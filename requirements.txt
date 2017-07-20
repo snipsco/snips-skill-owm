@@ -1,3 +1,0 @@
-paho-mqtt
-requests==2.6.0
-pyyaml

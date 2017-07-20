@@ -1,5 +1,3 @@
 skill:
-    id: weather_owm
-    entry_point: weather.py
     owm_key: ***REMOVED***
     default_location: Paris,fr

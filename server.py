@@ -5,7 +5,7 @@ import argparse
 import json
 import paho.mqtt.client as mqtt
 
-from weather import Weather
+from snips_skill_weather_owm.weather import Weather
 
 class Server:
 
@@ -16,7 +16,7 @@ class Server:
         self.client.on_message = self.on_message
         self.mqtt_hostname = mqtt_hostname
         self.mqtt_port = mqtt_port
-        self.weather = Weather(self, api_key, default_location)
+        self.weather = Weather(api_key, default_location, self)
 
     def start(self):
         print("[MQTT] Connecting to {} on port {}".format(
@@ -35,15 +35,15 @@ class Server:
         if (msg.topic == "hermes/nlu/intentParsed") and msg.payload:
             self.weather.handle_intent(json.loads(msg.payload.decode('utf-8')))
 
-    def publish(self, topic, payload):
-        self.client.publish(topic, payload=payload, qos=0, retain=False)
+    def speak(self, phrase):
+        self.client.publish("hermes/tts/say", payload=json.dumps({'text': phrase}), qos=0, retain=False)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Start Weather Skills")
     parser.add_argument("--mqtt_host", type=str, default="localhost")
     parser.add_argument("--mqtt_port", type=int, default=9898)
-    parser.add_argument("--owm_api_key", type=str, default=None)
-    parser.add_argument("--default_location", type=str, default="Paris,fr")
+    parser.add_argument("--owm_api_key", type=str, required=True)
+    parser.add_argument("--default_location", type=str, required=True)
     args = parser.parse_args()
     server = Server(args.mqtt_host,
         args.mqtt_port,

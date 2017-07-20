@@ -9,10 +9,10 @@ $ sudo apt-get install git python-pip
 $ sudo easy_install --upgrade pip
 ```
 
-Then install the dependencies from `requirements.txt`:
+Then install the dependencies:
 
 ```sh
-$ sudo -H pip install -r requirements.txt
+$ sudo python setup.py install
 ```
 
 ## Configuration
