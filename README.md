@@ -1,4 +1,4 @@
-# Snips Weather Skill
+# OpenWeatherMap skill for Snips
 
 ## Installation
 
