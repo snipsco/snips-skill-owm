@@ -14,3 +14,15 @@ check-codestyle:
 
 test:
 	python setup.py test
+
+clean:
+	rm -fr build
+	rm -fr dist
+	rm -fr snipsowm.egg-info
+
+upload:
+	@make clean
+	python setup.py install --user
+	python setup.py sdist
+	python setup.py bdist_wheel --universal
+	twine upload dist/*
