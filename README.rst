@@ -28,8 +28,12 @@ Copyright
 This skill is open source, provided by `Snips`_. See `LICENSE.txt`_ for more
 information.
 
-.. |Build Status| image:: https://travis-ci.org/snipsco/snips-skill-weather-owm.svg :target: https://travis-ci.org/snipsco/snips-skill-weather-owm :alt: Build Status
-.. |PyPI| image:: https://img.shields.io/pypi/v/snipsowm.svg :target: https://pypi.python.org/pypi/snipsowm :alt: PyPI
+.. |Build Status| image:: https://travis-ci.org/snipsco/snips-skill-weather-owm.svg
+   :target: https://travis-ci.org/snipsco/snips-skill-weather-owm
+   :alt: Build Status
+.. |PyPI| image:: https://img.shields.io/pypi/v/snipsowm.svg
+   :target: https://pypi.python.org/pypi/snipsowm
+   :alt: PyPI
 .. _`PyPI`: https://pypi.python.org/pypi/snipsowm
 .. _`pip`: http://www.pip-installer.org
 .. _`Snips`: https://www.snips.ai
