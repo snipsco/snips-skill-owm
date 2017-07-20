@@ -1,7 +1,7 @@
 OpenWeatherMap skill for Snips
 ==============================
 
-|Build Status| |PyPI|
+|Build Status| |PyPI| |MIT License|
 
 
 Installation
@@ -25,7 +25,7 @@ To try out the skill, you can run the test server, providing your OpenWeatherMap
 Copyright
 ---------
 
-This skill is open source, provided by `Snips`_. See `LICENSE.txt`_ for more
+This skill is provided by `Snips`_ as Open Source software. See `LICENSE.txt`_ for more
 information.
 
 .. |Build Status| image:: https://travis-ci.org/snipsco/snips-skill-weather-owm.svg
@@ -34,6 +34,10 @@ information.
 .. |PyPI| image:: https://img.shields.io/pypi/v/snipsowm.svg
    :target: https://pypi.python.org/pypi/snipsowm
    :alt: PyPI
+.. |MIT License| image:: https://img.shields.io/badge/license-MIT-blue.svg
+   :target: https://raw.githubusercontent.com/snipsco/snips-skill-weather-owm/master/LICENSE.txt
+   :alt: MIT License
+
 .. _`PyPI`: https://pypi.python.org/pypi/snipsowm
 .. _`pip`: http://www.pip-installer.org
 .. _`Snips`: https://www.snips.ai

@@ -6,11 +6,10 @@ install:
 	python setup.py install --user
 
 format:
-	sudo autopep8 --in-place --recursive .
+	autopep8 --in-place --recursive --exclude='src,temp' .
 
 check-codestyle:
-	pycodestyle server.py
-	pycodestyle snips_skill_weather_owm/weather.py
+	pycodestyle --exclude='src,temp' .
 
 test:
 	python setup.py test
