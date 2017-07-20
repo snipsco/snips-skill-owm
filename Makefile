@@ -1,9 +1,9 @@
 install:
 	sudo apt-get install git python-pip
 	sudo easy_install --upgrade pip
-	sudo python setup.py install
 	pip install pycodestyle
 	pip install autopep8
+	python setup.py install --user
 
 format:
 	sudo autopep8 --in-place --recursive .
@@ -12,5 +12,5 @@ check-codestyle:
 	pycodestyle server.py
 	pycodestyle snips_skill_weather_owm/weather.py
 
-tests:
+test:
 	python setup.py test

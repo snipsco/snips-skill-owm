@@ -2,17 +2,9 @@
 
 ## Installation
 
-Make sure `pip` is available on your system:
-
+Install dependencies
 ```sh
-$ sudo apt-get install git python-pip
-$ sudo easy_install --upgrade pip
-```
-
-Then install the dependencies:
-
-```sh
-$ sudo python setup.py install
+$ python setup.py install --user
 ```
 
 ## Configuration
@@ -24,3 +16,23 @@ Start the skill server by running the following command, providing your OpenWeat
 ```sh
 $ python server.py --owm_api_key=YOUR_API_KEY --default_location=Paris,fr
 ```
+
+
+
+
+install:
+	sudo apt-get install git python-pip
+	sudo easy_install --upgrade pip
+	pip install pycodestyle
+	pip install autopep8
+	python setup.py install --user
+
+format:
+	sudo autopep8 --in-place --recursive .
+
+check-codestyle:
+	pycodestyle server.py
+	pycodestyle snips_skill_weather_owm/weather.py
+
+test:
+	python setup.py test
