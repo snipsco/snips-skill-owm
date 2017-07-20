@@ -1,18 +1,13 @@
 OpenWeatherMap skill for Snips
 ==============================
 
-.. image:: https://travis-ci.org/snipsco/snips-skill-weather-owm.svg
-   :target: https://travis-ci.org/snipsco/snips-skill-weather-owm
-   :alt: Build Status
+|Build Status| |PyPI|
 
-.. image:: https://img.shields.io/pypi/v/snipsowm.svg
-   :target: https://pypi.python.org/pypi/snipsowm
-   :alt: PyPI
 
 Installation
 ------------
 
-The skill is on PyPI, so you can just install it with `pip`_:
+The skill is on `PyPI`_, so you can just install it with `pip`_:
 
 .. code-block:: console
 
@@ -33,7 +28,10 @@ Copyright
 This skill is open source, provided by `Snips`_. See `LICENSE.txt`_ for more
 information.
 
-.. _`pip`: http://www.pip-installer.org/
+.. |Build Status| image:: https://travis-ci.org/snipsco/snips-skill-weather-owm.svg :target: https://travis-ci.org/snipsco/snips-skill-weather-owm :alt: Build Status
+.. |PyPI| image:: https://img.shields.io/pypi/v/snipsowm.svg :target: https://pypi.python.org/pypi/snipsowm :alt: PyPI
+.. _`PyPI`: https://pypi.python.org/pypi/snipsowm
+.. _`pip`: http://www.pip-installer.org
 .. _`Snips`: https://www.snips.ai
 .. _`OpenWeatherMap website`: https://openweathermap.org/api
 .. _`LICENSE.txt`: https://github.com/snipsco/snips-skill-weather-owm/blob/master/LICENSE.txt

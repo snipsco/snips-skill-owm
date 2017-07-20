@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-class TestDecimal(TestCase):
+class TestSkills(TestCase):
 
-    def test_decimal_encode(self):
+    def test_skill(self):
         self.assertEqual("1", "1")
