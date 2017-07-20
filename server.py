@@ -5,7 +5,7 @@ import argparse
 import json
 import paho.mqtt.client as mqtt
 
-from snips_skill_weather_owm.weather import Weather
+from snipsowm.weather import Weather
 
 
 class Server:
