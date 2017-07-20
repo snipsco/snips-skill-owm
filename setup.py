@@ -9,7 +9,7 @@ setup(
     url='',
     download_url='',
     license='MIT',
-    install_requires=['paho-mqtt','requests==2.6.0'.'pyyaml'],
+    install_requires=['paho-mqtt','requests==2.6.0','pyyaml'],
     tests_require=[],
     packages=[
         'snips_skill_weather'
