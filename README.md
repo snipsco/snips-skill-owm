@@ -1,4 +1,7 @@
-# OpenWeatherMap skill for Snips
+OpenWeatherMap skill for Snips
+===
+
+[![Build Status](https://travis-ci.org/snipsco/snips-skill-weather-owm.svg)](https://travis-ci.org/snipsco/snips-skill-weather-owm)
 
 ## Installation
 
