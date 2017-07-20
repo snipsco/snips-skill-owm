@@ -7,6 +7,7 @@ import paho.mqtt.client as mqtt
 
 from snips_skill_weather_owm.weather import Weather
 
+
 class Server:
 
     def __init__(self, mqtt_hostname, mqtt_port, api_key, default_location):
@@ -36,7 +37,12 @@ class Server:
             self.weather.handle_intent(json.loads(msg.payload.decode('utf-8')))
 
     def speak(self, phrase):
-        self.client.publish("hermes/tts/say", payload=json.dumps({'text': phrase}), qos=0, retain=False)
+        self.client.publish(
+            "hermes/tts/say",
+            payload=json.dumps({'text': phrase}),
+            qos=0,
+            retain=False)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Start Weather Skills")
@@ -46,7 +52,7 @@ if __name__ == '__main__':
     parser.add_argument("--default_location", type=str, required=True)
     args = parser.parse_args()
     server = Server(args.mqtt_host,
-        args.mqtt_port,
-        args.owm_api_key,
-        args.default_location)
+                    args.mqtt_port,
+                    args.owm_api_key,
+                    args.default_location)
     server.start()

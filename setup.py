@@ -9,8 +9,8 @@ setup(
     url='https://www.snips.ai',
     download_url='',
     license='MIT',
-    install_requires=['paho-mqtt','requests==2.6.0','pyyaml'],
-    tests_require=[],
+    install_requires=['paho-mqtt', 'requests==2.6.0', 'pyyaml'],
+    test_suite="tests",
     packages=[
         'snips_skill_weather_owm'
     ]

@@ -3,12 +3,11 @@
 
 import requests
 import json
-import yaml
-
-API_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
 
 
 class Weather:
+
+    API_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
 
     ACCEPTED_INTENTS = [
         "SearchWeatherForecast",
@@ -23,7 +22,7 @@ class Weather:
     ###########################################################################
     # Intent handler
     ###########################################################################
-    
+
     def handle_intent(self, intent):
         if not self.get_intent_name(intent) in self.ACCEPTED_INTENTS:
             return
@@ -39,7 +38,7 @@ class Weather:
     ###########################################################################
     # Parsing functions
     ###########################################################################
-    
+
     def get_intent_name(self, intent):
         if 'intent' in intent and 'intentName' in intent['intent']:
             return intent['intent']['intentName'].split('__')[-1]
@@ -47,7 +46,8 @@ class Weather:
 
     def get_slot_value(self, intent, slot_name):
         try:
-            slot = next(s for s in intent['slots'] if s['slotName'] == slot_name)
+            slot = next(s for s in intent['slots']
+                        if s['slotName'] == slot_name)
             if 'value' in slot and 'value' in slot['value']:
                 if 'value' in slot['value']['value']:
                     return slot['value']['value']['value']
@@ -61,15 +61,19 @@ class Weather:
     ###########################################################################
 
     def get_weather(self, location):
-        url = "{}?APPID={}&q={}&units=metric".format(API_ENDPOINT,
-            self.api_key,
-            location)
+        url = "{}?APPID={}&q={}&units=metric".format(self.API_ENDPOINT,
+                                                     self.api_key,
+                                                     location)
         r = requests.get(url)
         response = json.loads(r.text)
-        try: description = response["weather"][0]["description"].encode('utf-8')
-        except: description = None
-        try: temperature = int(float(response["main"]["temp"]))
-        except: temperature = None
+        try:
+            description = response["weather"][0]["description"].encode('utf-8')
+        except KeyError, IndexError, UnicodeEncodeError:
+            description = None
+        try:
+            temperature = int(float(response["main"]["temp"]))
+        except KeyError:
+            temperature = None
         return (description, temperature)
 
     ###########################################################################
