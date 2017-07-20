@@ -6,11 +6,10 @@ OpenWeatherMap skill for Snips
 ## Installation
 
 Install dependencies
+
 ```sh
 $ python setup.py install --user
 ```
-
-## Configuration
 
 ## Running
 
