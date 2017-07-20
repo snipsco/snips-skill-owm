@@ -1,5 +1,5 @@
 OpenWeatherMap skill for Snips
-==============
+==============================
 
 .. image:: https://travis-ci.org/snipsco/snips-skill-weather-owm.svg
    :target: https://travis-ci.org/snipsco/snips-skill-weather-owm
@@ -30,9 +30,10 @@ To try out the skill, you can run the test server, providing your OpenWeatherMap
 Copyright
 ---------
 
-This skill is open source, provided by `Snips`_. See 
-
+This skill is open source, provided by `Snips`_. See `LICENSE.txt`_ for more
+information.
 
 .. _`pip`: http://www.pip-installer.org/
 .. _`Snips`: https://www.snips.ai
 .. _`OpenWeatherMap website`: https://openweathermap.org/api
+.. _`LICENSE.txt`: https://github.com/snipsco/snips-skill-weather-owm/blob/master/LICENSE.txt
