@@ -8,7 +8,7 @@ OpenWeatherMap skill for Snips
 Installation
 ------------
 
-The skill is on PyPI, so you can just install it with pip_::
+The skill is on PyPI, so you can just install it with `pip`_:
 
 .. code-block:: console
 
@@ -29,5 +29,5 @@ Copyright
 This skill is open source, provided by `Snips`_. See 
 
 
-.. _pip: http://www.pip-installer.org/
+.. _`pip`: http://www.pip-installer.org/
 .. _`Snips`: https://www.snips.ai
