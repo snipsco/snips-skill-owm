@@ -68,7 +68,7 @@ class Weather:
         response = json.loads(r.text)
         try:
             description = response["weather"][0]["description"].encode('utf-8')
-        except KeyError, IndexError, UnicodeEncodeError:
+        except (KeyError, IndexError, UnicodeEncodeError):
             description = None
         try:
             temperature = int(float(response["main"]["temp"]))
