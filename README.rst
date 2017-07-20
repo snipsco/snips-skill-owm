@@ -5,6 +5,10 @@ OpenWeatherMap skill for Snips
    :target: https://travis-ci.org/snipsco/snips-skill-weather-owm
    :alt: Build Status
 
+.. image:: https://img.shields.io/pypi/v/snipsowm.svg
+   :target: https://pypi.python.org/pypi/snipsowm
+   :alt: PyPI
+
 Installation
 ------------
 
@@ -17,7 +21,7 @@ The skill is on PyPI, so you can just install it with `pip`_:
 Running
 -------
 
-Start the skill server by running the following command, providing your OpenWeatherMap API key ((generate one here)[]) as well as the default location for weather forecasts:
+To try out the skill, you can run the test server, providing your OpenWeatherMap API key (you can obtain one from the `OpenWeatherMap website`_) as well as the default location for weather forecasts:
 
 .. code-block:: console
 
@@ -31,3 +35,4 @@ This skill is open source, provided by `Snips`_. See
 
 .. _`pip`: http://www.pip-installer.org/
 .. _`Snips`: https://www.snips.ai
+.. _`OpenWeatherMap website`: https://openweathermap.org/api
