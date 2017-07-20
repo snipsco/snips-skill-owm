@@ -2,13 +2,20 @@
 
 ## Installation
 
-Install the required dependencies:
+Make sure `pip` is available on your system:
 
 ```sh
 $ sudo apt-get install git python-pip
 $ sudo easy_install --upgrade pip
-$ sudo pip install paho-mqtt requests==2.6.0
 ```
+
+Then install the dependencies from `requirements.txt`:
+
+```sh
+$ sudo -H pip install -r requirements.txt
+```
+
+## Configuration
 
 ## Running
 

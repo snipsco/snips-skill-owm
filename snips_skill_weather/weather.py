@@ -3,8 +3,10 @@
 
 import requests
 import json
+import yaml
 
 API_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
+
 
 class Weather:
 
@@ -13,10 +15,10 @@ class Weather:
         "SearchWeatherForecastCondition"
     ]
 
-    def __init__(self, publisher, api_key, default_location):
-        self.publisher = publisher
-        self.api_key = api_key
-        self.default_location = default_location
+    def __init__(self):
+        self.publisher = "publisher"
+        self.api_key = "api_key"
+        self.default_location = "default_location"
 
     ###########################################################################
     # Intent handler
