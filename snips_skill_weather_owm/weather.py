@@ -15,10 +15,10 @@ class Weather:
         "SearchWeatherForecastCondition"
     ]
 
-    def __init__(self):
-        self.publisher = "publisher"
-        self.api_key = "api_key"
-        self.default_location = "default_location"
+    def __init__(self, api_key, default_location, tts_service=None):
+        self.api_key = api_key
+        self.default_location = default_location
+        self.tts_service = tts_service
 
     ###########################################################################
     # Intent handler
@@ -33,7 +33,8 @@ class Weather:
             or self.default_location
         (description, temperature) = self.get_weather(location)
         response = self.generate_sentence(location, description, temperature)
-        self.publisher.publish("hermes/tts/say", json.dumps({'text': response}))
+        if self.tts_service and response:
+            self.tts_service.speak(response)
 
     ###########################################################################
     # Parsing functions
