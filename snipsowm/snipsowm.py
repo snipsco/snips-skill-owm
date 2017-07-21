@@ -9,41 +9,12 @@ class Weather:
 
     API_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
 
-    ACCEPTED_INTENTS = [
-        "SearchWeatherForecast",
-        "SearchWeatherForecastCondition"
-    ]
-
     def __init__(self, api_key, default_location, tts_service=None):
         self.api_key = api_key
         self.default_location = default_location
         self.tts_service = tts_service
 
-    ###########################################################################
-    # Intent handler
-    ###########################################################################
-
-    # def handle_intent(self, intent):
-    #     if not self.get_intent_name(intent) in self.ACCEPTED_INTENTS:
-    #         return
-    #     location = self.get_slot_value(intent, "weatherForecastLocality") \
-    #         or self.get_slot_value(intent, "weatherForecastCountry") \
-    #         or self.get_slot_value(intent, "weatherForecastGeographicalPOI") \
-    #         or self.default_location
-    #     (description, temperature) = self.get_weather(location)
-    #     response = self.generate_sentence(location, description, temperature)
-    #     if self.tts_service and response:
-    #         self.tts_service.speak(response)
-    #     return response
-    # def handle_intent(self, intent):
-
-    def get(self, location=None, datetime=None):
-        # if not self.get_intent_name(intent) in self.ACCEPTED_INTENTS:
-        #     return
-        # location = self.get_slot_value(intent, "weatherForecastLocality") \
-        #     or self.get_slot_value(intent, "weatherForecastCountry") \
-        #     or self.get_slot_value(intent, "weatherForecastGeographicalPOI") \
-        #     or self.default_location
+    def execute(self, location=None, datetime=None):
         (description, temperature) = self.get_weather(location)
         response = self.generate_sentence(location, description, temperature)
         if self.tts_service and response:
