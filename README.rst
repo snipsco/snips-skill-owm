@@ -13,14 +13,18 @@ The skill is on `PyPI`_, so you can just install it with `pip`_:
 
     $ pip install snipsowm
 
-Running
--------
+Usage
+-----
 
-To try out the skill, you can run the test server, providing your OpenWeatherMap API key (you can obtain one from the `OpenWeatherMap website`_) as well as the default location for weather forecasts:
+The skill provides weather conditions and forecast using the `OpenWeatherMap`_ API. In order to use it, you need an `API key`_.
 
-.. code-block:: console
+.. code-block:: python
 
-    $ python server.py --owm_api_key=YOUR_API_KEY --default_location=Paris,fr
+    from snipsowm.weather import Weather
+
+    default_location = "Paris,fr"
+    weather = Weather(API_KEY, default_location, None) 
+    print(weather.get("Chicago"))
 
 Copyright
 ---------
@@ -40,6 +44,8 @@ information.
 
 .. _`PyPI`: https://pypi.python.org/pypi/snipsowm
 .. _`pip`: http://www.pip-installer.org
+.. _`OpenWeatherMap`: https://openweathermap.org/
+.. _`API key`: https://openweathermap.org/appid#get
 .. _`Snips`: https://www.snips.ai
 .. _`OpenWeatherMap website`: https://openweathermap.org/api
 .. _`LICENSE.txt`: https://github.com/snipsco/snips-skill-weather-owm/blob/master/LICENSE.txt

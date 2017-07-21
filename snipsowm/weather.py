@@ -23,17 +23,32 @@ class Weather:
     # Intent handler
     ###########################################################################
 
-    def handle_intent(self, intent):
-        if not self.get_intent_name(intent) in self.ACCEPTED_INTENTS:
-            return
-        location = self.get_slot_value(intent, "weatherForecastLocality") \
-            or self.get_slot_value(intent, "weatherForecastCountry") \
-            or self.get_slot_value(intent, "weatherForecastGeographicalPOI") \
-            or self.default_location
+    # def handle_intent(self, intent):
+    #     if not self.get_intent_name(intent) in self.ACCEPTED_INTENTS:
+    #         return
+    #     location = self.get_slot_value(intent, "weatherForecastLocality") \
+    #         or self.get_slot_value(intent, "weatherForecastCountry") \
+    #         or self.get_slot_value(intent, "weatherForecastGeographicalPOI") \
+    #         or self.default_location
+    #     (description, temperature) = self.get_weather(location)
+    #     response = self.generate_sentence(location, description, temperature)
+    #     if self.tts_service and response:
+    #         self.tts_service.speak(response)
+    #     return response
+    # def handle_intent(self, intent):
+
+    def get(self, location=None, datetime=None):
+        # if not self.get_intent_name(intent) in self.ACCEPTED_INTENTS:
+        #     return
+        # location = self.get_slot_value(intent, "weatherForecastLocality") \
+        #     or self.get_slot_value(intent, "weatherForecastCountry") \
+        #     or self.get_slot_value(intent, "weatherForecastGeographicalPOI") \
+        #     or self.default_location
         (description, temperature) = self.get_weather(location)
         response = self.generate_sentence(location, description, temperature)
         if self.tts_service and response:
             self.tts_service.speak(response)
+        return response
 
     ###########################################################################
     # Parsing functions
