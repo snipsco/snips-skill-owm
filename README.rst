@@ -20,11 +20,11 @@ The skill provides weather conditions and forecast using the `OpenWeatherMap`_ A
 
 .. code-block:: python
 
-    from snipsowm.weather import Weather
+    from snipsowm.snipsowm import SnipsOWM
 
     default_location = "Paris,fr"
-    weather = Weather(API_KEY, default_location, None) 
-    print(weather.get("Chicago"))
+    skill = SnipsOWM(API_KEY, default_location, None) 
+    print(skill.execute("Chicago"))
 
 Copyright
 ---------

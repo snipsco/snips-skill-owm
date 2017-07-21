@@ -5,7 +5,7 @@ import argparse
 import json
 import paho.mqtt.client as mqtt
 
-from snipsowm.weather import Weather
+from snipsowm.snipsowm import SnipsOWM
 
 
 class Server:
@@ -17,7 +17,7 @@ class Server:
         self.client.on_message = self.on_message
         self.mqtt_hostname = mqtt_hostname
         self.mqtt_port = mqtt_port
-        self.weather = Weather(api_key, default_location, self)
+        self.skill = SnipsOWM(api_key, default_location, self)
 
     def start(self):
         print("[MQTT] Connecting to {} on port {}".format(
@@ -34,7 +34,7 @@ class Server:
 
     def on_message(self, client, userdata, msg):
         if (msg.topic == "hermes/nlu/intentParsed") and msg.payload:
-            self.weather.handle_intent(json.loads(msg.payload.decode('utf-8')))
+            self.skill.execute(json.loads(msg.payload.decode('utf-8')))
 
     def speak(self, phrase):
         self.client.publish(
