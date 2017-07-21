@@ -32,14 +32,14 @@ Copyright
 This skill is provided by `Snips`_ as Open Source software. See `LICENSE.txt`_ for more
 information.
 
-.. |Build Status| image:: https://travis-ci.org/snipsco/snips-skill-weather-owm.svg
-   :target: https://travis-ci.org/snipsco/snips-skill-weather-owm
+.. |Build Status| image:: https://travis-ci.org/snipsco/snips-skill-owm.svg
+   :target: https://travis-ci.org/snipsco/snips-skill-owm
    :alt: Build Status
 .. |PyPI| image:: https://img.shields.io/pypi/v/snipsowm.svg
    :target: https://pypi.python.org/pypi/snipsowm
    :alt: PyPI
 .. |MIT License| image:: https://img.shields.io/badge/license-MIT-blue.svg
-   :target: https://raw.githubusercontent.com/snipsco/snips-skill-weather-owm/master/LICENSE.txt
+   :target: https://raw.githubusercontent.com/snipsco/snips-skill-owm/master/LICENSE.txt
    :alt: MIT License
 
 .. _`PyPI`: https://pypi.python.org/pypi/snipsowm
@@ -48,4 +48,4 @@ information.
 .. _`API key`: https://openweathermap.org/appid#get
 .. _`Snips`: https://www.snips.ai
 .. _`OpenWeatherMap website`: https://openweathermap.org/api
-.. _`LICENSE.txt`: https://github.com/snipsco/snips-skill-weather-owm/blob/master/LICENSE.txt
+.. _`LICENSE.txt`: https://github.com/snipsco/snips-skill-owm/blob/master/LICENSE.txt
