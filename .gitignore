@@ -104,3 +104,4 @@ src/
 temp/
 .DS_Store
 .AppleDouble/
+Makefile

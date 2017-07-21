@@ -5,7 +5,7 @@ import requests
 import json
 
 
-class Weather:
+class SnipsOWM:
 
     API_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
 
