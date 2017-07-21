@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from snipsowm.snipsowm import SnipsOWM
 
+
 class TestSkill(TestCase):
 
     def setUp(self):
