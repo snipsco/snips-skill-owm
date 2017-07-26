@@ -11,7 +11,7 @@ setup(
     license='MIT',
     install_requires=['requests==2.6.0'],
     test_suite="tests",
-    keywords = ['snips'],
+    keywords=['snips'],
     packages=[
         'snipsowm'
     ]
