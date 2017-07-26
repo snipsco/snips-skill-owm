@@ -1,11 +1,12 @@
-#!/usr/bin/env python3
-# encoding: utf-8
+# -*-: coding utf-8 -*-
+""" OpenWeatherMap skill for Snips. """
 
 import requests
 import json
 
 
 class SnipsOWM:
+    """ OpenWeatherMap skill for Snips. """
 
     API_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
 
