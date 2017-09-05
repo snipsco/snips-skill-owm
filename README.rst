@@ -16,6 +16,27 @@ The skill is on `PyPI`_, so you can just install it with `pip`_:
 Usage
 -----
 
+Snips Skills Manager
+^^^^^^^^^^^^^^^^^^^^
+
+It is recommended that you use this skill with the `Snips Skills Manager <https://github.com/snipsco/snipsskills>`_. Simply add the following section to your `Snipsfile <https://github.com/snipsco/snipsskills/wiki/The-Snipsfile>`_:
+
+.. code-block:: yaml
+
+    skills:
+    - package_name: snipsowm
+      class_name: SnipsOWM
+      pip: snipsowm
+      default_location: "Paris,fr"
+      api_key: 12A4F912EA29100B2C
+      intents:
+        - intent: GetWeather
+          action: "get_weather"
+      
+
+Standalone usage
+^^^^^^^^^^^^^^^^
+
 The skill provides weather conditions and forecast using the `OpenWeatherMap`_ API. In order to use it, you need an `API key`_.
 
 .. code-block:: python
