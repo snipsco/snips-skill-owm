@@ -32,9 +32,9 @@ class SnipsOWM:
         """ Speak a random response for a given weather condition
             at a specified locality and datetime.
 
-        :param condition: A SnipsWeatherCondition value
-                          corresponding to a weather condition, e.g.
-                          SnipsWeatherCondition.sun.
+        :param condition: A SnipsWeatherCondition value string
+                          corresponding to a weather condition extracted from the slots.
+                          e.g 'HUMID', 'SUNNY', etc ... 
         :param locality: The locality of the forecast, e.g. 'Paris,fr' or
                          'Eiffel Tower'
         :type locality: string
@@ -61,12 +61,12 @@ class SnipsOWM:
             tone = SentenceTone.NEUTRAL
         else:
 
-            assumed_condition = weather_condition.SnipsWeatherCondition(condition)
-            expected_condition = weather_condition.OWMWeatherCondition(actual_condition)
+            assumed_condition = weather_condition.SnipsWeatherCondition(condition).resolve()
+            expected_condition = weather_condition.OWMWeatherCondition(actual_condition).resolve()
 
             tone = SentenceTone.NEGATIVE if assumed_condition.value != expected_condition.value else SentenceTone.NEGATIVE
 
-        generated_sentence = generate_condition_sentence(tone, assumed_condition.describe(), locality, date)
+        generated_sentence = generate_condition_sentence(tone, expected_condition.describe(), locality, date)
         print generated_sentence
 
         if self.tts_service is not None:
@@ -133,3 +133,9 @@ class SnipsOWM:
 
 
 
+
+
+
+if __name__ == "__main__":
+    skill = SnipsOWM("***REMOVED***","Paris")
+    skill.speak_condition('HUMID', 'Paris', None)

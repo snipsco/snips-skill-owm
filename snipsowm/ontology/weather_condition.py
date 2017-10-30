@@ -124,14 +124,18 @@ class OWMWeatherCondition(object):
         OWMWeatherConditions.DUST: WeatherConditions.UNKNOWN,
         OWMWeatherConditions.VOLCANIC_ASH: WeatherConditions.UNKNOWN,
         OWMWeatherConditions.SQUALLS: WeatherConditions.UNKNOWN,
-        OWMWeatherConditions.TORNAD: WeatherConditions.UNKNOWN
+        OWMWeatherConditions.TORNAD: WeatherConditions.UNKNOWN,
+        OWMWeatherConditions.FEW_CLOUDS: WeatherConditions.CLOUDS,
+        OWMWeatherConditions.SCATTERED_CLOUDS: WeatherConditions.CLOUDS,
+        OWMWeatherConditions.BROKEN_CLOUDS: WeatherConditions.CLOUDS,
+        OWMWeatherConditions.OVERCAST_CLOUDS: WeatherConditions.CLOUDS
     }
 
     def __init__(self, id):
         self.value = OWMWeatherConditions(id)
 
     def resolve(self):
-        return self.mappings(self.value)
+        return WeatherCondition(self.mappings[self.value])
 
 
 
