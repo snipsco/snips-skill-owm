@@ -50,3 +50,7 @@ class OWMWeatherConditions(Enum):
     VOLCANIC_ASH = 762
     SQUALLS = 771
     TORNAD = 781
+    FEW_CLOUDS = 801
+    SCATTERED_CLOUDS = 802
+    BROKEN_CLOUDS = 803
+    OVERCAST_CLOUDS = 804
