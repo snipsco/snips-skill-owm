@@ -1,0 +1,37 @@
+package_name: snipsOWM
+class_name: SnipsOWM
+description: Open Weather Map skill for Snips
+parameters: ["api_key", "default_location", "tts_service"]
+intents:
+  - intent: SearchWeatherForecast
+    action: >
+      {%
+        if intent.weatherForecastLocality is not None:
+          location = intent.weatherForecastLocality
+        elif intent.weatherForecastCountry is not None:
+          location = intent.weatherForecastCountry
+        elif intent.weatherForecastRegion is not None:
+          location = intent.weatherForecastRegion
+        elif intent.weatherForecastGeographicalPOI is not None:
+          location = intent.weatherForecastGeographicalPOI
+
+        time = intent.weatherForecastStartDatetime
+        condition = intent.weatherForecastConditionName
+
+        skill.execute(location, time, condition)
+      %}
+  - intent: SearchWeatherForecastItem
+    action: >
+      {%
+      skill.light_on_set("white", intent.number, intent.house_room_EN)
+      %}
+  - intent: SearchWeatherForecast
+    action: >
+      {%
+      skill.light_down(intent.house_room_EN)
+      %}
+  - intent: SearchWeatherForecastCondition
+    action: >
+      {%
+      skill.light_up(intent.house_room_EN)
+      %}

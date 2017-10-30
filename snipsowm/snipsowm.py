@@ -7,6 +7,7 @@ import pprint
 
 from sentence_generation.sentence_generator import generate_condition_sentence, SentenceTone
 from ontology import weather_condition, snips, owm
+import datetime
 
 
 class SnipsOWM:
@@ -82,6 +83,7 @@ class SnipsOWM:
         url = "{}?APPID={}&q={}&units=metric".format(self.API_WEATHER_ENDPOINT,
                                                      self.api_key,
                                                      location)
+        print url
         r = requests.get(url)
         response = json.loads(r.text)
         try:
@@ -131,5 +133,31 @@ class SnipsOWM:
     def generate_forecast():
         pass
 
+        # return "{}: {}".format(presentation, forecast)
+
+    def _getTopicalInfos(self, response, date_time):
+        delta = date_time - datetime.datetime.strptime(response["list"][0]['dt_txt'], "%Y-%m-%d %H:%M:%S")
+        result = {}
+        for time_interval in response["list"]:
+            current_time = datetime.datetime.strptime(time_interval['dt_txt'], "%Y-%m-%d %H:%M:%S")
+            current_delta = date_time - current_time
+            if delta > current_delta:
+                delta = current_delta
+                result = time_interval
+
+        return result
+
+if __name__ == "__main__":
+    class STDOut:
+        def speak(self, string):
+            print string
+
+    std_out = STDOut()
 
 
+    owm = SnipsOWM("***REMOVED***", "Paris", std_out)
+    print datetime.datetime(2017, 5, 15)
+    with open('/Users/robin/projects/snips/snips_skills/skills/sample_response.json') as data_file:    
+        data = json.load(data_file)
+    print owm._getTopicalInfos(data, datetime.datetime(2017, 5, 15))
+    owm.get_forecast_weather("Madrid", datetime.datetime(2017, 5, 15)) 
