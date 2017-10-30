@@ -33,9 +33,9 @@ class SnipsOWM:
         """ Speak a random response for a given weather condition
             at a specified locality and datetime.
 
-        :param condition: A SnipsWeatherCondition value
-                          corresponding to a weather condition, e.g.
-                          SnipsWeatherCondition.sun.
+        :param condition: A SnipsWeatherCondition value string
+                          corresponding to a weather condition extracted from the slots.
+                          e.g 'HUMID', 'SUNNY', etc ... 
         :param locality: The locality of the forecast, e.g. 'Paris,fr' or
                          'Eiffel Tower'
         :type locality: string
@@ -62,12 +62,12 @@ class SnipsOWM:
             tone = SentenceTone.NEUTRAL
         else:
 
-            assumed_condition = weather_condition.SnipsWeatherCondition(condition)
-            expected_condition = weather_condition.OWMWeatherCondition(actual_condition)
+            assumed_condition = weather_condition.SnipsWeatherCondition(condition).resolve()
+            expected_condition = weather_condition.OWMWeatherCondition(actual_condition).resolve()
 
             tone = SentenceTone.NEGATIVE if assumed_condition.value != expected_condition.value else SentenceTone.NEGATIVE
 
-        generated_sentence = generate_condition_sentence(tone, assumed_condition.describe(), locality, date)
+        generated_sentence = generate_condition_sentence(tone, expected_condition.describe(), locality, date)
         print generated_sentence
 
         if self.tts_service is not None:
@@ -133,8 +133,6 @@ class SnipsOWM:
     def generate_forecast():
         pass
 
-        # return "{}: {}".format(presentation, forecast)
-
     def _getTopicalInfos(self, response, date_time):
         delta = date_time - datetime.datetime.strptime(response["list"][0]['dt_txt'], "%Y-%m-%d %H:%M:%S")
         result = {}
@@ -155,9 +153,10 @@ if __name__ == "__main__":
     std_out = STDOut()
 
 
-    owm = SnipsOWM("***REMOVED***", "Paris", std_out)
+    skill = SnipsOWM("", "Paris", std_out)
     print datetime.datetime(2017, 5, 15)
     with open('/Users/robin/projects/snips/snips_skills/skills/sample_response.json') as data_file:    
         data = json.load(data_file)
-    print owm._getTopicalInfos(data, datetime.datetime(2017, 5, 15))
-    owm.get_forecast_weather("Madrid", datetime.datetime(2017, 5, 15)) 
+    print skill._getTopicalInfos(data, datetime.datetime(2017, 5, 15))
+    skill.get_forecast_weather("Madrid", datetime.datetime(2017, 5, 15)) 
+    skill.speak_condition('HUMID', 'Paris', None)
