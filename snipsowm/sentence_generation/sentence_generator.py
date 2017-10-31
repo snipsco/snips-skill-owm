@@ -73,10 +73,62 @@ def generate_condition_sentence(tone, condition_description, locality, date):
 
     return "{}{}{}{}".format(*parameters)
 
+def generate_temperature_sentence(temperature, locality, date):
+    """
+    The sentence is generated from those parts :
+        - the temperature for the date and time
+        - date (the time when their will be such a temperature )
+        - locality (the place their is such a temperature)
+
+    :param temperature
+    :param locality:
+    :type locality:basestring
+    :param date:
+    :type date:datetime
+    :return:
+    :rtype:
+
+    """
+    if (temperature is None):
+        return "I couldn't fetch the right data for the specified place and date"
+    sentence_beginning = "The temperature"
+
+    temperature = "will be " + str(temperature) + " degrees"
+
+    sentence_locality = "" if locality is None else "in {}".format(locality)  # Locality
+    sentence_date = "" if date is None else "on {}".format(date_to_string(date))  # date
+
+    time_place_parameters = list((sentence_locality, sentence_date))
+    random.shuffle(time_place_parameters)
+
+    time_place_str = time_place_parameters[0] + " " +time_place_parameters[1]
+
+    temp_time_place_params = [time_place_str, temperature]
+    random.shuffle(temp_time_place_params)
+
+    return "{} {} {}".format(sentence_beginning, *temp_time_place_params)
+
+def _flatten(array):
+    result = []
+    for val in array:
+        if type(val) is str:
+            result += val
+        else:
+            for sub_val in val:
+                result += val
+    print result
+    return result 
+
 
 if __name__ == "__main__":
+    print generate_temperature_sentence("8", "Paris", datetime.datetime(2017, 11, 1))
+    print generate_temperature_sentence("8", "Paris", datetime.datetime(2017, 11, 1))
+    print generate_temperature_sentence("8", "Paris", datetime.datetime(2017, 11, 1))
+    print generate_temperature_sentence("8", "Paris", datetime.datetime(2017, 11, 1))
+    print generate_temperature_sentence("8", "Paris", datetime.datetime(2017, 11, 1))
+    print generate_temperature_sentence("8", "Paris", datetime.datetime(2017, 11, 1))
+
     print generate_condition_sentence(SentenceTone.POSITIVE, "sun is expected", "Paris", None)
-    print generate_condition_sentence(SentenceTone.NEGATIVE, "it's going to be raining", "Paris",
-                                      datetime.datetime(2017, 11, 10))
+    print generate_condition_sentence(SentenceTone.NEGATIVE, "it's going to be raining", "Paris", datetime.datetime(2017, 11, 10))
     print generate_condition_sentence(SentenceTone.NEUTRAL, "fog is expected", "Moscow",
                                       datetime.datetime(2017, 11, 10))
