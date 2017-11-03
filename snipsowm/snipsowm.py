@@ -114,7 +114,6 @@ class SnipsOWM:
         url = "{}?APPID={}&q={}&units=metric".format(self.API_WEATHER_ENDPOINT,
                                                      self.api_key,
                                                      location)
-        # print url
         r = requests.get(url)
         response = json.loads(r.text)
         try:
@@ -190,7 +189,7 @@ if __name__ == "__main__":
 
     std_out = STDOut()
 
-    skill = SnipsOWM("", "Paris", std_out)
+    skill = SnipsOWM("e3deb9f92803fce990166d1af2f3d0fc", "Paris", std_out)
 
     print "\n speak condition: \n"
 

@@ -116,7 +116,6 @@ def _flatten(array):
         else:
             for sub_val in val:
                 result += val
-    print result
     return result 
 
 
@@ -130,5 +129,5 @@ if __name__ == "__main__":
 
     print generate_condition_sentence(SentenceTone.POSITIVE, "sun is expected", "Paris", None)
     print generate_condition_sentence(SentenceTone.NEGATIVE, "it's going to be raining", "Paris", datetime.datetime(2017, 11, 10))
-    print generate_condition_sentence(SentenceTone.NEUTRAL, "fog is expected", "Moscow",
-                                      datetime.datetime(2017, 11, 10))
+    print generate_condition_sentence(SentenceTone.NEUTRAL, "fog is expected", "Moscow", datetime.datetime(2017, 11, 10))
+
