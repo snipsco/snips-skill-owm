@@ -3,9 +3,17 @@ from owm import OWMWeatherConditions
 from snips import SnipsWeatherConditions
 import random
 
+def _convert_to_unix_case(text):
+    result = ""
+    for i in text:
+        if i is ' ' or i is '-':
+            result += '_'
+        else:
+            result += i.capitalize()
+    return result
 
 class WeatherConditions(Enum):
-    THUNDERSTORM = 0
+    UNKNOWN = 0
     DRIZZLE = 1
     RAIN = 2
     SNOW = 3
@@ -15,7 +23,8 @@ class WeatherConditions(Enum):
     STORM = 7
     HUMID = 8
     WIND = 9
-    UNKNOWN = 10
+    THUNDERSTORM = 10
+    # CLEAR = 11 
 
 
 class WeatherCondition(object):
@@ -28,12 +37,12 @@ class WeatherCondition(object):
         WeatherConditions.RAIN : ["rain is expected","it's going to be rainy","expect rain"],
         WeatherConditions.SNOW : ["snow is expected","it's going to snow","expect snow"],
         WeatherConditions.FOG : ["fog is expected","it's going to be foggy","expect fog"],
-        WeatherConditions.SUN : ["sun is expected","it's going to be sunny"],
+        WeatherConditions.SUN : ["sun is expected","it's going to be sunny", "the sun will shine"],
         WeatherConditions.CLOUDS : ["it's going to be cloudy","expect clouds"],
         WeatherConditions.STORM : ["storms are expected","it's going to be stormy","expect storms"],
         WeatherConditions.HUMID : ["humidity is expected","it's going to be humid"],
         WeatherConditions.WIND : ["wind is expected","it's going to be windy","expect wind"],
-        WeatherConditions.UNKNOWN : [""]
+        WeatherConditions.UNKNOWN : ["The weather is undescribable"]
     }
 
     def describe(self):
@@ -43,7 +52,7 @@ class WeatherCondition(object):
 class SnipsWeatherCondition(object):
     mappings = {
         SnipsWeatherConditions.HUMID: WeatherConditions.HUMID,
-        SnipsWeatherConditions.BLIZZARD: WeatherConditions.UNKNOWN,
+        SnipsWeatherConditions.BLIZZARD: WeatherConditions.FOG,
         SnipsWeatherConditions.SNOWFALL: WeatherConditions.SNOW,
         SnipsWeatherConditions.WINDY: WeatherConditions.WIND,
         SnipsWeatherConditions.CLOUD: WeatherConditions.CLOUDS,
@@ -64,13 +73,56 @@ class SnipsWeatherCondition(object):
         SnipsWeatherConditions.CLOUDY: WeatherConditions.CLOUDS,
         SnipsWeatherConditions.HUMIDITY: WeatherConditions.HUMID,
         SnipsWeatherConditions.SNOWSTORM: WeatherConditions.SNOW,
-        SnipsWeatherConditions.WIND: WeatherConditions.WIND
+        SnipsWeatherConditions.WIND: WeatherConditions.WIND,
+        SnipsWeatherConditions.TRENCH_COAT: WeatherConditions.RAIN, # TODO REMOVE WHEN INTENT 'ITEM' WILL BE INDEPENDENTLY MANAGED
+        SnipsWeatherConditions.PARKA: WeatherConditions.RAIN,
+        SnipsWeatherConditions.CARDIGAN: WeatherConditions.RAIN,
+        SnipsWeatherConditions.SUMMER_CLOTHING: WeatherConditions.SUN,
+        SnipsWeatherConditions.GAMP: WeatherConditions.RAIN,
+        SnipsWeatherConditions.BROLLY: WeatherConditions.RAIN,
+        SnipsWeatherConditions.SUNSHADE: WeatherConditions.SUN,
+        SnipsWeatherConditions.PARASOL: WeatherConditions.SUN,
+        SnipsWeatherConditions.UMBRELLA: WeatherConditions.RAIN,
+        SnipsWeatherConditions.OPEN_TOED_SHOES: WeatherConditions.SUN,
+        SnipsWeatherConditions.SHORTS: WeatherConditions.SUN,
+        SnipsWeatherConditions.SKIRT: WeatherConditions.SUN,
+        SnipsWeatherConditions.WARM_JUMPER: WeatherConditions.SNOW,
+        SnipsWeatherConditions.WARM_SOCKS: WeatherConditions.SNOW,
+        SnipsWeatherConditions.WARM_SWEATER: WeatherConditions.SNOW,
+        SnipsWeatherConditions.SCARF: WeatherConditions.SNOW,
+        SnipsWeatherConditions.STRAW_HAT: WeatherConditions.SUN,
+        SnipsWeatherConditions.HAT: WeatherConditions.SUN,
+        SnipsWeatherConditions.SUNBLOCK: WeatherConditions.SUN,
+        SnipsWeatherConditions.SUNSCREEN: WeatherConditions.SUN,
+        SnipsWeatherConditions.SUN_CREAM: WeatherConditions.SUN,
+        SnipsWeatherConditions.WOOLEN_SWEATER: WeatherConditions.SNOW,
+        SnipsWeatherConditions.WOOLEN_JUMPER: WeatherConditions.SNOW,
+        SnipsWeatherConditions.WOOLEN_SOCKS: WeatherConditions.SNOW,
+        SnipsWeatherConditions.WOOLEN_TIGHTS: WeatherConditions.SNOW,
+        SnipsWeatherConditions.SLEEVELESS_SUNDRESS: WeatherConditions.SUN,
+        SnipsWeatherConditions.SUNDRESS: WeatherConditions.SUN,
+        SnipsWeatherConditions.CHUNKY_SWEATER: WeatherConditions.CLOUDS,
+        SnipsWeatherConditions.SUNGLASSES: WeatherConditions.SUN,
+        SnipsWeatherConditions.RAINCOAT: WeatherConditions.RAIN
+
     }
 
     def __init__(self, key):
-        self.value = SnipsWeatherConditions[key]
+        self.value = None
+        if type(key) is SnipsWeatherConditions:
+            self.value = key
+        elif type(key) is int:
+            try:
+                self.value = SnipsWeatherConditions(key)
+            except:
+                pass
+        elif type(key) is str:
+            key = _convert_to_unix_case(key)
+            if key in SnipsWeatherConditions.__members__:
+                self.value = SnipsWeatherConditions[key]
 
     def resolve(self):
+        if self.value == None: return WeatherCondition(WeatherConditions.UNKNOWN)
         return WeatherCondition(self.mappings[self.value])
 
 
@@ -128,14 +180,32 @@ class OWMWeatherCondition(object):
         OWMWeatherConditions.FEW_CLOUDS: WeatherConditions.CLOUDS,
         OWMWeatherConditions.SCATTERED_CLOUDS: WeatherConditions.CLOUDS,
         OWMWeatherConditions.BROKEN_CLOUDS: WeatherConditions.CLOUDS,
-        OWMWeatherConditions.OVERCAST_CLOUDS: WeatherConditions.CLOUDS
+        OWMWeatherConditions.OVERCAST_CLOUDS: WeatherConditions.CLOUDS,
+        OWMWeatherConditions.CLEAR_SKY: WeatherConditions.SUN,
+        OWMWeatherConditions.TORNADO: WeatherConditions.STORM,
+        OWMWeatherConditions.TROPICAL_STORM: WeatherConditions.STORM,
+        OWMWeatherConditions.HURRICANE: WeatherConditions.STORM,
+        OWMWeatherConditions.COLD: WeatherConditions.UNKNOWN,
+        OWMWeatherConditions.HOT: WeatherConditions.UNKNOWN,
+        OWMWeatherConditions.WINDY: WeatherConditions.UNKNOWN,
+        OWMWeatherConditions.HAIL: WeatherConditions.UNKNOWN
     }
 
-    def __init__(self, id):
-        self.value = OWMWeatherConditions(id)
+    def __init__(self, key):
+        self.value = None
+        if type(key) is OWMWeatherConditions:
+            self.value = key
+        elif type(key) is int:
+            try:
+                self.value = OWMWeatherConditions(key)
+            except:
+                pass
+        elif type(key) is str:
+            key = _convert_to_unix_case(key)
+            if key in OWMWeatherConditions.__members__:
+                self.value = OWMWeatherConditions[key]
+
 
     def resolve(self):
+        if self.value == None: return WeatherCondition(WeatherConditions.UNKNOWN)
         return WeatherCondition(self.mappings[self.value])
-
-
-
