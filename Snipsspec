@@ -3,9 +3,10 @@ class_name: SnipsOWM
 description: Open Weather Map skill for Snips
 parameters: ["api_key", "default_location", "tts_service"]
 intents:
-  - intent: SearchWeatherForecast
+  - intent: SearchWeatherForecastCondition
     action: >
       {%
+        location = None
         if intent.weatherForecastLocality is not None:
           location = intent.weatherForecastLocality
         elif intent.weatherForecastCountry is not None:
@@ -15,23 +16,64 @@ intents:
         elif intent.weatherForecastGeographicalPOI is not None:
           location = intent.weatherForecastGeographicalPOI
 
+
         time = intent.weatherForecastStartDatetime
         condition = intent.weatherForecastConditionName
 
-        skill.execute(location, time, condition)
+        skill.speak_condition(condition, location, time)
       %}
   - intent: SearchWeatherForecastItem
     action: >
       {%
-      skill.light_on_set("white", intent.number, intent.house_room_EN)
+        location = None
+        if intent.weatherForecastLocality is not None:
+          location = intent.weatherForecastLocality
+        elif intent.weatherForecastCountry is not None:
+          location = intent.weatherForecastCountry
+        elif intent.weatherForecastRegion is not None:
+          location = intent.weatherForecastRegion
+        elif intent.weatherForecastGeographicalPOI is not None:
+          location = intent.weatherForecastGeographicalPOI
+          
+
+        time = intent.weatherForecastStartDatetime
+        item = intent.weatherForecastItemName
+
+        skill.speak_condition(item, location, time)
       %}
   - intent: SearchWeatherForecast
     action: >
       {%
-      skill.light_down(intent.house_room_EN)
+        location = None
+        if intent.weatherForecastLocality is not None:
+          location = intent.weatherForecastLocality
+        elif intent.weatherForecastCountry is not None:
+          location = intent.weatherForecastCountry
+        elif intent.weatherForecastRegion is not None:
+          location = intent.weatherForecastRegion
+        elif intent.weatherForecastGeographicalPOI is not None:
+          location = intent.weatherForecastGeographicalPOI
+          
+
+        time = intent.weatherForecastStartDatetime
+
+        skill.speak_condition(None, location, time)
       %}
-  - intent: SearchWeatherForecastCondition
+  - intent: SearchWeatherForecastTemperature
     action: >
       {%
-      skill.light_up(intent.house_room_EN)
+        location = None
+        if intent.weatherForecastLocality is not None:
+          location = intent.weatherForecastLocality
+        elif intent.weatherForecastCountry is not None:
+          location = intent.weatherForecastCountry
+        elif intent.weatherForecastRegion is not None:
+          location = intent.weatherForecastRegion
+        elif intent.weatherForecastGeographicalPOI is not None:
+          location = intent.weatherForecastGeographicalPOI
+          
+
+        time = intent.weatherForecastStartDatetime
+
+        skill.speak_temperature(location, time)
       %}
