@@ -42,7 +42,7 @@ class WeatherCondition(object):
         WeatherConditions.STORM : ["storms are expected","it's going to be stormy","expect storms"],
         WeatherConditions.HUMID : ["humidity is expected","it's going to be humid"],
         WeatherConditions.WIND : ["wind is expected","it's going to be windy","expect wind"],
-        WeatherConditions.UNKNOWN : ["I don't know how to describe"]
+        WeatherConditions.UNKNOWN : ["I don't know how to describe the weather"]
     }
 
     def describe(self):
