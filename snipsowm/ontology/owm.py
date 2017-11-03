@@ -50,7 +50,15 @@ class OWMWeatherConditions(Enum):
     VOLCANIC_ASH = 762
     SQUALLS = 771
     TORNAD = 781
+    CLEAR_SKY = 800
     FEW_CLOUDS = 801
     SCATTERED_CLOUDS = 802
     BROKEN_CLOUDS = 803
     OVERCAST_CLOUDS = 804
+    TORNADO = 900 
+    TROPICAL_STORM = 901 
+    HURRICANE = 902 
+    COLD = 903 
+    HOT = 904 
+    WINDY = 905 
+    HAIL = 906 
