@@ -1,13 +1,12 @@
-# -*-: coding utf-8 -*-
+# -*- coding: utf-8 -*-
 """ OpenWeatherMap skill for Snips. """
 
-import requests
-import json
-import pprint
-
-from sentence_generation.sentence_generator import generate_condition_sentence, generate_temperature_sentence, SentenceTone
-from ontology import weather_condition, snips, owm
 import datetime
+import json
+
+import requests
+
+from snipsowm import weather_condition
 
 
 class SnipsOWM:
@@ -16,7 +15,7 @@ class SnipsOWM:
     API_WEATHER_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
     API_FORECAST_ENDPOINT = "http://api.openweathermap.org/data/2.5/forecast"
 
-    def __init__(self, api_key, default_location, tts_service=None):
+    def __init__(self, api_key, default_location, tts_service=None, locale="en_US"):
         """
         :param api_key: OpenWeatherMap API key.
         :param default_location: Default location for which to fetch the
@@ -45,13 +44,12 @@ class SnipsOWM:
         if locality is None:
             locality = self.default_location
         actual_condition, temperature = \
-                    self.get_current_weather(locality) if date is None else self.get_forecast_weather(locality, date)
+            self.get_current_weather(locality) if date is None else self.get_forecast_weather(locality, date)
 
         generated_sentence = generate_temperature_sentence(temperature, locality, date)
 
         if self.tts_service is not None:
             self.tts_service.speak(generated_sentence)
-
 
     def speak_condition(self, assumed_condition, locality, date, granularity=0):
         """ Speak a random response for a given weather condition
@@ -71,11 +69,9 @@ class SnipsOWM:
         :return: A random response for a given weather condition
                  at a specified locality and datetime.
         """
-
-        # We initialize variables
-
-        actual_condition_group = weather_condition.WeatherCondition( weather_condition.WeatherConditions.UNKNOWN )
-        assumed_condition_group = weather_condition.WeatherCondition( weather_condition.WeatherConditions.UNKNOWN )
+        # Default values for variables
+        actual_condition_group = weather_condition.WeatherCondition(weather_condition.WeatherConditions.UNKNOWN)
+        assumed_condition_group = weather_condition.WeatherCondition(weather_condition.WeatherConditions.UNKNOWN)
         tone = SentenceTone.NEUTRAL
         if locality is None:
             locality = self.default_location
@@ -85,7 +81,8 @@ class SnipsOWM:
         actual_condition, temperature = \
             self.get_current_weather(locality) if date is None else self.get_forecast_weather(locality, date)
 
-        # We find the categorie (group) of the received weather description
+
+        # We find the category (group) of the received weather description
 
         assumed_condition_group = weather_condition.SnipsWeatherCondition(assumed_condition).resolve()
         actual_condition_group = weather_condition.OWMWeatherCondition(actual_condition).resolve()
@@ -98,7 +95,6 @@ class SnipsOWM:
         # We compose the sentence
 
         generated_sentence = generate_condition_sentence(tone, actual_condition_group.describe(), locality, date)
-        # print "[generated sentence] " + generated_sentence
 
         # And finally send it to the TTS if provided
 
@@ -182,10 +178,12 @@ class SnipsOWM:
 
         return result
 
+
 if __name__ == "__main__":
     class STDOut:
         def speak(self, string):
             print string
+
 
     std_out = STDOut()
 
