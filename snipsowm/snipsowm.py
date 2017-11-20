@@ -26,6 +26,10 @@ class SnipsOWM:
         self.api_key = api_key
         self.default_location = default_location
         self.tts_service = tts_service
+        self.locale = locale
+
+    def test_skill(self):
+        print "[DEBUG] {}".format(self.locale)
 
     def speak_temperature(self, locality, date, granularity=0):
         """ Tell the temperature at a given locality and datetime.
