@@ -6,7 +6,7 @@ import json
 
 import requests
 import weather_condition
-from sentence_generator import SentenceTone, generate_condition_sentence
+from sentence_generator import SentenceTone, generate_condition_sentence, generate_temperature_sentence
 
 class SnipsOWM:
     """ OpenWeatherMap skill for Snips. """
