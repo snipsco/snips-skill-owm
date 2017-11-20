@@ -6,11 +6,6 @@ import locale
 import random
 
 
-class Language(Enum):
-    ENGLISH = 0
-    FRENCH = 1
-
-
 class SentenceTone(Enum):
     NEUTRAL = 0
     POSITIVE = 1
@@ -42,95 +37,8 @@ def date_to_string(date, granularity=0):
     return date.strftime("%A, %d %B, %H:%M%p")
 
 
-def generate_condition_sentence(tone, condition_description, locality, date):
-    """
-    The sentence is generated from those parts :
-        - introduction (We answer positively or negatively to the user)
-        - condition (we describe the condition to the user)
-        - date (when is the condition happening)
-        - locality (where the condition is happening)
-
-    :param tone:
-    :type tone: SentenceTone
-    :param condition_description:
-    :type condition_description: basestring
-    :param locality:
-    :type locality:basestring
-    :param date:
-    :type date:datetime
-    :return:
-    :rtype:
-
-    """
-
-    # Introduction
-    sentence_beginnings = {
-        SentenceTone.POSITIVE: "Yes, ",
-        SentenceTone.NEGATIVE: "No, ",
-        SentenceTone.NEUTRAL: ""
-
-    }
-
-    sentence_beginning = sentence_beginnings[tone]
-    sentence_locality = "" if locality is None else " in {}".format(locality)  # Locality
-    sentence_date = "" if date is None else " on {}".format(date_to_string(date))  # date
-
-    permutable_parameters = list((sentence_locality, sentence_date))
-    random.shuffle(permutable_parameters)
-    parameters = (sentence_beginning, condition_description) + tuple(permutable_parameters)
-
-    return "{}{}{}{}".format(*parameters)
-
-
-def generate_temperature_sentence(temperature, locality, date):
-    """
-    The sentence is generated from those parts :
-        - the temperature for the date and time
-        - date (the time when their will be such a temperature )
-        - locality (the place their is such a temperature)
-
-    :param temperature
-    :param locality:
-    :type locality:basestring
-    :param date:
-    :type date:datetime
-    :return:
-    :rtype:
-
-    """
-    if (temperature is None):
-        return "I couldn't fetch the right data for the specified place and date"
-    sentence_beginning = "The temperature"
-
-    temperature = "will be " + str(temperature) + " degrees"
-
-    sentence_locality = "" if locality is None else "in {}".format(locality)  # Locality
-    sentence_date = "" if date is None else "on {}".format(date_to_string(date))  # date
-
-    time_place_parameters = list((sentence_locality, sentence_date))
-    random.shuffle(time_place_parameters)
-
-    time_place_str = time_place_parameters[0] + " " + time_place_parameters[1]
-
-    temp_time_place_params = [time_place_str, temperature]
-    random.shuffle(temp_time_place_params)
-
-    return "{} {} {}".format(sentence_beginning, *temp_time_place_params)
-
-
-def _flatten(array):
-    result = []
-    for val in array:
-        if type(val) is str:
-            result += val
-        else:
-            for sub_val in val:
-                result += val
-    return result
-
-
 def french_is_masculine_word(word):
-    return word[len(word) - 1] not in ['é','e']
+    return word[len(word) - 1] not in ['é', 'e']
 
 
 def starts_with_vowel(word):
@@ -138,12 +46,12 @@ def starts_with_vowel(word):
 
 
 class SentenceGenerator(object):
-    def __init__(self, language=Language.ENGLISH):
+    def __init__(self, locale="en_US"):
         """
         :param language:
         :type language: Language
         """
-        self.language = language
+        self.locale = locale
 
     def generate_sentence_introduction(self, tone):
         """
@@ -155,19 +63,19 @@ class SentenceGenerator(object):
         """
 
         sentence_beginnings = {
-            Language.ENGLISH: {
-                SentenceTone.POSITIVE: "Yes, ",
-                SentenceTone.NEGATIVE: "No, ",
+            "en_US": {
+                SentenceTone.POSITIVE: "Yes,",
+                SentenceTone.NEGATIVE: "No,",
                 SentenceTone.NEUTRAL: ""
             },
-            Language.FRENCH: {
-                SentenceTone.POSITIVE: "Oui, ",
-                SentenceTone.NEGATIVE: "Non, ",
+            "fr_FR": {
+                SentenceTone.POSITIVE: "Oui,",
+                SentenceTone.NEGATIVE: "Non,",
                 SentenceTone.NEUTRAL: ""
             }
         }
 
-        sentence_beginning = sentence_beginnings[self.language][tone]
+        sentence_beginning = sentence_beginnings[self.locale][tone]
         return sentence_beginning
 
     def generate_sentence_locality(self, POI=None, Locality=None, Region=None, Country=None):
@@ -183,9 +91,9 @@ class SentenceGenerator(object):
         :return:
         :rtype: basestring
         """
-        if self.language == Language.ENGLISH:
+        if self.locale == "en_US":
             return "" if Locality is None else " in {}".format(Locality)
-        if self.language == Language.FRENCH:
+        if self.locale == "fr_FR":
             """
             Country granularity:
             - We use "au" for masculine nouns that begins with a consonant
@@ -222,7 +130,7 @@ class SentenceGenerator(object):
         else:
             return ""
 
-    def generate_sentence_date(self,date, granularity=0, language=Language.ENGLISH):
+    def generate_sentence_date(self, date, granularity=0):
         """ Convert a date to a string, with an appropriate level of
             granularity.
 
@@ -234,14 +142,13 @@ class SentenceGenerator(object):
                             3: year (only year is returned)
         :return: A textual representation of the date.
         """
-        if (language == Language.FRENCH):
-            """
-            Careful, this operation is not thread safe ...
-            """
-            try:
-                locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
-            except locale.Error:
-                return ""
+
+        full_locale = "{}.UTF-8".format(self.locale)
+
+        try:  # Careful, this operation is not thread safe ...
+            locale.setlocale(locale.LC_TIME, full_locale)
+        except locale.Error:
+            return ""
 
         if not date:
             return ""
@@ -255,10 +162,14 @@ class SentenceGenerator(object):
 
         return date.strftime("%A, %d %B, %H:%M%p")
 
-    def generate_condition_description(self):
-        return ""
+    def generate_condition_description(self, condition_description):
+        return condition_description if len(condition_description) > 0 else ""
 
-    def generate_condition_sentence(self):
+    def generate_condition_sentence(self,
+                                    tone=SentenceTone.POSITIVE,
+                                    date=None, granularity=0,
+                                    condition_description=None,
+                                    POI=None, Locality=None, Region=None, Country=None):
         """
             The sentence is generated from those parts :
                 - introduction (We answer positively or negatively to the user)
@@ -278,10 +189,68 @@ class SentenceGenerator(object):
             :rtype:
 
             """
-        sentence = ""
-        return sentence
+        introduction = self.generate_sentence_introduction(tone)
+
+        locality = self.generate_sentence_locality(POI, Locality, Region, Country)
+
+        date = self.generate_sentence_date(date)
+
+        permutable_parameters = list((locality, date))
+        random.shuffle(permutable_parameters)
+        parameters = (introduction, condition_description) + tuple(permutable_parameters)
+        return "{} {} {} {}".format(*parameters)
+
+    def generate_temperature_sentence(self,
+                                      temperature="-273.15",
+                                      date=None, granularity=0,
+                                      POI=None, Locality=None, Region=None, Country=None):
+        """
+        The sentence is generated from those parts :
+            - the temperature for the date and time
+            - date (the time when their will be such a temperature )
+            - locality (the place their is such a temperature)
+
+        :param temperature
+        :param locality:
+        :type locality:basestring
+        :param date:
+        :type date:datetime
+        :return:
+        :rtype:
+
+        """
+        error_sentences = {
+            "en_US": "I couldn't fetch the right data for the specified place and date",
+            "fr_FR": "Je n'ai pas pu récupérer les prévisions de température pour cet endroit et ces dates"
+        }
+
+        if (temperature is None):
+            return error_sentences[self.locale]
+
+        sentence_introductions = {
+            "en_US": ["The temperature will be {} degrees"],
+            "fr_FR": ["La température sera de {} degrés", "Il fera {} degrés"]
+        }
+
+        introduction = random.choice(sentence_introductions[self.locale]).format(temperature)
+        locality = self.generate_sentence_locality(POI, Locality, Region, Country)
+        date = self.generate_sentence_date(date)
+
+        permutable_parameters = list((locality, date))
+        random.shuffle(permutable_parameters)
+        parameters = (introduction,) + tuple(permutable_parameters)
+        return "{} {} {} ".format(*parameters)
 
 
 if __name__ == "__main__":
-    generator = SentenceGenerator(Language.FRENCH)
-    print generator.generate_condition_locality()
+    generator = SentenceGenerator(locale="fr_FR")
+    a = generator.generate_condition_sentence(tone=SentenceTone.POSITIVE,
+                                              date=datetime.datetime(2017, 5, 15), granularity=1,
+                                              condition_description="il va pleuvoir",
+                                              Locality="Paris"
+                                              )
+
+    b = generator.generate_temperature_sentence(temperature="18",
+                                                date=datetime.datetime(2017, 5, 15), granularity=1,
+                                                Locality="Paris")
+
