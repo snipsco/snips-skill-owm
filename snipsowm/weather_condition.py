@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 from enum import Enum
 from owm import OWMWeatherConditions
 from snips import SnipsWeatherConditions
 import random
+
 
 def _convert_to_unix_case(text):
     result = ""
@@ -11,6 +13,7 @@ def _convert_to_unix_case(text):
         else:
             result += i.capitalize()
     return result
+
 
 class WeatherConditions(Enum):
     UNKNOWN = 0
@@ -32,21 +35,54 @@ class WeatherCondition(object):
         self.value = key
 
     descriptions = {
-        WeatherConditions.THUNDERSTORM : ["Thunderstorms are expected","expect thunderstorms"],
-        WeatherConditions.DRIZZLE : ["drizzle are expected","expect drizzle"],
-        WeatherConditions.RAIN : ["rain is expected","it's going to be rainy","expect rain"],
-        WeatherConditions.SNOW : ["snow is expected","it's going to snow","expect snow"],
-        WeatherConditions.FOG : ["fog is expected","it's going to be foggy","expect fog"],
-        WeatherConditions.SUN : ["sun is expected","it's going to be sunny", "the sun will shine"],
-        WeatherConditions.CLOUDS : ["it's going to be cloudy","expect clouds"],
-        WeatherConditions.STORM : ["storms are expected","it's going to be stormy","expect storms"],
-        WeatherConditions.HUMID : ["humidity is expected","it's going to be humid"],
-        WeatherConditions.WIND : ["wind is expected","it's going to be windy","expect wind"],
-        WeatherConditions.UNKNOWN : ["I don't know how to describe the weather"]
+        WeatherConditions.THUNDERSTORM: {
+            "en_US": ["Thunderstorms are expected", "expect thunderstorms"],
+            "fr_FR": ["de l'orage et des éclair sont prévus"]
+        },
+        WeatherConditions.DRIZZLE: {
+            "en_US": ["drizzle are expected", "expect drizzle"],
+            "fr_FR": ["prévoir de la bruine"],
+        },
+        WeatherConditions.RAIN: {
+            "en_US": ["rain is expected", "it's going to be rainy", "expect rain"],
+            "fr_FR": ["il va pleuvoir", "il pleuvra", "le temps sera pluvieux"],
+        },
+        WeatherConditions.SNOW: {
+            "en_US": ["snow is expected", "it's going to snow", "expect snow"],
+            "fr_FR": ["il neigera", "il va neiger", "le temps sera neigeux"],
+        },
+        WeatherConditions.FOG: {
+            "en_US": ["fog is expected", "it's going to be foggy", "expect fog"],
+            "fr_FR": ["Il y aura du brouillard"],
+        },
+        WeatherConditions.SUN: {
+            "en_US": ["sun is expected", "it's going to be sunny", "the sun will shine"],
+            "fr_FR": ["le temps sera ensoleillé"],
+        },
+        WeatherConditions.CLOUDS: {
+            "en_US": ["it's going to be cloudy", "expect clouds"],
+            "fr_FR": ["le temps sera nuageux"],
+        },
+        WeatherConditions.STORM: {
+            "en_US": ["storms are expected", "it's going to be stormy", "expect storms"],
+            "fr_FR": ["il y aura de l'orage"],
+        },
+        WeatherConditions.HUMID: {
+            "en_US": ["humidity is expected", "it's going to be humid"],
+            "fr_FR": ["le temps sera humide"],
+        },
+        WeatherConditions.WIND: {
+            "en_US": ["wind is expected", "it's going to be windy", "expect wind"],
+            "fr_FR": ["s'attendre à du vent"],
+        },
+        WeatherConditions.UNKNOWN: {
+            "en_US": ["I don't know how to describe the weather"],
+            "fr_FR": ["Je ne peux pas décrire la météo"],
+        },
     }
 
-    def describe(self):
-        return random.choice(self.descriptions[self.value])
+    def describe(self, locale):
+        return random.choice(self.descriptions[self.value][locale])
 
 
 class SnipsWeatherCondition(object):
@@ -74,7 +110,8 @@ class SnipsWeatherCondition(object):
         SnipsWeatherConditions.HUMIDITY: WeatherConditions.HUMID,
         SnipsWeatherConditions.SNOWSTORM: WeatherConditions.SNOW,
         SnipsWeatherConditions.WIND: WeatherConditions.WIND,
-        SnipsWeatherConditions.TRENCH_COAT: WeatherConditions.RAIN, # TODO REMOVE WHEN INTENT 'ITEM' WILL BE INDEPENDENTLY MANAGED
+        SnipsWeatherConditions.TRENCH_COAT: WeatherConditions.RAIN,
+        # TODO REMOVE WHEN INTENT 'ITEM' WILL BE INDEPENDENTLY MANAGED
         SnipsWeatherConditions.PARKA: WeatherConditions.RAIN,
         SnipsWeatherConditions.CARDIGAN: WeatherConditions.RAIN,
         SnipsWeatherConditions.SUMMER_CLOTHING: WeatherConditions.SUN,
@@ -204,7 +241,6 @@ class OWMWeatherCondition(object):
             key = _convert_to_unix_case(key)
             if key in OWMWeatherConditions.__members__:
                 self.value = OWMWeatherConditions[key]
-
 
     def resolve(self):
         if self.value == None: return WeatherCondition(WeatherConditions.UNKNOWN)
