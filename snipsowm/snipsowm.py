@@ -6,7 +6,8 @@ import json
 
 import requests
 import weather_condition
-from sentence_generator import SentenceTone, generate_condition_sentence, generate_temperature_sentence
+from sentence_generator import SentenceTone, SentenceGenerator
+
 
 class SnipsOWM:
     """ OpenWeatherMap skill for Snips. """
@@ -28,9 +29,6 @@ class SnipsOWM:
         self.tts_service = tts_service
         self.locale = locale
 
-    def test_skill(self):
-        print "[DEBUG] {}".format(self.locale)
-
     def speak_temperature(self, locality, date, granularity=0):
         """ Tell the temperature at a given locality and datetime.
 
@@ -49,7 +47,10 @@ class SnipsOWM:
         actual_condition, temperature = \
             self.get_current_weather(locality) if date is None else self.get_forecast_weather(locality, date)
 
-        generated_sentence = generate_temperature_sentence(temperature, locality, date)
+        sentence_generator = SentenceGenerator(locale=self.locale)
+        generated_sentence = sentence_generator.generate_temperature_sentence(temperature=temperature,
+                                                                              date=date, granularity=0,
+                                                                              Locality=locality)
 
         if self.tts_service is not None:
             self.tts_service.speak(generated_sentence)
@@ -84,7 +85,6 @@ class SnipsOWM:
         actual_condition, temperature = \
             self.get_current_weather(locality) if date is None else self.get_forecast_weather(locality, date)
 
-
         # We find the category (group) of the received weather description
 
         assumed_condition_group = weather_condition.SnipsWeatherCondition(assumed_condition).resolve()
@@ -96,8 +96,11 @@ class SnipsOWM:
             tone = SentenceTone.NEGATIVE if assumed_condition_group.value != actual_condition_group.value else SentenceTone.POSITIVE
 
         # We compose the sentence
-
-        generated_sentence = generate_condition_sentence(tone, actual_condition_group.describe(), locality, date)
+        sentence_generator = SentenceGenerator(locale=self.locale)
+        generated_sentence = sentence_generator.generate_condition_sentence(tone=tone,
+                                                                            date=date, granularity=0,
+                                                                            condition_description=actual_condition_group.describe(self.locale),
+                                                                            Locality=locality)
 
         # And finally send it to the TTS if provided
 
@@ -190,30 +193,29 @@ if __name__ == "__main__":
 
     std_out = STDOut()
 
-    skill = SnipsOWM("", "Paris", std_out)
+    skill = SnipsOWM("", "Paris", std_out, locale="fr_FR")
 
     print "\n speak condition: \n"
-
-    skill.speak_condition('HUMID', 'Paris', datetime.datetime(2017, 5, 15))
+    skill.speak_condition('RAIN', 'Paris', datetime.datetime(2017, 11, 23))
     skill.speak_condition('BLIZZARD', 'Lyon', None)
     skill.speak_condition('NOTKNOWN', 'Paris', None)
-    skill.speak_condition('CLOUD', 'Paris', datetime.datetime(2017, 5, 15))
-    skill.speak_condition('CLOUD', 'Lyon', datetime.datetime(2017, 11, 1))
-    skill.speak_condition('CLOUD', 'Lyon', datetime.datetime(2017, 11, 5))
+    skill.speak_condition('CLOUD', 'Paris', datetime.datetime(2017, 11, 20))
+    skill.speak_condition('CLOUD', 'Lyon', datetime.datetime(2017, 11, 23))
+    skill.speak_condition('CLOUD', 'Lyon', datetime.datetime(2017, 11, 22))
     skill.speak_condition('CLOUDY', 'Paris', None)
     skill.speak_condition('SUNNY', None, None)
     skill.speak_condition(None, None, None)
 
+
     print "\n\n\n speak temperature: \n"
 
-    skill.speak_temperature('Paris', datetime.datetime(2017, 11, 1))
-    skill.speak_temperature('Paris', datetime.datetime(2017, 5, 15))
-    skill.speak_temperature('Lyon', None)
-    skill.speak_temperature('Madrid', None)
+
     skill.speak_temperature(None, None)
 
+    """
     print "\n\n\n speak item: \n"
 
     skill.speak_condition('Raincoat', 'Paris', datetime.datetime(2017, 5, 15))
     skill.speak_condition('Sunglasses', 'Lyon', datetime.datetime(2017, 11, 1))
     skill.speak_condition('Chunky Sweater', 'Lyon', datetime.datetime(2017, 11, 5))
+    """
