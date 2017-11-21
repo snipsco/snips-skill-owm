@@ -239,7 +239,7 @@ class SentenceGenerator(object):
         permutable_parameters = list((locality, date))
         random.shuffle(permutable_parameters)
         parameters = (introduction,) + tuple(permutable_parameters)
-        return "{} {} {} ".format(*parameters)
+        return "{} {} {}".format(*parameters)
 
 
 if __name__ == "__main__":
