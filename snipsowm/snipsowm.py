@@ -61,7 +61,8 @@ class SnipsOWM:
 
         :param assumed_condition: A SnipsWeatherCondition value string
                           corresponding to a weather condition extracted from the slots.
-                          e.g 'HUMID', 'SUNNY', etc ... 
+                          e.g 'HUMID', 'SUNNY', etc ...
+                          Can be none, if there is no assumption.
         :param locality: The locality of the forecast, e.g. 'Paris,fr' or
                          'Eiffel Tower'
         :type locality: string
@@ -85,15 +86,19 @@ class SnipsOWM:
         actual_condition, temperature = \
             self.get_current_weather(locality) if date is None else self.get_forecast_weather(locality, date)
 
-        # We find the category (group) of the received weather description
 
-        assumed_condition_group = weather_condition.SnipsWeatherCondition(assumed_condition).resolve()
+        # We retrieve the weather from our weather provider
         actual_condition_group = weather_condition.OWMWeatherCondition(actual_condition).resolve()
 
-        # We check if their is a positive/negative tone to add to the answer
+        if assumed_condition:
+            # We find the category (group) of the received weather description
+            assumed_condition_group = weather_condition.SnipsWeatherCondition(assumed_condition).resolve()
 
-        if assumed_condition_group.value != weather_condition.WeatherConditions.UNKNOWN:
-            tone = SentenceTone.NEGATIVE if assumed_condition_group.value != actual_condition_group.value else SentenceTone.POSITIVE
+            # We check if their is a positive/negative tone to add to the answer
+            if assumed_condition_group.value != weather_condition.WeatherConditions.UNKNOWN:
+                tone = SentenceTone.NEGATIVE if assumed_condition_group.value != actual_condition_group.value else SentenceTone.POSITIVE
+        else:
+            tone = SentenceTone.NEUTRAL
 
         # We compose the sentence
         sentence_generator = SentenceGenerator(locale=self.locale)
@@ -196,10 +201,10 @@ if __name__ == "__main__":
     skill = SnipsOWM("", "Paris", std_out, locale="fr_FR")
 
     print "\n speak condition: \n"
-    skill.speak_condition('RAIN', 'Paris', datetime.datetime(2017, 11, 23))
+    skill.speak_condition(None, 'Paris', datetime.datetime(2017, 11, 23))
     skill.speak_condition('BLIZZARD', 'Lyon', None)
     skill.speak_condition('NOTKNOWN', 'Paris', None)
-    skill.speak_condition('CLOUD', 'Paris', datetime.datetime(2017, 11, 20))
+    skill.speak_condition('CLOUD', 'Paris', datetime.datetime(2017, 11, 23))
     skill.speak_condition('CLOUD', 'Lyon', datetime.datetime(2017, 11, 23))
     skill.speak_condition('CLOUD', 'Lyon', datetime.datetime(2017, 11, 22))
     skill.speak_condition('CLOUDY', 'Paris', None)
