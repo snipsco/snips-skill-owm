@@ -92,7 +92,7 @@ class SentenceGenerator(object):
         :rtype: basestring
         """
         if self.locale == "en_US":
-            return "" if Locality is None else " in {}".format(Locality)
+            return "" if Locality is None else "in {}".format(Locality)
         if self.locale == "fr_FR":
             """
             Country granularity:
@@ -198,7 +198,10 @@ class SentenceGenerator(object):
         permutable_parameters = list((locality, date))
         random.shuffle(permutable_parameters)
         parameters = (introduction, condition_description) + tuple(permutable_parameters)
-        return "{} {} {} {}".format(*parameters)
+
+        # Formatting
+        parameters = filter(lambda x: len(x) > 0, parameters)
+        return ("{} "*len(parameters)).format(*parameters)
 
     def generate_temperature_sentence(self,
                                       temperature="-273.15",
