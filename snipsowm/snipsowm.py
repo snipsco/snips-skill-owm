@@ -55,7 +55,7 @@ class SnipsOWM:
         if self.tts_service is not None:
             self.tts_service.speak(generated_sentence)
 
-    def speak_condition(self, assumed_condition, locality, date, granularity=0):
+    def speak_condition(self, assumed_condition, date, POI=None, Locality=None, Region=None, Country=None, granularity=0):
         """ Speak a random response for a given weather condition
             at a specified locality and datetime.
 
@@ -78,11 +78,11 @@ class SnipsOWM:
         actual_condition_group = weather_condition.WeatherCondition(weather_condition.WeatherConditions.UNKNOWN)
         assumed_condition_group = weather_condition.WeatherCondition(weather_condition.WeatherConditions.UNKNOWN)
         tone = SentenceTone.NEUTRAL
-        if locality is None:
+
+        if not (POI or Locality or Region or Country):
             locality = self.default_location
 
         # We retrieve the condition and the temperature from our weather provider
-
         actual_condition, temperature = \
             self.get_current_weather(locality) if date is None else self.get_forecast_weather(locality, date)
 
@@ -105,7 +105,7 @@ class SnipsOWM:
         generated_sentence = sentence_generator.generate_condition_sentence(tone=tone,
                                                                             date=date, granularity=0,
                                                                             condition_description=actual_condition_group.describe(self.locale),
-                                                                            Locality=locality)
+                                                                            POI=POI, Locality=Locality, Region=Region, Country=Country)
 
         # And finally send it to the TTS if provided
 
@@ -198,9 +198,14 @@ if __name__ == "__main__":
 
     std_out = STDOut()
 
-    skill = SnipsOWM("", "Paris", std_out, locale="fr_FR")
+    skill = SnipsOWM("", "Paris", std_out, locale="en_US")
 
     print "\n speak condition: \n"
+
+    skill.speak_condition(None, datetime.datetime(2017, 11, 23), locality='Budapest')
+
+
+    """
     skill.speak_condition(None, 'Paris', datetime.datetime(2017, 11, 23))
     skill.speak_condition('BLIZZARD', 'Lyon', None)
     skill.speak_condition('NOTKNOWN', 'Paris', None)
@@ -217,7 +222,7 @@ if __name__ == "__main__":
 
     skill.speak_temperature(None, None)
 
-    """
+
     print "\n\n\n speak item: \n"
 
     skill.speak_condition('Raincoat', 'Paris', datetime.datetime(2017, 5, 15))

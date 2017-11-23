@@ -16,30 +16,21 @@ intents:
   - intent: SearchWeatherForecastCondition
     action: |
       {%
-      from snipsfakeweather.snipsfakeweather import WeatherCondition
-
-      locality = None
-      try:
-        locality = intent.forecast_locality \
-          or intent.forecast_country \
-          or intent.forecast_region \
-          or intent.forecast_geographical_poi
-      except Exception:
-        pass
 
       datetime = None
       granularity = None
+
       if isinstance(intent.forecast_start_date_time, InstantTime):
         datetime = intent.forecast_start_date_time.datetime
         granularity = intent.forecast_start_date_time.granularity
       elif isinstance(intent.forecast_start_date_time, TimeInterval):
         datetime = intent.forecast_start_date_time.start
 
-      condition = None
+      condition_name = None
       try:
-        name = intent.forecast_condition_name
+        condition_name = intent.forecast_condition_name
       except Exception:
         pass
 
-      skill.speak_condition(condition, datetime, granularity=granularity, locality=locality)
+      skill.speak_condition(condition, datetime, granularity=granularity, Locality=intent.forecast_locality, Region=intent.forecast_region, Country=intent.forecast_country, POI=intent.forecast_geographical_poi)
       %}
