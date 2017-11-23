@@ -79,8 +79,8 @@ class SnipsOWM:
         assumed_condition_group = weather_condition.WeatherCondition(weather_condition.WeatherConditions.UNKNOWN)
         tone = SentenceTone.NEUTRAL
 
-        if not (POI or Locality or Region or Country):
-            locality = self.default_location
+        localities = filter(lambda x: x is not None, [POI, Locality, Region, Country])
+        locality = localities[0] if len(localities) > 0 else self.default_location
 
         # We retrieve the condition and the temperature from our weather provider
         actual_condition, temperature = \
