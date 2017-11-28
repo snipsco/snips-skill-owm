@@ -20,7 +20,7 @@ intents:
 
       from dateutil.parser import parse
       datetime = None
-      now = dt.datetime.now()
+      now = dt.datetime.now().replace(tzinfo=None)
       granularity = None
 
       if isinstance(intent.forecast_start_date_time, InstantTime):
