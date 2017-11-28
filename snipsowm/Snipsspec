@@ -16,11 +16,11 @@ intents:
   - intent: searchWeatherForecast
     action: |
       {%
-      import datetime
+      import datetime as dt
 
       from dateutil.parser import parse
       datetime = None
-      now = datetime.datetime.now()
+      now = dt.datetime.now()
       granularity = None
 
       if isinstance(intent.forecast_start_date_time, InstantTime):
