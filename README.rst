@@ -13,6 +13,13 @@ The skill is on `PyPI`_, so you can just install it with `pip`_:
 
     $ pip install snipsowm
 
+
+You also need to generate locales for your languages. So far the locales that are supported are :
+- `en_US`
+- `fr_FR`
+
+You can generate them with `sudo raspi-config`. Going in the `Localisation Options` submenu, then in the `Change Locale` submenu, and selecting the locales you want to support.
+
 Usage
 -----
 
