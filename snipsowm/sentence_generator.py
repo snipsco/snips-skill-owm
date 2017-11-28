@@ -157,11 +157,11 @@ class SentenceGenerator(object):
         if granularity == 0:
             return date.strftime("%A")
         elif granularity == 1:
-            return date.strftime("%A, %d")
+            return date.strftime("%A, %-d")
         elif granularity == 2:
-            return date.strftime("%A, %d %B")
+            return date.strftime("%A, %-d %B")
 
-        return date.strftime("%A, %d %B, %H:%M%p")
+        return date.strftime("%A, %-d %B, %H:%M%p")
 
     def generate_condition_description(self, condition_description):
         return condition_description if len(condition_description) > 0 else ""
