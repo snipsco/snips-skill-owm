@@ -194,7 +194,7 @@ class SentenceGenerator(object):
 
         locality = self.generate_sentence_locality(POI, Locality, Region, Country)
 
-        date = self.generate_sentence_date(date)
+        date = self.generate_sentence_date(date, granularity=granularity)
 
         permutable_parameters = list((locality, date))
         random.shuffle(permutable_parameters)
