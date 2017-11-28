@@ -25,6 +25,7 @@ intents:
 
       if isinstance(intent.forecast_start_date_time, InstantTime):
         datetime = intent.forecast_start_date_time.datetime
+
         delta_days = abs((datetime - now).days)
         if delta_days > 6: # There a week difference between today and the date we want the forecast.
           granularity = 1 # Give the day of the forecast date, plus the number of the day in the month.
@@ -43,7 +44,6 @@ intents:
       except Exception:
         pass
 
-      granularity = 1
       print "cond: {}, datetime: {}, Local: {}, granularity: {}".format(condition_name, datetime, intent.forecast_locality, granularity)
       skill.speak_condition(condition_name, datetime, granularity=granularity, Locality=intent.forecast_locality, Region=intent.forecast_region, Country=intent.forecast_country, POI=intent.forecast_geographical_poi)
       %}
