@@ -109,6 +109,7 @@ class SnipsOWM:
 
         # And finally send it to the TTS if provided
 
+        print generated_sentence
         if self.tts_service is not None:
             self.tts_service.speak(generated_sentence)
 
