@@ -24,7 +24,7 @@ intents:
       granularity = None
 
       if isinstance(intent.forecast_start_date_time, InstantTime):
-        datetime = intent.forecast_start_date_time.datetime
+        datetime = (intent.forecast_start_date_time.datetime).replace(tzinfo=None)
 
         delta_days = abs((datetime - now).days)
         if delta_days > 5: # There a week difference between today and the date we want the forecast.
