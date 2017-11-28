@@ -3,20 +3,20 @@ class_name: SnipsOWM
 description: Open Weather Map skill
 requires_tts: True
 intents:
-  - intent: SearchWeatherForecastTemperature
+  - intent: searchWeatherForecastTemperature
     action: |
       {%
       locality = None
       %}
-  - intent: SearchWeatherForecast
+  - intent: searchWeatherForecastCondition
     action: |
       {%
       locality = None
       %}
-  - intent: SearchWeatherForecastCondition
+  - intent: searchWeatherForecast
     action: |
       {%
-
+      from dateutil.parser import parse
       datetime = None
       granularity = None
 
@@ -24,13 +24,16 @@ intents:
         datetime = intent.forecast_start_date_time.datetime
         granularity = intent.forecast_start_date_time.granularity
       elif isinstance(intent.forecast_start_date_time, TimeInterval):
-        datetime = intent.forecast_start_date_time.start
+        datetime = parse(intent.forecast_start_date_time.start)
 
+      datetime = datetime.replace(tzinfo=None)
       condition_name = None
       try:
         condition_name = intent.forecast_condition_name
       except Exception:
         pass
 
-      skill.speak_condition(condition, datetime, granularity=granularity, Locality=intent.forecast_locality, Region=intent.forecast_region, Country=intent.forecast_country, POI=intent.forecast_geographical_poi)
+      granularity = 1
+      print "cond: {}, datetime: {}, Local: {}, granularity: {}".format(condition_name, datetime, intent.forecast_locality, granularity)
+      skill.speak_condition(condition_name, datetime, granularity=granularity, Locality=intent.forecast_locality, Region=intent.forecast_region, Country=intent.forecast_country, POI=intent.forecast_geographical_poi)
       %}
