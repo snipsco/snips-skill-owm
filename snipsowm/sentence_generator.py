@@ -148,6 +148,7 @@ class SentenceGenerator(object):
         try:  # Careful, this operation is not thread safe ...
             locale.setlocale(locale.LC_TIME, full_locale)
         except locale.Error:
+            print "Careful ! There was an error while trying to set the locale. This means your locale is not properly installed. Please refer to the README for more information."
             return ""
 
         if not date:
