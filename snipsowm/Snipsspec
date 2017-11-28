@@ -37,7 +37,6 @@ intents:
       elif isinstance(intent.forecast_start_date_time, TimeInterval):
         datetime = parse(intent.forecast_start_date_time.start)
 
-      datetime = datetime.replace(tzinfo=None)
       condition_name = None
       try:
         condition_name = intent.forecast_condition_name
