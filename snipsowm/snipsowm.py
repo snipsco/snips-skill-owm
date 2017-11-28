@@ -103,7 +103,7 @@ class SnipsOWM:
         # We compose the sentence
         sentence_generator = SentenceGenerator(locale=self.locale)
         generated_sentence = sentence_generator.generate_condition_sentence(tone=tone,
-                                                                            date=date, granularity=0,
+                                                                            date=date, granularity=granularity,
                                                                             condition_description=actual_condition_group.describe(self.locale),
                                                                             POI=POI, Locality=Locality, Region=Region, Country=Country)
 
