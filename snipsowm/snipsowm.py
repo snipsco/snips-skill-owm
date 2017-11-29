@@ -9,6 +9,14 @@ import weather_condition
 from sentence_generator import SentenceTone, SentenceGenerator
 
 
+class APIError(Exception):
+    pass
+
+
+class OpenWeatherMapAPIError(APIError):
+    pass
+
+
 class SnipsOWM:
     """ OpenWeatherMap skill for Snips. """
 
@@ -57,7 +65,8 @@ class SnipsOWM:
         if self.tts_service is not None:
             self.tts_service.speak(generated_sentence)
 
-    def speak_condition(self, assumed_condition, date, POI=None, Locality=None, Region=None, Country=None, granularity=0):
+    def speak_condition(self, assumed_condition, date, POI=None, Locality=None, Region=None, Country=None,
+                        granularity=0):
         """ Speak a response for a given weather condition
             at a specified locality and datetime.
             If the locality is not specified, use the default location.
@@ -113,31 +122,37 @@ class SnipsOWM:
         tone = SentenceTone.NEUTRAL
 
         # We retrieve the condition and the temperature from our weather provider
-        actual_condition, temperature = \
-            self.get_current_weather(locality) if date == now_date else self.get_forecast_weather(locality, date)
+        try:
+            actual_condition, temperature = \
+                self.get_current_weather(locality) if date == now_date else self.get_forecast_weather(locality, date)
 
+            # We retrieve the weather from our weather provider
+            actual_condition_group = weather_condition.OWMWeatherCondition(actual_condition).resolve()
 
-        # We retrieve the weather from our weather provider
-        actual_condition_group = weather_condition.OWMWeatherCondition(actual_condition).resolve()
+            if assumed_condition:
+                # We find the category (group) of the received weather description
+                assumed_condition_group = weather_condition.SnipsWeatherCondition(assumed_condition).resolve()
 
-        if assumed_condition:
-            # We find the category (group) of the received weather description
-            assumed_condition_group = weather_condition.SnipsWeatherCondition(assumed_condition).resolve()
+                # We check if their is a positive/negative tone to add to the answer
+                if assumed_condition_group.value != weather_condition.WeatherConditions.UNKNOWN:
+                    tone = SentenceTone.NEGATIVE if assumed_condition_group.value != actual_condition_group.value else SentenceTone.POSITIVE
+            else:
+                tone = SentenceTone.NEUTRAL
 
-            # We check if their is a positive/negative tone to add to the answer
-            if assumed_condition_group.value != weather_condition.WeatherConditions.UNKNOWN:
-                tone = SentenceTone.NEGATIVE if assumed_condition_group.value != actual_condition_group.value else SentenceTone.POSITIVE
-        else:
-            tone = SentenceTone.NEUTRAL
+            # We compose the sentence
+            sentence_generator = SentenceGenerator(locale=self.locale)
+            generated_sentence = sentence_generator.generate_condition_sentence(tone=tone,
+                                                                                date=date, granularity=granularity,
+                                                                                condition_description=actual_condition_group.describe(
+                                                                                    self.locale),
+                                                                                POI=POI, Locality=Locality,
+                                                                                Region=Region,
+                                                                                Country=Country)
 
-        # We compose the sentence
-        sentence_generator = SentenceGenerator(locale=self.locale)
-        generated_sentence = sentence_generator.generate_condition_sentence(tone=tone,
-                                                                            date=date, granularity=granularity,
-                                                                            condition_description=actual_condition_group.describe(self.locale),
-                                                                            POI=POI, Locality=Locality, Region=Region, Country=Country)
-
-        # And finally send it to the TTS if provided
+            # And finally send it to the TTS if provided
+        except OpenWeatherMapAPIError as e:
+            sentence_generator = SentenceGenerator(locale=self.locale)
+            generated_sentence = sentence_generator.generate_error_sentence()
 
         print generated_sentence
         if self.tts_service is not None:
@@ -154,6 +169,10 @@ class SnipsOWM:
                                                      location)
         r = requests.get(url)
         response = json.loads(r.text)
+
+        if response['cod'] == '404':
+            raise OpenWeatherMapAPIError(response['message'])
+
         try:
             description = response["weather"][0]["id"]
         except (KeyError, IndexError, UnicodeEncodeError):
@@ -179,6 +198,10 @@ class SnipsOWM:
                                                      location)
         r = requests.get(url)
         response = json.loads(r.text)
+
+        if response['cod'] == '404':
+            raise OpenWeatherMapAPIError(response['message'])
+
         response = self._getTopicalInfos(response, datetime)
 
         try:

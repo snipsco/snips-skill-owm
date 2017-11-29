@@ -248,6 +248,14 @@ class SentenceGenerator(object):
         parameters = (introduction,) + tuple(permutable_parameters)
         return "{} {} {}".format(*parameters)
 
+    def generate_error_sentence(self):
+        error_sentences = {
+            "en_US" : "An error occured when trying to retrieve the weather, please try again",
+            "fr_FR" : "Désolé, il y a eu une erreur lors de la récupération des données météo. Veuillez réessayer"
+        }
+
+        return error_sentences[self.locale]
+
 
 if __name__ == "__main__":
     generator = SentenceGenerator(locale="fr_FR")
