@@ -201,7 +201,7 @@ class SentenceGenerator(object):
         parameters = (introduction, condition_description) + tuple(permutable_parameters)
 
         # Formatting
-        parameters = filter(lambda x: len(x) > 0, parameters)
+        parameters = filter(lambda x: not x is None and len(x) > 0, parameters)
         return ("{} "*len(parameters)).format(*parameters)
 
     def generate_temperature_sentence(self,
