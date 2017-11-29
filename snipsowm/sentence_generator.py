@@ -127,6 +127,9 @@ class SentenceGenerator(object):
                     return "au {}".format(Country)
                 else:
                     return "en {}".format(Country)
+
+            return ""
+
         else:
             return ""
 

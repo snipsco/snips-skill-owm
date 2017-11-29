@@ -15,6 +15,8 @@ class SnipsOWM:
     API_WEATHER_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
     API_FORECAST_ENDPOINT = "http://api.openweathermap.org/data/2.5/forecast"
 
+    OWM_MAX_FORECAST_DAYS = 15
+
     def __init__(self, api_key, default_location, tts_service=None, locale="en_US"):
         """
         :param api_key: OpenWeatherMap API key.
@@ -56,31 +58,54 @@ class SnipsOWM:
             self.tts_service.speak(generated_sentence)
 
     def speak_condition(self, assumed_condition, date, POI=None, Locality=None, Region=None, Country=None, granularity=0):
-        """ Speak a random response for a given weather condition
+        """ Speak a response for a given weather condition
             at a specified locality and datetime.
+            If the locality is not specified, use the default location.
 
         :param assumed_condition: A SnipsWeatherCondition value string
                           corresponding to a weather condition extracted from the slots.
                           e.g 'HUMID', 'SUNNY', etc ...
                           Can be none, if there is no assumption.
-        :param locality: The locality of the forecast, e.g. 'Paris,fr' or
-                         'Eiffel Tower'
-        :type locality: string
+        :type assumed_condition: basestring
 
-        :param date: Time of the forecast, in ISO 8601 format, e.g.
-                     "2017-07-21T10:35:29+00:00"
-        :type date: datetime
+        :param date: datetime of the forecast
+        :type date: datetime.datetime
+
+        :param POI: Slot value from Snips
+        :type POI: basestring
+
+        :param Locality: Slot value from Snips
+        :type Locality: basestring
+
+        :param Region: Slot value from Snips
+        :type Region: basestring
+
+        :param Country: Slot value from Snips
+        :type Country: basestring
+
+        :param granularity: Precision with which the date should be described.
+        :type granularity: int
 
         :return: A random response for a given weather condition
                  at a specified locality and datetime.
         """
-        # Default values for variables
+
+        # If the forecast date is higher than 16 days (which is OWM limit), don't tell the weather.
+        if date < datetime.datetime.now() or (date - datetime.datetime.now()).days > self.OWM_MAX_FORECAST_DAYS:
+            return
+
+        # Checking the parameters values
+        if (POI or Locality or Region or Country):
+            localities = filter(lambda x: x is not None, [POI, Locality, Region, Country])
+            locality = localities[0]
+        else:
+            locality = self.default_location
+            Locality = self.default_location
+
+        # Initializing variables
         actual_condition_group = weather_condition.WeatherCondition(weather_condition.WeatherConditions.UNKNOWN)
         assumed_condition_group = weather_condition.WeatherCondition(weather_condition.WeatherConditions.UNKNOWN)
         tone = SentenceTone.NEUTRAL
-
-        localities = filter(lambda x: x is not None, [POI, Locality, Region, Country])
-        locality = localities[0] if len(localities) > 0 else self.default_location
 
         # We retrieve the condition and the temperature from our weather provider
         actual_condition, temperature = \
