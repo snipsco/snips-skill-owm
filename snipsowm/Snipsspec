@@ -17,11 +17,10 @@ intents:
     action: |
       {%
       import datetime as dt
-
       from dateutil.parser import parse
+
+      # Determine datetime
       datetime = None
-      now = dt.datetime.now().replace(tzinfo=None)
-      granularity = None
 
       if isinstance(intent.forecast_start_date_time, InstantTime):
         datetime = (intent.forecast_start_date_time.datetime).replace(tzinfo=None)
@@ -29,23 +28,27 @@ intents:
       elif isinstance(intent.forecast_start_date_time, TimeInterval):
         datetime = (intent.forecast_start_date_time.start).replace(tzinfo=None)
 
+      # Determine granularity
+      granularity = None
+      if datetime:  # We have an information about the date.
+        now = dt.datetime.now().replace(tzinfo=None)
+        delta_days = abs((datetime - now).days)
+        if delta_days > 5: # There a week difference between today and the date we want the forecast.
+          granularity = 1 # Give the day of the forecast date, plus the number of the day in the month.
+        elif delta_days > 10: # There a 10-day difference between today and the date we want the forecast.
+          granularity = 2 # Give the full date
+        else:
+          granularity = 0 # Just give the day of the week
       else:
-        datetime = now
+        granularity = 0
 
-      delta_days = abs((datetime - now).days)
-      if delta_days > 5: # There a week difference between today and the date we want the forecast.
-        granularity = 1 # Give the day of the forecast date, plus the number of the day in the month.
-      elif delta_days > 10: # There a 10-day difference between today and the date we want the forecast.
-        granularity = 2 # Give the full date
-      else:
-        granularity = 0 # Just give the day of the week
-
+      # Determine condition
       condition_name = None
       try:
         condition_name = intent.forecast_condition_name
       except Exception:
         pass
 
-      print "cond: {}, datetime: {}, Local: {}, granularity: {}".format(condition_name, datetime, intent.forecast_locality, granularity)
+      print "cond: {}, datetime: {}, Locality: {}, granularity: {}".format(condition_name, datetime, intent.forecast_locality, granularity)
       skill.speak_condition(condition_name, datetime, granularity=granularity, Locality=intent.forecast_locality, Region=intent.forecast_region, Country=intent.forecast_country, POI=intent.forecast_geographical_poi)
       %}
