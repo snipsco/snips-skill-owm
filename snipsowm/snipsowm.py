@@ -91,7 +91,12 @@ class SnipsOWM:
         """
 
         # If the forecast date is higher than 16 days (which is OWM limit), don't tell the weather.
-        if date < datetime.datetime.now() or (date - datetime.datetime.now()).days > self.OWM_MAX_FORECAST_DAYS:
+        now_date = datetime.datetime.now()
+
+        if date is None:
+            date = now_date
+
+        if date < now_date or (date - now_date).days > self.OWM_MAX_FORECAST_DAYS:
             return
 
         # Checking the parameters values
