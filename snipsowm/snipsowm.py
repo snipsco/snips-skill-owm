@@ -114,7 +114,7 @@ class SnipsOWM:
 
         # We retrieve the condition and the temperature from our weather provider
         actual_condition, temperature = \
-            self.get_current_weather(locality) if date is None else self.get_forecast_weather(locality, date)
+            self.get_current_weather(locality) if date == now_date else self.get_forecast_weather(locality, date)
 
 
         # We retrieve the weather from our weather provider
@@ -229,34 +229,6 @@ if __name__ == "__main__":
 
     std_out = STDOut()
 
-    skill = SnipsOWM("", "Paris", std_out, locale="en_US")
+    skill = SnipsOWM("e75d39d94de1e2fa6aad857646f9b5a1", "Paris", std_out, locale="fr_FR")
 
-    print "\n speak condition: \n"
-
-    skill.speak_condition(None, datetime.datetime(2017, 11, 23), locality='Budapest')
-
-
-    """
-    skill.speak_condition(None, 'Paris', datetime.datetime(2017, 11, 23))
-    skill.speak_condition('BLIZZARD', 'Lyon', None)
-    skill.speak_condition('NOTKNOWN', 'Paris', None)
-    skill.speak_condition('CLOUD', 'Paris', datetime.datetime(2017, 11, 23))
-    skill.speak_condition('CLOUD', 'Lyon', datetime.datetime(2017, 11, 23))
-    skill.speak_condition('CLOUD', 'Lyon', datetime.datetime(2017, 11, 22))
-    skill.speak_condition('CLOUDY', 'Paris', None)
-    skill.speak_condition('SUNNY', None, None)
-    skill.speak_condition(None, None, None)
-
-
-    print "\n\n\n speak temperature: \n"
-
-
-    skill.speak_temperature(None, None)
-
-
-    print "\n\n\n speak item: \n"
-
-    skill.speak_condition('Raincoat', 'Paris', datetime.datetime(2017, 5, 15))
-    skill.speak_condition('Sunglasses', 'Lyon', datetime.datetime(2017, 11, 1))
-    skill.speak_condition('Chunky Sweater', 'Lyon', datetime.datetime(2017, 11, 5))
-    """
+    skill.speak_condition(None, datetime.datetime(2017, 11, 30), Locality='Berlin')
