@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from enum import Enum
+import Levenshtein
 from owm import OWMWeatherConditions
 from snips import SnipsWeatherConditions
 import random
+
 
 
 def _convert_to_unix_case(text):
@@ -144,21 +146,33 @@ class SnipsWeatherCondition(object):
 
     }
 
-    def __init__(self, key):
+    def __init__(self, key=None):
         self.value = None
-        if type(key) is SnipsWeatherConditions:
-            self.value = key
-        elif type(key) is int:
-            try:
-                self.value = SnipsWeatherConditions(key)
-            except:
-                pass
-        elif type(key) is str:
-            key = _convert_to_unix_case(key)
-            if key in SnipsWeatherConditions.__members__:
-                self.value = SnipsWeatherConditions[key]
+        if key:
+            if type(key) is SnipsWeatherConditions:
+                self.value = key
+            elif type(key) is int:
+                try:
+                    self.value = SnipsWeatherConditions(key)
+                except:
+                    pass
+            elif type(key) is str:
+                if key in SnipsWeatherConditions.__members__:
+                    self.value = SnipsWeatherConditions[key]
+
+    def fuzzy_matching(self, condition_name):
+        condition_name = _convert_to_unix_case(condition_name)
+        sorted_candidates = sorted(list(SnipsWeatherConditions), cmp=lambda x,y: Levenshtein.distance(x.name, condition_name) - Levenshtein.distance(y.name, condition_name))
+        self.value = sorted_candidates[0]
+        return self
+
 
     def resolve(self):
+        """
+        Resolves a SnipsWeatherCondition to a WeatherCondition
+        :return: a WeatherCondition
+        :rtype: WeatherCondition
+        """
         if self.value == None: return WeatherCondition(WeatherConditions.UNKNOWN)
         return WeatherCondition(self.mappings[self.value])
 
@@ -245,3 +259,9 @@ class OWMWeatherCondition(object):
     def resolve(self):
         if self.value == None: return WeatherCondition(WeatherConditions.UNKNOWN)
         return WeatherCondition(self.mappings[self.value])
+
+  
+
+
+if __name__ == "__main__":
+    print SnipsWeatherCondition().fuzzy_matching('raining').resolve().value
