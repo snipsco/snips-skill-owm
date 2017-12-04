@@ -161,10 +161,10 @@ class SnipsWeatherCondition(object):
                     self.value = SnipsWeatherConditions[key]
 
     def normalize_condition_name(self, condition_name):
-        normalized_condition_name = condition_name.lower().strip()
+        return condition_name.lower().strip()
 
     def fuzzy_matching(self, locale, condition_name):
-        normalized_condition_name = self.normalize_condition_name(condition_name)
+        condition_name = self.normalize_condition_name(condition_name)
         conditions_candidates = get_condition_candidates(locale, condition_name)
 
         sorted_candidates = sorted(conditions_candidates.items(), cmp=lambda x,y: Levenshtein.distance(condition_name, x[1]) - Levenshtein.distance(condition_name, y[1]))
@@ -268,3 +268,7 @@ class OWMWeatherCondition(object):
 def get_condition_candidates(locale, condition_name):
     return { condition : min(mappings[condition][locale], key=lambda s: Levenshtein.distance(condition_name, s)) for condition in list(SnipsWeatherConditions)}
 
+
+
+if __name__ == "__main__":
+    print SnipsWeatherCondition().fuzzy_matching("en_US", u'OVERCASt').value
