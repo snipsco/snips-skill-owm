@@ -117,8 +117,8 @@ class SnipsOWM:
             Locality = self.default_location
 
         # Initializing variables
-        actual_condition_group = weather_condition.WeatherCondition(weather_condition.WeatherConditions.UNKNOWN)
-        assumed_condition_group = weather_condition.WeatherCondition(weather_condition.WeatherConditions.UNKNOWN)
+        actual_condition_group = weather_condition.WeatherConditionDescriptor(weather_condition.WeatherConditions.UNKNOWN)
+        assumed_condition_group = weather_condition.WeatherConditionDescriptor(weather_condition.WeatherConditions.UNKNOWN)
         tone = SentenceTone.NEUTRAL
 
         # We retrieve the condition and the temperature from our weather provider
@@ -127,11 +127,11 @@ class SnipsOWM:
                 self.get_current_weather(locality) if date == now_date else self.get_forecast_weather(locality, date)
 
             # We retrieve the weather from our weather provider
-            actual_condition_group = weather_condition.OWMWeatherCondition(actual_condition).resolve()
+            actual_condition_group = weather_condition.OWMToWeatherConditionMapper(actual_condition).resolve()
 
             if assumed_condition:
                 # We find the category (group) of the received weather description
-                assumed_condition_group = weather_condition.SnipsWeatherCondition().fuzzy_matching(self.locale, assumed_condition).resolve()
+                assumed_condition_group = weather_condition.SnipsToWeatherConditionMapper().fuzzy_matching(self.locale, assumed_condition).resolve()
 
                 # We check if their is a positive/negative tone to add to the answer
                 if assumed_condition_group.value != weather_condition.WeatherConditions.UNKNOWN:
