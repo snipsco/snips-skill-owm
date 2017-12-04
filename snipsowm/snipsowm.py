@@ -131,7 +131,7 @@ class SnipsOWM:
 
             if assumed_condition:
                 # We find the category (group) of the received weather description
-                assumed_condition_group = weather_condition.SnipsWeatherCondition(assumed_condition).resolve()
+                assumed_condition_group = weather_condition.SnipsWeatherCondition().fuzzy_matching(self.locale, assumed_condition).resolve()
 
                 # We check if their is a positive/negative tone to add to the answer
                 if assumed_condition_group.value != weather_condition.WeatherConditions.UNKNOWN:

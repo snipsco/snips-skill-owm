@@ -2,7 +2,7 @@
 from enum import Enum
 import Levenshtein
 from owm import OWMWeatherConditions
-from snips import SnipsWeatherConditions
+from snips import SnipsWeatherConditions, mappings
 import random
 
 
@@ -160,12 +160,16 @@ class SnipsWeatherCondition(object):
                 if key in SnipsWeatherConditions.__members__:
                     self.value = SnipsWeatherConditions[key]
 
-    def fuzzy_matching(self, condition_name):
-        condition_name = _convert_to_unix_case(condition_name)
-        sorted_candidates = sorted(list(SnipsWeatherConditions), cmp=lambda x,y: Levenshtein.distance(x.name, condition_name) - Levenshtein.distance(y.name, condition_name))
-        self.value = sorted_candidates[0]
-        return self
+    def normalize_condition_name(self, condition_name):
+        normalized_condition_name = condition_name.lower().strip()
 
+    def fuzzy_matching(self, locale, condition_name):
+        normalized_condition_name = self.normalize_condition_name(condition_name)
+        conditions_candidates = get_condition_candidates(locale, condition_name)
+
+        sorted_candidates = sorted(conditions_candidates.items(), cmp=lambda x,y: Levenshtein.distance(condition_name, x[1]) - Levenshtein.distance(condition_name, y[1]))
+        self.value = sorted_candidates[0][0]
+        return self
 
     def resolve(self):
         """
@@ -260,8 +264,7 @@ class OWMWeatherCondition(object):
         if self.value == None: return WeatherCondition(WeatherConditions.UNKNOWN)
         return WeatherCondition(self.mappings[self.value])
 
-  
 
+def get_condition_candidates(locale, condition_name):
+    return { condition : min(mappings[condition][locale], key=lambda s: Levenshtein.distance(condition_name, s)) for condition in list(SnipsWeatherConditions)}
 
-if __name__ == "__main__":
-    print SnipsWeatherCondition().fuzzy_matching('raining').resolve().value
