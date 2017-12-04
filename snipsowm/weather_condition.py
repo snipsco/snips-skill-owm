@@ -4,35 +4,15 @@ import Levenshtein
 from owm import OWMWeatherConditions
 from snips import SnipsWeatherConditions, mappings
 import random
+from utils import _convert_to_unix_case
+from weather import WeatherConditions
 
 
+class WeatherConditionDescriptor(object):
+    """
+    A utility class that describes description sentences for WeatherCondition.
+    """
 
-def _convert_to_unix_case(text):
-    result = ""
-    for i in text:
-        if i is ' ' or i is '-':
-            result += '_'
-        else:
-            result += i.capitalize()
-    return result
-
-
-class WeatherConditions(Enum):
-    UNKNOWN = 0
-    DRIZZLE = 1
-    RAIN = 2
-    SNOW = 3
-    FOG = 4
-    SUN = 5
-    CLOUDS = 6
-    STORM = 7
-    HUMID = 8
-    WIND = 9
-    THUNDERSTORM = 10
-    # CLEAR = 11 
-
-
-class WeatherCondition(object):
     def __init__(self, key):
         self.value = key
 
@@ -87,7 +67,7 @@ class WeatherCondition(object):
         return random.choice(self.descriptions[self.value][locale])
 
 
-class SnipsWeatherCondition(object):
+class SnipsToWeatherConditionMapper(object):
     mappings = {
         SnipsWeatherConditions.HUMID: WeatherConditions.HUMID,
         SnipsWeatherConditions.BLIZZARD: WeatherConditions.FOG,
@@ -160,15 +140,8 @@ class SnipsWeatherCondition(object):
                 if key in SnipsWeatherConditions.__members__:
                     self.value = SnipsWeatherConditions[key]
 
-    def normalize_condition_name(self, condition_name):
-        return condition_name.lower().strip()
-
     def fuzzy_matching(self, locale, condition_name):
-        condition_name = self.normalize_condition_name(condition_name)
-        conditions_candidates = get_condition_candidates(locale, condition_name)
-
-        sorted_candidates = sorted(conditions_candidates.items(), cmp=lambda x,y: Levenshtein.distance(condition_name, x[1]) - Levenshtein.distance(condition_name, y[1]))
-        self.value = sorted_candidates[0][0]
+        self.value = SlotValueResolver().fuzzy_match(locale, condition_name)
         return self
 
     def resolve(self):
@@ -177,11 +150,11 @@ class SnipsWeatherCondition(object):
         :return: a WeatherCondition
         :rtype: WeatherCondition
         """
-        if self.value == None: return WeatherCondition(WeatherConditions.UNKNOWN)
-        return WeatherCondition(self.mappings[self.value])
+        if self.value == None: return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
+        return WeatherConditionDescriptor(self.mappings[self.value])
 
 
-class OWMWeatherCondition(object):
+class OWMToWeatherConditionMapper(object):
     mappings = {
         OWMWeatherConditions.THUNDERSTORM_WITH_LIGHT_RAIN: WeatherConditions.THUNDERSTORM,
         OWMWeatherConditions.THUNDERSTORM_WITH_RAIN: WeatherConditions.THUNDERSTORM,
@@ -261,14 +234,27 @@ class OWMWeatherCondition(object):
                 self.value = OWMWeatherConditions[key]
 
     def resolve(self):
-        if self.value == None: return WeatherCondition(WeatherConditions.UNKNOWN)
-        return WeatherCondition(self.mappings[self.value])
+        if self.value == None: return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
+        return WeatherConditionDescriptor(self.mappings[self.value])
 
 
-def get_condition_candidates(locale, condition_name):
-    return { condition : min(mappings[condition][locale], key=lambda s: Levenshtein.distance(condition_name, s)) for condition in list(SnipsWeatherConditions)}
+class SlotValueResolver(object):
+    def normalize_input(self, input_string):
+        return input_string.lower().strip()
 
+    def fuzzy_match(self, locale, condition_name):
+        condition_name = self.normalize_input(condition_name)
+        conditions_candidates = self.get_condition_candidates(locale, condition_name)
+
+        sorted_candidates = sorted(conditions_candidates.items(),
+                                   cmp=lambda x, y: Levenshtein.distance(condition_name, x[1]) - Levenshtein.distance(
+                                       condition_name, y[1]))
+        return sorted_candidates[0][0]
+
+    def get_condition_candidates(self, locale, condition_name):
+        return {condition: min(mappings[condition][locale], key=lambda s: Levenshtein.distance(condition_name, s)) for
+                condition in list(SnipsWeatherConditions)}
 
 
 if __name__ == "__main__":
-    print SnipsWeatherCondition().fuzzy_matching("en_US", u'OVERCASt').value
+    print SlotValueResolver().fuzzy_match("fr_FR", u'HUMID')

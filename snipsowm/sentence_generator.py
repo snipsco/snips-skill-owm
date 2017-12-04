@@ -4,6 +4,7 @@ import datetime
 from enum import Enum
 import locale
 import random
+from utils import _convert_to_unix_case
 
 
 class SentenceTone(Enum):
@@ -205,7 +206,7 @@ class SentenceGenerator(object):
 
         # Formatting
         parameters = filter(lambda x: not x is None and len(x) > 0, parameters)
-        return ("{} "*len(parameters)).format(*parameters)
+        return ("{} " * len(parameters)).format(*parameters)
 
     def generate_temperature_sentence(self,
                                       temperature="-273.15",
@@ -250,8 +251,8 @@ class SentenceGenerator(object):
 
     def generate_error_sentence(self):
         error_sentences = {
-            "en_US" : "An error occured when trying to retrieve the weather, please try again",
-            "fr_FR" : "Désolé, il y a eu une erreur lors de la récupération des données météo. Veuillez réessayer"
+            "en_US": "An error occured when trying to retrieve the weather, please try again",
+            "fr_FR": "Désolé, il y a eu une erreur lors de la récupération des données météo. Veuillez réessayer"
         }
 
         return error_sentences[self.locale]
@@ -268,4 +269,3 @@ if __name__ == "__main__":
     b = generator.generate_temperature_sentence(temperature="18",
                                                 date=datetime.datetime(2017, 5, 15), granularity=1,
                                                 Locality="Paris")
-
