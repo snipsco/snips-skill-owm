@@ -149,7 +149,7 @@ intents:
       # Determine condition
       try:
         item_name = intent.forecast_item
-      except Exception
+      except Exception:
          pass
 
       print "cond: {}, datetime: {}, Locality: {}, granularity: {}".format(item_name, datetime, intent.forecast_locality, granularity)
