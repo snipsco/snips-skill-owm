@@ -147,8 +147,11 @@ intents:
         granularity = 0
 
       # Determine condition
-      condition_name = None
+      try:
+        item_name = intent.forecast_item
+      except Exception
+         pass
 
-      print "cond: {}, datetime: {}, Locality: {}, granularity: {}".format(condition_name, datetime, intent.forecast_locality, granularity)
-      skill.speak_condition(condition_name, datetime, granularity=granularity, Locality=intent.forecast_locality, Region=intent.forecast_region, Country=intent.forecast_country, POI=intent.forecast_geographical_poi)
+      print "cond: {}, datetime: {}, Locality: {}, granularity: {}".format(item_name, datetime, intent.forecast_locality, granularity)
+      skill.speak_condition(item_name, datetime, granularity=granularity, Locality=intent.forecast_locality, Region=intent.forecast_region, Country=intent.forecast_country, POI=intent.forecast_geographical_poi)
       %}
