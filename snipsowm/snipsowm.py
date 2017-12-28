@@ -25,7 +25,7 @@ class SnipsOWM:
 
     OWM_MAX_FORECAST_DAYS = 15
 
-    def __init__(self, api_key, default_location, tts_service=None, locale="en_US"):
+    def __init__(self, api_key, default_location, locale="en_US"):
         """
         :param api_key: OpenWeatherMap API key.
         :param default_location: Default location for which to fetch the
@@ -36,10 +36,9 @@ class SnipsOWM:
         """
         self.api_key = api_key
         self.default_location = default_location
-        self.tts_service = tts_service
         self.locale = locale
 
-    def speak_temperature(self, locality, date, granularity=0):
+    def speak_temperature(self, snips, locality, date, granularity=0):
         """ Tell the temperature at a given locality and datetime.
 
         :param locality: The locality of the forecast, e.g. 'Paris,fr' or
@@ -62,10 +61,9 @@ class SnipsOWM:
                                                                               date=date, granularity=0,
                                                                               Locality=locality)
 
-        if self.tts_service is not None:
-            self.tts_service.speak(generated_sentence)
+        snips.dialogue.speak(generated_sentence, snips.session_id)
 
-    def speak_condition(self, assumed_condition, date, POI=None, Locality=None, Region=None, Country=None,
+    def speak_condition(self, snips, assumed_condition, date, POI=None, Locality=None, Region=None, Country=None,
                         granularity=0):
         """ Speak a response for a given weather condition
             at a specified locality and datetime.
@@ -155,8 +153,7 @@ class SnipsOWM:
             generated_sentence = sentence_generator.generate_error_sentence()
 
         print generated_sentence
-        if self.tts_service is not None:
-            self.tts_service.speak(generated_sentence)
+        snips.dialogue.speak(generated_sentence, snips.session_id)
 
     def get_current_weather(self, location):
         """Perform the API request.
