@@ -9,7 +9,11 @@ setup(
     url='https://github.com/snipsco/snips-skill-owm',
     download_url='',
     license='MIT',
-    install_requires=['requests==2.6.0'],
+    install_requires=[
+        'requests==2.6.0',
+        'enum34==1.1.6',
+        'python-Levenshtein'
+    ],
     test_suite="tests",
     keywords=['snips'],
     package_data={'snipsowm': ['Snipsspec']},
