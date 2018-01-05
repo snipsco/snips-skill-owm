@@ -11,12 +11,13 @@ intents:
 
       # Determine datetime
       datetime = None
+      if snips.intent.forecast_start_datetime:
+        datetime = snips.intent.forecast_start_datetime[0]
 
-      if isinstance(snips.intent.forecast_start_datetime, snips.types.InstantTime):
-        datetime = (snips.intent.forecast_start_datetime.datetime).replace(tzinfo=None)
-
-      elif isinstance(snips.intent.forecast_start_datetime, snips.types.TimeInterval):
-        datetime = (snips.intent.forecast_start_datetime.start).replace(tzinfo=None)
+      if isinstance(datetime, snips.types.InstantTime):
+        datetime = (datetime.datetime).replace(tzinfo=None)
+      elif isinstance(datetime, snips.types.TimeInterval):
+        datetime = (datetime.end).replace(tzinfo=None)
 
       # Determine granularity
       granularity = None
@@ -32,11 +33,15 @@ intents:
       else:
         granularity = 0
 
+      locality = None
       try:
         locality = snips.intent.forecast_locality \
           or snips.intent.forecast_country \
           or snips.intent.forecast_region \
           or snips.intent.forecast_geographical_poi
+
+        if locality:
+          locality = locality[0]
       except Exception:
         pass
 
@@ -52,11 +57,14 @@ intents:
       # Determine datetime
       datetime = None
 
-      if isinstance(snips.intent.forecast_start_datetime, snips.types.InstantTime):
-        datetime = (snips.intent.forecast_start_datetime.datetime).replace(tzinfo=None)
+      if snips.intent.forecast_start_datetime:
+        datetime = snips.intent.forecast_start_datetime[0]
 
-      elif isinstance(snips.intent.forecast_start_datetime, snips.types.TimeInterval):
-        datetime = (snips.intent.forecast_start_datetime.start).replace(tzinfo=None)
+      if isinstance(datetime, snips.types.InstantTime):
+        datetime = (datetime.datetime).replace(tzinfo=None)
+      elif isinstance(datetime, snips.types.TimeInterval):
+        datetime = (datetime.end).replace(tzinfo=None)
+
 
       # Determine granularity
       granularity = None
@@ -75,9 +83,14 @@ intents:
       # Determine condition
       condition_name = None
       try:
-        condition_name = snips.intent.forecast_condition_name
+        condition_name = snips.intent.forecast_condition_name[0] if snips.intent.forecast_condition_name else None
       except Exception:
         pass
+
+      snips.intent.forecast_locality = snips.intent.forecast_locality[0] if snips.intent.forecast_locality else None
+      snips.intent.forecast_region = snips.intent.forecast_region[0] if snips.intent.forecast_region else None
+      snips.intent.forecast_country = snips.intent.forecast_country[0] if snips.intent.forecast_country else None
+      snips.intent.forecast_geographical_poi = snips.intent.forecast_geographical_poi[0] if snips.intent.forecast_geographical_poi else None
 
       print "cond: {}, datetime: {}, Locality: {}, granularity: {}".format(condition_name, datetime, snips.intent.forecast_locality, granularity)
       snips.skill.speak_condition(snips, condition_name, datetime, granularity=granularity, Locality=snips.intent.forecast_locality, Region=snips.intent.forecast_region, Country=snips.intent.forecast_country, POI=snips.intent.forecast_geographical_poi)
@@ -91,11 +104,13 @@ intents:
       # Determine datetime
       datetime = None
 
-      if isinstance(snips.intent.forecast_start_datetime, snips.types.InstantTime):
-        datetime = (snips.intent.forecast_start_datetime.datetime).replace(tzinfo=None)
+      if snips.intent.forecast_start_datetime:
+        datetime = snips.intent.forecast_start_datetime[0]
 
-      elif isinstance(snips.intent.forecast_start_datetime, snips.types.TimeInterval):
-        datetime = (snips.intent.forecast_start_datetime.start).replace(tzinfo=None)
+      if isinstance(datetime, snips.types.InstantTime):
+        datetime = (datetime.datetime).replace(tzinfo=None)
+      elif isinstance(datetime, snips.types.TimeInterval):
+        datetime = (datetime.end).replace(tzinfo=None)
 
       # Determine granularity
       granularity = None
@@ -111,8 +126,13 @@ intents:
       else:
         granularity = 0
 
-      # Determine condition
+      # No condition in this intent so initialized to None
       condition_name = None
+
+      snips.intent.forecast_locality = snips.intent.forecast_locality[0] if snips.intent.forecast_locality else None
+      snips.intent.forecast_region = snips.intent.forecast_region[0] if snips.intent.forecast_region else None
+      snips.intent.forecast_country = snips.intent.forecast_country[0] if snips.intent.forecast_country else None
+      snips.intent.forecast_geographical_poi = snips.intent.forecast_geographical_poi[0] if snips.intent.forecast_geographical_poi else None
 
       print "cond: {}, datetime: {}, Locality: {}, granularity: {}".format(condition_name, datetime, snips.intent.forecast_locality, granularity)
       snips.skill.speak_condition(snips, condition_name, datetime, granularity=granularity, Locality=snips.intent.forecast_locality, Region=snips.intent.forecast_region, Country=snips.intent.forecast_country, POI=snips.intent.forecast_geographical_poi)
@@ -126,11 +146,13 @@ intents:
       # Determine datetime
       datetime = None
 
-      if isinstance(snips.intent.forecast_start_datetime, snips.types.InstantTime):
-        datetime = (snips.intent.forecast_start_datetime.datetime).replace(tzinfo=None)
+      if snips.intent.forecast_start_datetime:
+        datetime = snips.intent.forecast_start_datetime[0]
 
-      elif isinstance(snips.intent.forecast_start_datetime, snips.types.TimeInterval):
-        datetime = (snips.intent.forecast_start_datetime.start).replace(tzinfo=None)
+      if isinstance(datetime, snips.types.InstantTime):
+        datetime = (datetime.datetime).replace(tzinfo=None)
+      elif isinstance(datetime, snips.types.TimeInterval):
+        datetime = (datetime.end).replace(tzinfo=None)
 
       # Determine granularity
       granularity = None
@@ -146,11 +168,16 @@ intents:
       else:
         granularity = 0
 
-      # Determine condition
+      # Determine item
       try:
-        item_name = snips.intent.forecast_item
+        item_name = snips.intent.forecast_item[0] if snips.intent.forecast_item else None
       except Exception:
          pass
+
+      snips.intent.forecast_locality = snips.intent.forecast_locality[0] if snips.intent.forecast_locality else None
+      snips.intent.forecast_region = snips.intent.forecast_region[0] if snips.intent.forecast_region else None
+      snips.intent.forecast_country = snips.intent.forecast_country[0] if snips.intent.forecast_country else None
+      snips.intent.forecast_geographical_poi = snips.intent.forecast_geographical_poi[0] if snips.intent.forecast_geographical_poi else None
 
       print "cond: {}, datetime: {}, Locality: {}, granularity: {}".format(item_name, datetime, snips.intent.forecast_locality, granularity)
       snips.skill.speak_condition(snips, item_name, datetime, granularity=granularity, Locality=snips.intent.forecast_locality, Region=snips.intent.forecast_region, Country=snips.intent.forecast_country, POI=snips.intent.forecast_geographical_poi)
