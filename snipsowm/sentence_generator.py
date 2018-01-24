@@ -26,7 +26,7 @@ def date_to_string(date, granularity=0):
     :return: A textual representation of the date.
     """
     if not date:
-        return None
+        return ""
 
     if granularity == 0:
         return date.strftime("%A")
@@ -155,17 +155,7 @@ class SentenceGenerator(object):
             print "Careful ! There was an error while trying to set the locale. This means your locale is not properly installed. Please refer to the README for more information."
             return ""
 
-        if not date:
-            return ""
-
-        if granularity == 0:
-            return date.strftime("%A")
-        elif granularity == 1:
-            return date.strftime("%A %-d")
-        elif granularity == 2:
-            return date.strftime("%A %-d %B")
-
-        return date.strftime("%A %-d %B, %H:%M%p")
+        return date_to_string(date, granularity)
 
     def generate_condition_description(self, condition_description):
         return condition_description if len(condition_description) > 0 else ""
@@ -256,16 +246,3 @@ class SentenceGenerator(object):
         }
 
         return error_sentences[self.locale]
-
-
-if __name__ == "__main__":
-    generator = SentenceGenerator(locale="fr_FR")
-    a = generator.generate_condition_sentence(tone=SentenceTone.POSITIVE,
-                                              date=datetime.datetime(2017, 5, 15), granularity=1,
-                                              condition_description="il va pleuvoir",
-                                              Locality="Paris"
-                                              )
-
-    b = generator.generate_temperature_sentence(temperature="18",
-                                                date=datetime.datetime(2017, 5, 15), granularity=1,
-                                                Locality="Paris")

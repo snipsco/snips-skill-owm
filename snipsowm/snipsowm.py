@@ -3,10 +3,9 @@
 
 import datetime
 import json
-
 import requests
-import weather_condition
 from sentence_generator import SentenceTone, SentenceGenerator
+import weather_condition
 
 
 class APIError(Exception):
@@ -115,11 +114,11 @@ class SnipsOWM:
             Locality = self.default_location
 
         # Initializing variables
-        actual_condition_group = weather_condition.WeatherConditionDescriptor(weather_condition.WeatherConditions.UNKNOWN)
         assumed_condition_group = weather_condition.WeatherConditionDescriptor(weather_condition.WeatherConditions.UNKNOWN)
         tone = SentenceTone.NEUTRAL
 
         # We retrieve the condition and the temperature from our weather provider
+        actual_condition_group = weather_condition.WeatherConditionDescriptor(weather_condition.WeatherConditions.UNKNOWN)
         try:
             actual_condition, temperature = \
                 self.get_current_weather(locality) if date == now_date else self.get_forecast_weather(locality, date)
@@ -239,16 +238,3 @@ class SnipsOWM:
                 result = time_interval
 
         return result
-
-
-if __name__ == "__main__":
-    class STDOut:
-        def speak(self, string):
-            print string
-
-
-    std_out = STDOut()
-
-    skill = SnipsOWM("e75d39d94de1e2fa6aad857646f9b5a1", "Paris", std_out, locale="fr_FR")
-
-    skill.speak_condition(None, datetime.datetime(2017, 11, 30), Locality='Berlin')
