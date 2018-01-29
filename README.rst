@@ -38,10 +38,10 @@ It is recommended that you use this skill with the `Snips Skills Manager <https:
       class_name: SnipsOWM
       pip: snipsowm
       default_location: "Paris,fr"
-      api_key: 12A4F912EA29100B2C
-      intents:
-        - intent: GetWeather
-          action: "get_weather"
+      params:
+        - api_key: <YOUR API KEY>
+          locale: en_US
+          default_location: France
       
 Copyright
 ---------
