@@ -13,12 +13,15 @@ The skill is on `PyPI`_, so you can just install it with `pip`_:
 
     $ pip install snipsowm
 
+Locale
+------
+To have the skills properly working, you **need** to generate to generate locales for your languages. 
+So far the locales that are supported are :
 
-You also need to generate locales for your languages. So far the locales that are supported are :
-- `en_US`
-- `fr_FR`
+- 🇺🇸 `en_US`
+- 🇫🇷 `fr_FR`
 
-You can generate them with `sudo raspi-config`. Going in the `Localisation Options` submenu, then in the `Change Locale` submenu, and selecting the locales you want to support.
+You can generate them with `sudo raspi-config`. Going in the `Localisation Options` submenu, then in the `Change Locale` submenu, and selecting the locales you want to support. For instance, select `en_US UTF-8` if you want support for English. 
 
 Usage
 -----
@@ -40,20 +43,6 @@ It is recommended that you use this skill with the `Snips Skills Manager <https:
         - intent: GetWeather
           action: "get_weather"
       
-
-Standalone usage
-^^^^^^^^^^^^^^^^
-
-The skill provides weather conditions and forecast using the `OpenWeatherMap`_ API. In order to use it, you need an `API key`_.
-
-.. code-block:: python
-
-    from snipsowm.snipsowm import SnipsOWM
-
-    default_location = "Paris,fr"
-    skill = SnipsOWM(API_KEY, default_location, None) 
-    print(skill.execute("Chicago"))
-
 Copyright
 ---------
 
