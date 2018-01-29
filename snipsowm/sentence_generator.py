@@ -93,7 +93,12 @@ class SentenceGenerator(object):
         :rtype: basestring
         """
         if self.locale == "en_US":
-            return "" if Locality is None else "in {}".format(Locality)
+            if (POI or Locality or Region or Country):
+                locality = filter(lambda x: x is not None, [POI, Locality, Region, Country])[0]
+                return "in {}".format(locality)
+            else:
+                return ""
+
         if self.locale == "fr_FR":
             """
             Country granularity:
