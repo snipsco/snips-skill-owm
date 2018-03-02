@@ -5,24 +5,16 @@ import datetime
 import json
 import requests
 from sentence_generator import SentenceTone, SentenceGenerator
+from provider.providers import WeatherProviders
+from provider.weather_provider import WeatherProviderError, WeatherProviderConnectivityError
 import weather_condition
-
-
-class APIError(Exception):
-    pass
-
-
-class OpenWeatherMapAPIError(APIError):
-    pass
 
 
 class SnipsOWM:
     """ OpenWeatherMap skill for Snips. """
 
-    API_WEATHER_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
-    API_FORECAST_ENDPOINT = "http://api.openweathermap.org/data/2.5/forecast"
 
-    OWM_MAX_FORECAST_DAYS = 15
+
 
     def __init__(self, api_key, default_location, locale="en_US"):
         """
@@ -37,6 +29,8 @@ class SnipsOWM:
         self.default_location = default_location
         self.locale = locale
 
+        self.provider = WeatherProviders.OWM(api_key)
+
     def speak_temperature(self, snips, locality, date, granularity=0):
         """ Tell the temperature at a given locality and datetime.
 
@@ -50,15 +44,21 @@ class SnipsOWM:
 
         :return: The temperature at a given locality and datetime.
         """
-        if locality is None:
-            locality = self.default_location
-        actual_condition, temperature = \
-            self.get_current_weather(locality) if date is None else self.get_forecast_weather(locality, date)
-
         sentence_generator = SentenceGenerator(locale=self.locale)
-        generated_sentence = sentence_generator.generate_temperature_sentence(temperature=temperature,
+
+        try:
+            if locality is None:
+                locality = self.default_location
+            actual_condition, temperature = \
+                self.provider.get_current_weather(locality) if date is None else self.provider.get_forecast_weather(locality, date)
+
+            generated_sentence = sentence_generator.generate_temperature_sentence(temperature=temperature,
                                                                               date=date, granularity=0,
                                                                               Locality=locality)
+
+
+        except WeatherProviderError:
+            generated_sentence = sentence_generator.generate_error_sentence()
 
         snips.dialogue.speak(generated_sentence, snips.session_id)
 
@@ -119,9 +119,11 @@ class SnipsOWM:
 
         # We retrieve the condition and the temperature from our weather provider
         actual_condition_group = weather_condition.WeatherConditionDescriptor(weather_condition.WeatherConditions.UNKNOWN)
+
+        sentence_generator = SentenceGenerator(locale=self.locale)
         try:
             actual_condition, temperature = \
-                self.get_current_weather(locality) if date == now_date else self.get_forecast_weather(locality, date)
+                self.provider.get_current_weather(locality) if date == now_date else self.provider.get_forecast_weather(locality, date)
 
             # We retrieve the weather from our weather provider
             actual_condition_group = weather_condition.OWMToWeatherConditionMapper(actual_condition).resolve()
@@ -137,7 +139,6 @@ class SnipsOWM:
                 tone = SentenceTone.NEUTRAL
 
             # We compose the sentence
-            sentence_generator = SentenceGenerator(locale=self.locale)
             generated_sentence = sentence_generator.generate_condition_sentence(tone=tone,
                                                                                 date=date, granularity=granularity,
                                                                                 condition_description=actual_condition_group.describe(
@@ -147,94 +148,7 @@ class SnipsOWM:
                                                                                 Country=Country)
 
             # And finally send it to the TTS if provided
-        except OpenWeatherMapAPIError as e:
-            sentence_generator = SentenceGenerator(locale=self.locale)
+        except WeatherProviderError as e:
             generated_sentence = sentence_generator.generate_error_sentence()
 
-        print generated_sentence
         snips.dialogue.speak(generated_sentence, snips.session_id)
-
-    def get_current_weather(self, location):
-        """Perform the API request.
-
-        :param location: The location of the forecast, e.g. 'Paris,fr' or
-                         'Eiffel Tower'
-        """
-        url = "{}?APPID={}&q={}&units=metric".format(self.API_WEATHER_ENDPOINT,
-                                                     self.api_key,
-                                                     location)
-        r = requests.get(url)
-        response = json.loads(r.text)
-
-        if response['cod'] == '404':
-            raise OpenWeatherMapAPIError(response['message'])
-
-        try:
-            description = response["weather"][0]["id"]
-        except (KeyError, IndexError, UnicodeEncodeError):
-            description = None
-        try:
-            temperature = int(float(response["main"]["temp"]))
-        except KeyError:
-            temperature = None
-        return (description, temperature)
-
-    def get_forecast_weather(self, location, datetime):
-        """
-        Perform the API request.
-        :param location: The location of the asked forecast 
-        :type location: string 
-        :param datetime: The date and time of the requested forecast
-        :type datetime: datetime
-        :return: description of the asked weather and the temperature
-        :rtype: (str, int)
-        """
-        url = "{}?APPID={}&q={}&units=metric".format(self.API_FORECAST_ENDPOINT,
-                                                     self.api_key,
-                                                     location)
-        r = requests.get(url)
-        response = json.loads(r.text)
-
-        if response['cod'] == '404':
-            raise OpenWeatherMapAPIError(response['message'])
-
-        response = self._getTopicalInfos(response, datetime)
-
-        try:
-            description = response["weather"][0]["id"]
-        except (KeyError, IndexError, UnicodeEncodeError):
-            description = None
-        try:
-            temperature = int(float(response["main"]["temp"]))
-        except KeyError:
-            temperature = None
-        return (description, temperature)
-
-    def get_weather(self, location, datetime=None):
-        if datetime:
-            return self.get_forecast_weather(location, datetime)
-        else:
-            return self.get_current_weather(location)
-
-    @staticmethod
-    def generate_forecast_temperature_sentence():
-        pass
-
-    @staticmethod
-    def generate_forecast():
-        pass
-
-    def _getTopicalInfos(self, response, date_time):
-        delta = date_time - datetime.datetime.strptime(response["list"][0]['dt_txt'], "%Y-%m-%d %H:%M:%S")
-        delta = abs(delta)
-        result = {}
-
-        for time_interval in response["list"]:
-            current_time = datetime.datetime.strptime(time_interval['dt_txt'], "%Y-%m-%d %H:%M:%S")
-            current_delta = date_time - current_time
-            current_delta = abs(current_delta)
-            if delta > current_delta:
-                delta = current_delta
-                result = time_interval
-
-        return result
