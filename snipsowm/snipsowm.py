@@ -55,7 +55,7 @@ class SnipsOWM:
             generated_sentence = sentence_generator.generate_temperature_sentence(temperature=temperature,
                                                                               date=date, granularity=0,
                                                                               Locality=locality)
-    
+
 
         except WeatherProviderError:
             generated_sentence = sentence_generator.generate_error_sentence()
@@ -95,15 +95,6 @@ class SnipsOWM:
         :return: A random response for a given weather condition
                  at a specified locality and datetime.
         """
-
-        # If the forecast date is higher than 16 days (which is OWM limit), don't tell the weather.
-        now_date = datetime.datetime.now()
-
-        if date is None:
-            date = now_date
-
-        if date < now_date or (date - now_date).days > self.OWM_MAX_FORECAST_DAYS:
-            return
 
         # Checking the parameters values
         if (POI or Locality or Region or Country):
