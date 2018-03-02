@@ -4,7 +4,7 @@
 import datetime
 import json
 import requests
-from sentence_generator import SentenceTone, SentenceGenerator
+from feedback.sentence_generator import AnswerSentenceGenerator, ConditionQuerySentenceGenerator, TemperatureQuerySentenceGenerator
 from provider.providers import WeatherProviders
 from provider.weather_provider import WeatherProviderError, WeatherProviderConnectivityError
 import weather_condition
@@ -44,7 +44,7 @@ class SnipsOWM:
 
         :return: The temperature at a given locality and datetime.
         """
-        sentence_generator = SentenceGenerator(locale=self.locale)
+        sentence_generator = TemperatureQuerySentenceGenerator(locale=self.locale)
 
         try:
             if locality is None:
@@ -115,12 +115,12 @@ class SnipsOWM:
 
         # Initializing variables
         assumed_condition_group = weather_condition.WeatherConditionDescriptor(weather_condition.WeatherConditions.UNKNOWN)
-        tone = SentenceTone.NEUTRAL
+        tone = AnswerSentenceGenerator.SentenceTone.NEUTRAL
 
         # We retrieve the condition and the temperature from our weather provider
         actual_condition_group = weather_condition.WeatherConditionDescriptor(weather_condition.WeatherConditions.UNKNOWN)
 
-        sentence_generator = SentenceGenerator(locale=self.locale)
+        sentence_generator = ConditionQuerySentenceGenerator(locale=self.locale)
         try:
             actual_condition, temperature = \
                 self.provider.get_current_weather(locality) if date == now_date else self.provider.get_forecast_weather(locality, date)
@@ -134,9 +134,9 @@ class SnipsOWM:
 
                 # We check if their is a positive/negative tone to add to the answer
                 if assumed_condition_group.value != weather_condition.WeatherConditions.UNKNOWN:
-                    tone = SentenceTone.NEGATIVE if assumed_condition_group.value != actual_condition_group.value else SentenceTone.POSITIVE
+                    tone = AnswerSentenceGenerator.SentenceTone.NEGATIVE if assumed_condition_group.value != actual_condition_group.value else AnswerSentenceGenerator.SentenceTone.POSITIVE
             else:
-                tone = SentenceTone.NEUTRAL
+                tone = AnswerSentenceGenerator.SentenceTone.NEUTRAL
 
             # We compose the sentence
             generated_sentence = sentence_generator.generate_condition_sentence(tone=tone,
