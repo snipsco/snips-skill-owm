@@ -49,13 +49,13 @@ class SnipsOWM:
         try:
             if locality is None:
                 locality = self.default_location
-            actual_condition, temperature = \
+            _, temperature = \
                 self.provider.get_current_weather(locality) if date is None else self.provider.get_forecast_weather(locality, date)
 
             generated_sentence = sentence_generator.generate_temperature_sentence(temperature=temperature,
                                                                               date=date, granularity=0,
                                                                               Locality=locality)
-
+    
 
         except WeatherProviderError:
             generated_sentence = sentence_generator.generate_error_sentence()
