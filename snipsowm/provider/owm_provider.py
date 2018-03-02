@@ -54,8 +54,11 @@ class OWMWeatherProvider(WeatherProvider):
         r = requests.get(url)
         response = json.loads(r.text)
 
-        if response['cod'] == '404':
+        if response['cod'] == 404:
             raise OpenWeatherMapQueryError(response['message'])
+
+        if response['cod'] == 401:
+            raise OpenWeatherMapAPIKeyError(response['message'])
 
         response = self._getTopicalInfos(response, datetime)
 
@@ -108,6 +111,9 @@ class OpenWeatherMapError(WeatherProviderError):
     """Basic exception for errors raised by OWM"""
     pass
 
+class OpenWeatherMapAPIKeyError(WeatherProviderConnectivityError):
+    """Exception raised when the wrong API key is provided"""
+    pass
 
 class OpenWeatherMapQueryError(OpenWeatherMapError):
     """Exception for 404 errors raised by OWM"""
