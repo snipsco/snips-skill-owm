@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import abc
+import collections
 from enum import Enum
 import locale
 import sentence_generation_utils as utils
@@ -70,7 +71,7 @@ class AnswerSentenceGenerator(SentenceGenerator):
             else:
                 return ""
 
-        if self.locale == "fr_FR":
+        elif self.locale == "fr_FR":
             """
             Country granularity:
             - We use "au" for masculine nouns that begins with a consonant
