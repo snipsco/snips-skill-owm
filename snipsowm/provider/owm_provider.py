@@ -4,7 +4,6 @@ import json
 import requests
 from weather_provider import WeatherProvider, WeatherProviderError, WeatherProviderConnectivityError
 
-
 class OWMWeatherProvider(WeatherProvider):
     API_WEATHER_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
     API_FORECAST_ENDPOINT = "http://api.openweathermap.org/data/2.5/forecast"
@@ -25,8 +24,11 @@ class OWMWeatherProvider(WeatherProvider):
         r = requests.get(url)
         response = json.loads(r.text)
 
-        if response['cod'] == '404':
+        if response['cod'] == 404:
             raise OpenWeatherMapQueryError(response['message'])
+
+        if response['cod'] == 401:
+            raise OpenWeatherMapAPIKeyError(response['message'])
 
         try:
             description = response["weather"][0]["id"]
@@ -118,7 +120,6 @@ class OpenWeatherMapAPIKeyError(WeatherProviderConnectivityError):
 class OpenWeatherMapQueryError(OpenWeatherMapError):
     """Exception for 404 errors raised by OWM"""
     pass
-
 
 class OpenWeatherMapMaxDaysForecastError(OpenWeatherMapError):
     """Exception raised by OWM when a forecast for more than OWMWeatherProvider.OWM_MAX_FORECAST_DAYS days is asked"""
