@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='snipsowm',
@@ -17,7 +17,5 @@ setup(
     test_suite="tests",
     keywords=['snips'],
     package_data={'snipsowm': ['Snipsspec']},
-    packages=[
-        'snipsowm'
-    ]
+    packages=find_packages()
 )
