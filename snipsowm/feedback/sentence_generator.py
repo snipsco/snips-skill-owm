@@ -13,11 +13,30 @@ class SentenceGenerator(object):
     def __init__(self, locale="en_US"):
         self.locale = locale
 
+    def generate_error_sentence(self):
+        error_sentences = {
+            "en_US": "An error occured when trying to retrieve the weather, please try again",
+            "fr_FR": "Désolé, il y à eu une erreur lors de la récupération des données météo. Veuillez réessayer"
+        }
+
+        return error_sentences[self.locale]
+
+    def generate_error_locale_sentence(self):
+        """
+        TODO : This method is too specific to be implemented by the SentenceGenerator class.
+        :return:
+        :rtype:basestring
+        """
+        error_sentences = {
+            "en_US": "An error occured. Your system doesn't have the correct locale installed. Please refer to the documentation. ",
+            "fr_FR": "Désolé, il y à eu une erreur. Votre système n'a pas la locale correcte installée. Veuillez consulter la documentation pour plus de détails."
+        }
+
+        return error_sentences[self.locale]
+
 
 class SimpleSentenceGenerator(SentenceGenerator):
-    @abc.abstractmethod
-    def generate_error_sentence(self):
-        pass
+    pass
 
 
 class AnswerSentenceGenerator(SentenceGenerator):
@@ -130,17 +149,9 @@ class AnswerSentenceGenerator(SentenceGenerator):
             locale.setlocale(locale.LC_TIME, full_locale)
         except locale.Error:
             print "Careful ! There was an error while trying to set the locale. This means your locale is not properly installed. Please refer to the README for more information."
-            return ""
+            raise SentenceGenerationException()
 
         return utils.date_to_string(date, granularity)
-
-    def generate_error_sentence(self):
-        error_sentences = {
-            "en_US": "An error occured when trying to retrieve the weather, please try again",
-            "fr_FR": "Désolé, il y a eu une erreur lors de la récupération des données météo. Veuillez réessayer"
-        }
-
-        return error_sentences[self.locale]
 
 
 class ConditionQuerySentenceGenerator(AnswerSentenceGenerator):
@@ -228,3 +239,11 @@ class TemperatureQuerySentenceGenerator(AnswerSentenceGenerator):
         random.shuffle(permutable_parameters)
         parameters = (introduction,) + tuple(permutable_parameters)
         return "{} {} {}".format(*parameters)
+
+
+class SentenceGenerationException(Exception):
+    pass
+
+
+class SentenceGenerationLocaleException(SentenceGenerationException):
+    pass
