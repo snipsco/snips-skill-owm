@@ -3,7 +3,7 @@
 
 import datetime
 from feedback.sentence_generator import AnswerSentenceGenerator, ConditionQuerySentenceGenerator, \
-    TemperatureQuerySentenceGenerator
+    TemperatureQuerySentenceGenerator, SentenceGenerationLocaleException
 from provider.owm_provider import OWMWeatherProvider
 from provider.weather_provider import WeatherProviderError, WeatherProviderConnectivityError
 import weather_condition
@@ -53,6 +53,8 @@ class SnipsOWM:
                                                                                   Locality=locality)
         except (WeatherProviderError, WeatherProviderConnectivityError):
             generated_sentence = sentence_generator.generate_error_sentence()
+        except SentenceGenerationLocaleException:
+            generated_sentence = sentence_generator.generate_error_locale_sentence()
 
         snips.dialogue.speak(generated_sentence, snips.session_id)
 
@@ -136,7 +138,9 @@ class SnipsOWM:
 
             # And finally send it to the TTS if provided
         except (WeatherProviderError, WeatherProviderConnectivityError):
-            generated_sentence = sentence_generator.generate_error_sentence()
+                generated_sentence = sentence_generator.generate_error_sentence()
+        except SentenceGenerationLocaleException:
+            generated_sentence = sentence_generator.generate_error_locale_sentence()
 
         snips.dialogue.speak(generated_sentence, snips.session_id)
 
@@ -221,5 +225,7 @@ class SnipsOWM:
             # And finally send it to the TTS if provided
         except (WeatherProviderError, WeatherProviderConnectivityError):
             generated_sentence = sentence_generator.generate_error_sentence()
+        except SentenceGenerationLocaleException:
+            generated_sentence = sentence_generator.generate_error_locale_sentence()
 
         snips.dialogue.speak(generated_sentence, snips.session_id)
