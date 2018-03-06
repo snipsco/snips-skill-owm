@@ -32,6 +32,7 @@ Snips Skills Manager
 It is recommended that you use this skill with the `Snips Skills Manager <https://github.com/snipsco/snipsskills>`_. Simply add the following section to your `Snipsfile <https://github.com/snipsco/snipsskills/wiki/The-Snipsfile>`_:
 
 .. code-block:: yaml
+
     locale: <Desired Locale>
     skills:
     - package_name: snipsowm
