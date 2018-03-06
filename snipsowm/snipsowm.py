@@ -150,7 +150,7 @@ class SnipsOWM:
                           corresponding to a weather condition extracted from the slots.
                           e.g 'HUMID', 'SUNNY', etc ...
                           Can be none, if there is no assumption.
-        :type assumed_condition: basestring
+        :type item_name: basestring
 
         :param date: datetime of the forecast
         :type date: datetime.datetime
@@ -198,10 +198,10 @@ class SnipsOWM:
             # We retrieve the weather from our weather provider
             actual_condition_group = weather_condition.OWMToWeatherConditionMapper(actual_condition).resolve()
 
-            if assumed_condition:
+            if item_name:
                 # We find the category (group) of the received weather description
                 assumed_condition_group = weather_condition.SnipsToWeatherConditionMapper().fuzzy_matching(self.locale,
-                                                                                                           assumed_condition).resolve()
+                                                                                                           item_name).resolve()
 
                 # We check if their is a positive/negative tone to add to the answer
                 if assumed_condition_group.value != weather_condition.WeatherConditions.UNKNOWN:
