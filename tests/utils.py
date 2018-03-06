@@ -1,3 +1,7 @@
+DUMMY_API_KEY = "dummykey"
+DUMMY_LOCATION = "DUMMY LOCATION"
+
+
 class MockSnips(object):
     class MockDialogue(object):
         def __init__(self):
