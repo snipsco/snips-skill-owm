@@ -180,5 +180,5 @@ intents:
       snips.intent.forecast_geographical_poi = snips.intent.forecast_geographical_poi[0] if snips.intent.forecast_geographical_poi else None
 
       print "cond: {}, datetime: {}, Locality: {}, granularity: {}".format(item_name, datetime, snips.intent.forecast_locality, granularity)
-      snips.skill.speak_condition(snips, item_name, datetime, granularity=granularity, Locality=snips.intent.forecast_locality, Region=snips.intent.forecast_region, Country=snips.intent.forecast_country, POI=snips.intent.forecast_geographical_poi)
+      snips.skill.speak_item(snips, item_name, datetime, granularity=granularity, Locality=snips.intent.forecast_locality, Region=snips.intent.forecast_region, Country=snips.intent.forecast_country, POI=snips.intent.forecast_geographical_poi)
       %}

@@ -1,8 +1,16 @@
 language: python
 python:
-  - "2.7"
+- '2.7'
 cache: pip
 install:
-  - python setup.py install
+- python setup.py install
 script:
-  - python setup.py test
+- python setup.py test
+deploy:
+  provider: pypi
+  user: michaelfester
+  password:
+    secure: CO5Ka21ZHa8f7r2TXmXQ3OHjZP+mnWv2gyaZsUvVLXKt8h2uxaZrPxO/XFhXz0Hk7Pf3lbnFabLgjOZMH6gjRaSuHyJMwlOl0Q0ywygWo/QOF4UubC+73sCsuNq8JahmkCGCAum6boz+ElWIwyXBwOIPglqpmYgp40c/+jDA0jN8H0VMEC5EtrKYHODZYXQPsA/g4y42xqIPpYqn32gXd3IGf/eyGVSOhrTCIbh4NC3A4RIMdbfmdJkh1TWA7f/URoSAXyygtTQEdlu4m3qKOQ6c+T6S+zJ+X2s/YMXXnc36mmSPgXlBPZY7sAXl6HQpB3hUMv/fWgIh0Dn3v7qlVn4fM6zXUovkDuQwM/uiGBGJVqP6djsGYIlyQpT5R/qhKcuh3zJVx3vNt0U6YK5FNHitz7APJiVJWbYqgky4iSmpch4MKIAeWVrvQ157R8Y0xiBPJbJXCVude9gxdtpAt0rNWBo3PQqXCjNq9q6/m5afJB9wT6s3dxyqOnPv/aWmKMfLKtLXVROBbwHrp2nGj/+e19VkTLUM87MtsFR4XLuVLj544665YtqLYLHyuXfL44lLL0nMix6+hVOXaY3ulXHRcuL7oXTbsdAx7NzKj9BBzJB6+We0GILRxwl+yi+exgZSq0ZhNE2uYdqO308H/8inMmcrSQrcfFqbYqwkGp0=
+  on:
+    tags: true
+    branch: master
