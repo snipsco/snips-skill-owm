@@ -7,7 +7,12 @@ class MockSnips(object):
         def speak(self, sentence, session_id):
             self._speak_called = True
 
+    class MockTypes(object):
+        def __init__(self):
+            pass
+
     def __init__(self):
         self._called = False
         self.dialogue = MockSnips.MockDialogue()
         self.session_id = "DummySessionId"
+        self.types = MockSnips.MockTypes()
