@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='snipsowm',
-    version='0.2.0',
+    version='0.2.1',
     description='OpenWeatherMap weather skill for Snips',
     author='Michael Fester',
     author_email='michael.fester@gmail.com',
