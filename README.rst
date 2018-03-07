@@ -40,8 +40,8 @@ It is recommended that you use this skill with the `Snips Skills Manager <https:
       pip: snipsowm
       default_location: "Paris,fr"
       params:
-        - api_key: <YOUR API KEY>
-          default_location: France
+        api_key: <YOUR API KEY>
+        default_location: France
       
 Copyright
 ---------
