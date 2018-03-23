@@ -1,7 +1,7 @@
 # OpenWeatherMap skill for Snips
 
 [![Build Status](https://travis-ci.org/snipsco/snips-skill-owm.svg)](https://travis-ci.org/snipsco/snips-skill-owm)
-[![PyPi](https://img.shields.io/pypi/v/snips-skill-owm.svg)](https://pypi.python.org/pypi/snips-skill-owm)
+[![PyPi](https://img.shields.io/pypi/v/snipsowm.svg)](https://pypi.python.org/pypi/snipsowm)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/snipsco/snips-skill-owm/master/LICENSE.txt)
 
 ## Installation
