@@ -5,3 +5,4 @@ idna==2.6
 requests==2.18.4
 urllib3==1.22
 python-Levenshtein
+hermes_python
