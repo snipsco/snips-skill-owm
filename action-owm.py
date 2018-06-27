@@ -1,13 +1,16 @@
 #!/usr/bin/env python2
 # -*-: coding utf-8 -*-
 
-from hermes_python.hermes import Hermes
-import hermes_python
-from snipsowm.snipsowm import SnipsOWM
+import ConfigParser
+from datetime import datetime
 import datetime as dt
 from dateutil.parser import parse
-from datetime import datetime
+from hermes_python.hermes import Hermes
+import hermes_python
+import io
 import os
+from snipsowm.snipsowm import SnipsOWM
+
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
@@ -18,35 +21,54 @@ MQTT_ADDR = "{}:{}".format(MQTT_IP_ADDR, str(MQTT_PORT))
 DIR = os.path.dirname(os.path.realpath(__file__)) + '/alarm/'
 
 lang = "EN"
+class SnipsConfigParser(ConfigParser.SafeConfigParser):
+    def to_dict(self):
+        return {section : {option_name : option for option_name, option in self.items(section)} for section in self.sections()}
+
+def read_configuration_file(configuration_file):
+    try:
+        with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
+            conf_parser = SnipsConfigParser()
+            conf_parser.readfp(f)
+            return conf_parser.to_dict()
+    except (IOError, ConfigParser.Error) as e:
+        return dict()
 
 def getCondition(snips):
       # Determine condition
     if snips.slots.forecast_condition_name:
-        return snips.slots.forecast_condition_name[0].slot_value.value.value
+        res = snips.slots.forecast_condition_name[0].slot_value.value.value
+        return unicode(res)
     return None
+
 def getLocality(snips):
     if snips.slots.forecast_locality:
-        return snips.slots.forecast_locality[0].slot_value.value.value
+        res = snips.slots.forecast_locality[0].slot_value.value.value
+        return unicode(res)
     return None
 
 def getRegion(snips):
     if snips.slots.forecast_region:
-        return snips.slots.forecast_region[0].slot_value.value.value
+        res = snips.slots.forecast_region[0].slot_value.value.value
+        return unicode(res)
     return None
 
 def getCountry(snips):
     if snips.slots.forecast_country :
-        return snips.slots.forecast_country[0].slot_value.value.value
+        res = snips.slots.forecast_country[0].slot_value.value.value
+        return unicode(res)
     return None
 
 def getPOI(snips):
     if snips.slots.forecast_geographical_poi:
-        return snips.slots.forecast_geographical_poi[0].slot_value.value.value
+        res = snips.slots.forecast_geographical_poi[0].slot_value.value.value
+        return unicode(res)
     return None
 
 def getItemName(snips):
     if snips.slots.forecast_item:
-        return snips.slots.forecast_item[0].slot_value.value.value
+        res = snips.slots.forecast_item[0].slot_value.value.value
+        return unicode(res)
     return None
 
 def getDateTime(snips):
@@ -76,7 +98,7 @@ def getAnyLocality(snips):
           or snips.slots.forecast_geographical_poi
 
         if locality:
-          return locality[0].slot_value.value.value
+          return unicode(locality[0].slot_value.value.value)
       except Exception:
         pass
 
@@ -99,12 +121,14 @@ def searchWeatherForecastTemperature(hermes, intent_message):
     granularity = getGranurality(datetime)
     locality = getAnyLocality(intent_message)
     res = hermes.skill.speak_temperature(locality, datetime, granularity)
+    current_session_id = intent_message.session_id
+    hermes.publish_end_session(current_session_id, res)
     print(res)
 
 def searchWeatherForecastCondition(hermes, intent_message):
     datetime = getDateTime(intent_message)
     granularity = getGranurality(datetime)
-    condition =getCondition(intent_message)
+    condition = getCondition(intent_message)
     locality = getLocality(intent_message)
     region = getRegion(intent_message)
     country = getCountry(intent_message)
@@ -113,6 +137,8 @@ def searchWeatherForecastCondition(hermes, intent_message):
                                granularity=granularity, Locality=locality,
                                Region=region, Country=country,
                                POI=geographical_poi)
+    current_session_id = intent_message.session_id
+    hermes.publish_end_session(current_session_id, res)
     print(res)
 
 def searchWeatherForecast(hermes, intent_message):
@@ -128,6 +154,8 @@ def searchWeatherForecast(hermes, intent_message):
                                granularity=granularity, Locality=locality,
                                Region=region, Country=country,
                                POI=geographical_poi)
+    current_session_id = intent_message.session_id
+    hermes.publish_end_session(current_session_id, res)
     print(res)
 
 def searchWeatherForecastItem(hermes, intent_message):
@@ -145,15 +173,22 @@ def searchWeatherForecastItem(hermes, intent_message):
                                  Region=region,
                                  Country=country,
                                  POI=geographical_poi)
+    current_session_id = intent_message.session_id
+    hermes.publish_end_session(current_session_id, res)
     print(res)
 
 if __name__ == "__main__":
-    skill = SnipsOWM("xxxx", "default_location")
+    config = read_configuration_file("config.ini")
+    skill = SnipsOWM(config["secret"]["api_key"],
+                     config["secret"]["default_location"])
     lang = "EN"
     with Hermes(MQTT_ADDR) as h:
         h.skill = skill
-        h.subscribe_intent("searchWeatherForecastItem", searchWeatherForecastItem) \
-        .subscribe_intent("searchWeatherForecastTemperature", searchWeatherForecastTemperature) \
-        .subscribe_intent("searchWeatherForecastCondition", searchWeatherForecastCondition) \
+        h.subscribe_intent("searchWeatherForecastItem",
+                           searchWeatherForecastItem) \
+        .subscribe_intent("searchWeatherForecastTemperature",
+                          searchWeatherForecastTemperature) \
+        .subscribe_intent("searchWeatherForecastCondition",
+                          searchWeatherForecastCondition) \
         .subscribe_intent("searchWeatherForecast", searchWeatherForecast) \
         .loop_forever()
