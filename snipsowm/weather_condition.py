@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from enum import Enum
-import Levenshtein
+from wagnerfischerpp import WagnerFischer
 from owm import OWMWeatherConditions
 from snips import SnipsWeatherConditions, mappings
 import random
@@ -150,7 +149,7 @@ class SnipsToWeatherConditionMapper(object):
         :return: a WeatherCondition
         :rtype: WeatherCondition
         """
-        if self.value == None: return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
+        if self.value is None: return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
         return WeatherConditionDescriptor(self.mappings[self.value])
 
 
@@ -234,7 +233,7 @@ class OWMToWeatherConditionMapper(object):
                 self.value = OWMWeatherConditions[key]
 
     def resolve(self):
-        if self.value == None: return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
+        if self.value is None: return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
         return WeatherConditionDescriptor(self.mappings[self.value])
 
 
@@ -247,12 +246,11 @@ class SlotValueResolver(object):
         conditions_candidates = self.get_condition_candidates(locale, condition_name)
 
         sorted_candidates = sorted(conditions_candidates.items(),
-                                   cmp=lambda x, y: Levenshtein.distance(condition_name, x[1]) - Levenshtein.distance(
-                                       condition_name, y[1]))
+                                   cmp=lambda x, y: WagnerFischer(condition_name, x[1]).cost - WagnerFischer(condition_name, y[1]).cost)
         return sorted_candidates[0][0]
 
     def get_condition_candidates(self, locale, condition_name):
-        return {condition: min(mappings[condition][locale], key=lambda s: Levenshtein.distance(condition_name, s)) for
+        return {condition: min(mappings[condition][locale], key=lambda s:  WagnerFischer(condition_name, s).cost) for
                 condition in list(SnipsWeatherConditions)}
 
 

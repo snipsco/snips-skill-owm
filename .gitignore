@@ -105,3 +105,5 @@ temp/
 .DS_Store
 .AppleDouble/
 Makefile
+
+config.ini

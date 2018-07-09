@@ -5,7 +5,7 @@ import datetime
 from feedback.sentence_generator import AnswerSentenceGenerator, ConditionQuerySentenceGenerator, \
     TemperatureQuerySentenceGenerator, SentenceGenerationLocaleException
 from provider.owm_provider import OWMWeatherProvider
-from provider.weather_provider import WeatherProviderError, WeatherProviderConnectivityError
+from provider.weather_provider import WeatherProviderError, WeatherProviderConnectivityError, WeatherProviderInvalidAPIKey
 import weather_condition
 
 
@@ -27,7 +27,7 @@ class SnipsOWM:
 
         self.provider = OWMWeatherProvider(api_key)
 
-    def speak_temperature(self, snips, locality, date, granularity=0):
+    def speak_temperature(self, locality, date, granularity=0):
         """ Tell the temperature at a given locality and datetime.
 
         :param locality: The locality of the forecast, e.g. 'Paris,fr' or
@@ -53,12 +53,14 @@ class SnipsOWM:
                                                                                   Locality=locality)
         except (WeatherProviderError, WeatherProviderConnectivityError):
             generated_sentence = sentence_generator.generate_error_sentence()
+        except WeatherProviderInvalidAPIKey:
+            generated_sentence = sentence_generator.generate_api_key_error_sentence()
         except SentenceGenerationLocaleException:
             generated_sentence = sentence_generator.generate_error_locale_sentence()
 
-        snips.dialogue.speak(generated_sentence, snips.session_id)
+        return generated_sentence
 
-    def speak_condition(self, snips, assumed_condition, date, POI=None, Locality=None, Region=None, Country=None,
+    def speak_condition(self, assumed_condition, date, POI=None, Locality=None, Region=None, Country=None,
                         granularity=0):
         """ Speak a response for a given weather condition
             at a specified locality and datetime.
@@ -141,10 +143,12 @@ class SnipsOWM:
                 generated_sentence = sentence_generator.generate_error_sentence()
         except SentenceGenerationLocaleException:
             generated_sentence = sentence_generator.generate_error_locale_sentence()
+        except WeatherProviderInvalidAPIKey:
+            generated_sentence = sentence_generator.generate_api_key_error_sentence()
 
-        snips.dialogue.speak(generated_sentence, snips.session_id)
+        return generated_sentence
 
-    def speak_item(self, snips, item_name, date, POI=None, Locality=None, Region=None, Country=None,
+    def speak_item(self, item_name, date, POI=None, Locality=None, Region=None, Country=None,
                    granularity=0):
         """ Speak a response for a given a item
             at a specified locality and datetime.
@@ -227,5 +231,7 @@ class SnipsOWM:
             generated_sentence = sentence_generator.generate_error_sentence()
         except SentenceGenerationLocaleException:
             generated_sentence = sentence_generator.generate_error_locale_sentence()
+        except WeatherProviderInvalidAPIKey:
+            generated_sentence = sentence_generator.generate_api_key_error_sentence()
 
-        snips.dialogue.speak(generated_sentence, snips.session_id)
+        return generated_sentence

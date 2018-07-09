@@ -2,7 +2,8 @@
 import datetime
 import json
 import requests
-from weather_provider import WeatherProvider, WeatherProviderError, WeatherProviderConnectivityError
+from weather_provider import WeatherProvider, WeatherProviderError, WeatherProviderConnectivityError, WeatherProviderInvalidAPIKey
+
 
 class OWMWeatherProvider(WeatherProvider):
     API_WEATHER_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather"
@@ -38,7 +39,7 @@ class OWMWeatherProvider(WeatherProvider):
             temperature = int(float(response["main"]["temp"]))
         except KeyError:
             temperature = None
-        return (description, temperature)
+        return description, temperature
 
     def get_forecast_weather(self, location, datetime):
         """
@@ -72,7 +73,7 @@ class OWMWeatherProvider(WeatherProvider):
             temperature = int(float(response["main"]["temp"]))
         except KeyError:
             temperature = None
-        return (description, temperature)
+        return description, temperature
 
     def get_weather(self, location, datetime=None):
         if datetime:
@@ -113,13 +114,16 @@ class OpenWeatherMapError(WeatherProviderError):
     """Basic exception for errors raised by OWM"""
     pass
 
-class OpenWeatherMapAPIKeyError(WeatherProviderConnectivityError):
+
+class OpenWeatherMapAPIKeyError(WeatherProviderInvalidAPIKey):
     """Exception raised when the wrong API key is provided"""
     pass
+
 
 class OpenWeatherMapQueryError(OpenWeatherMapError):
     """Exception for 404 errors raised by OWM"""
     pass
+
 
 class OpenWeatherMapMaxDaysForecastError(OpenWeatherMapError):
     """Exception raised by OWM when a forecast for more than OWMWeatherProvider.OWM_MAX_FORECAST_DAYS days is asked"""
