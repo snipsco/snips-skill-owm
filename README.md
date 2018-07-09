@@ -1,17 +1,16 @@
-# OpenWeatherMap skill for Snips
+# OpenWeatherMap action for Snips
 
-[![Build Status](https://travis-ci.org/snipsco/snips-skill-owm.svg)](https://travis-ci.org/snipsco/snips-skill-owm)
-[![PyPi](https://img.shields.io/pypi/v/snipsowm.svg)](https://pypi.python.org/pypi/snipsowm)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/snipsco/snips-skill-owm/master/LICENSE.txt)
 
-## Installation
-------------
+## Installation with Sam
 
-The skill is on [PyPI](https://pypi.python.org/pypi/snips-skill-owm), so you can just install it with [pip](http://www.pip-installer.org):
+The easiest way to use this Action is to install it with [Sam](https://snips.gitbook.io/getting-started/installation)
 
-```sh
-$ pip install snipsowm
-```
+`sam install actions -g https://github.com/snipsco/snips-skill-owm.git`
+
+Sam will then ask you for an OpenWeatherMap API key. You can create one by signing up to [OpenWeatherMap](https://openweathermap.org)
+
+The action works with the English Weather skill that you can download on [Snips' console](https://console.snips.ai)
 
 ## Locale
 
@@ -22,23 +21,12 @@ To have the skills properly working, you **need** to generate locales for your l
 
 You can generate them with `sudo raspi-config`. Going in the `Localisation Options` submenu, then in the `Change Locale` submenu, and selecting the locales you want to support. For instance, select `en_US UTF-8` if you want support for English. 
 
-## Usage
+## Manual installation
 
-### Snips Skills Manager
-
-It is recommended that you use this skill with the [Snips Skills Manager](https://github.com/snipsco/snipsskills). Simply add the following section to your [Snipsfile](https://github.com/snipsco/snipsskills/wiki/The-Snipsfile):
-
-```sh
-locale: <Desired Locale>
-skills:
-- package_name: snipsowm
-  class_name: SnipsOWM
-  pip: snipsowm
-  default_location: "Paris,fr"
-  params:
-    api_key: <YOUR API KEY>
-    default_location: France
-```
+- Clone the repository on your Pi
+- Run `setup.sh` (it will create a virtualenv, install the dependencies in it and rename config.ini.default to config.ini)
+- Provide an OpenWeatherMap API key in the config.ini
+- Run `action-owm.py`
 
 ## Contributing
 
@@ -46,4 +34,4 @@ Please see the [Contribution Guidelines](https://github.com/snipsco/snips-skill-
 
 ## Copyright
 
-This skill is provided by [Snips](https://www.snips.ai) as Open Source software. See [LICENSE.txt](https://github.com/snipsco/snips-skill-owm/blob/master/LICENSE.txt) for more information.
+This action is provided by [Snips](https://www.snips.ai) as Open Source software. See [LICENSE.txt](https://github.com/snipsco/snips-skill-owm/blob/master/LICENSE.txt) for more information.

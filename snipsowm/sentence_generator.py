@@ -4,7 +4,6 @@ import datetime
 from enum import Enum
 import locale
 import random
-from utils import _convert_to_unix_case
 
 
 class SentenceTone(Enum):
@@ -93,7 +92,7 @@ class SentenceGenerator(object):
         :rtype: basestring
         """
         if self.locale == "en_US":
-            if (POI or Locality or Region or Country):
+            if POI or Locality or Region or Country:
                 locality = filter(lambda x: x is not None, [POI, Locality, Region, Country])[0]
                 return "in {}".format(locality)
             else:
@@ -157,8 +156,8 @@ class SentenceGenerator(object):
         try:  # Careful, this operation is not thread safe ...
             locale.setlocale(locale.LC_TIME, full_locale)
         except locale.Error:
-            print "Careful ! There was an error while trying to set the locale. This means your locale is not properly installed. Please refer to the README for more information."
-            return ""
+            print "Careful ! There was an error while trying to set the locale {}. This means your locale is not properly installed. Please refer to the README for more information.".format(full_locale)
+            print "Some information displayed might not be formated to your locale"
 
         return date_to_string(date, granularity)
 
@@ -250,4 +249,11 @@ class SentenceGenerator(object):
             "fr_FR": "Désolé, il y a eu une erreur lors de la récupération des données météo. Veuillez réessayer"
         }
 
+        return error_sentences[self.locale]
+
+    def generate_api_key_error_sentence(self):
+        error_sentences = {
+            "en_US": "The API key you provided is invalid, check your config.ini",
+            "fr_FR": "La clé API fournie est incorrecte, vérifiez le fichier config.ini"
+        }
         return error_sentences[self.locale]

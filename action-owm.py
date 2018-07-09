@@ -21,9 +21,11 @@ MQTT_ADDR = "{}:{}".format(MQTT_IP_ADDR, str(MQTT_PORT))
 DIR = os.path.dirname(os.path.realpath(__file__)) + '/alarm/'
 
 lang = "EN"
+
+
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
-        return {section : {option_name : option for option_name, option in self.items(section)} for section in self.sections()}
+        return {section: {option_name : option for option_name, option in self.items(section)} for section in self.sections()}
 
 def read_configuration_file(configuration_file):
     try:
@@ -123,7 +125,6 @@ def searchWeatherForecastTemperature(hermes, intent_message):
     res = hermes.skill.speak_temperature(locality, datetime, granularity)
     current_session_id = intent_message.session_id
     hermes.publish_end_session(current_session_id, res)
-    print(res)
 
 def searchWeatherForecastCondition(hermes, intent_message):
     datetime = getDateTime(intent_message)
@@ -139,7 +140,6 @@ def searchWeatherForecastCondition(hermes, intent_message):
                                POI=geographical_poi)
     current_session_id = intent_message.session_id
     hermes.publish_end_session(current_session_id, res)
-    print(res)
 
 def searchWeatherForecast(hermes, intent_message):
     datetime = getDateTime(intent_message)
@@ -156,7 +156,6 @@ def searchWeatherForecast(hermes, intent_message):
                                POI=geographical_poi)
     current_session_id = intent_message.session_id
     hermes.publish_end_session(current_session_id, res)
-    print(res)
 
 def searchWeatherForecastItem(hermes, intent_message):
     datetime = getDateTime(intent_message)
@@ -175,10 +174,16 @@ def searchWeatherForecastItem(hermes, intent_message):
                                  POI=geographical_poi)
     current_session_id = intent_message.session_id
     hermes.publish_end_session(current_session_id, res)
-    print(res)
+
 
 if __name__ == "__main__":
     config = read_configuration_file("config.ini")
+
+    if config.get("secret").get("api_key") is None:
+        print "No API key in config.ini, you must setup an OpenWeatherMap API key for this skill to work"
+    elif len(config.get("secret").get("api_key")) == 0:
+        print "No API key in config.ini, you must setup an OpenWeatherMap API key for this skill to work"
+
     skill = SnipsOWM(config["secret"]["api_key"],
                      config["secret"]["default_location"])
     lang = "EN"

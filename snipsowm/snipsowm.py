@@ -5,7 +5,7 @@ import datetime
 from feedback.sentence_generator import AnswerSentenceGenerator, ConditionQuerySentenceGenerator, \
     TemperatureQuerySentenceGenerator, SentenceGenerationLocaleException
 from provider.owm_provider import OWMWeatherProvider
-from provider.weather_provider import WeatherProviderError, WeatherProviderConnectivityError
+from provider.weather_provider import WeatherProviderError, WeatherProviderConnectivityError, WeatherProviderInvalidAPIKey
 import weather_condition
 
 
@@ -53,6 +53,8 @@ class SnipsOWM:
                                                                                   Locality=locality)
         except (WeatherProviderError, WeatherProviderConnectivityError):
             generated_sentence = sentence_generator.generate_error_sentence()
+        except WeatherProviderInvalidAPIKey:
+            generated_sentence = sentence_generator.generate_api_key_error_sentence()
         except SentenceGenerationLocaleException:
             generated_sentence = sentence_generator.generate_error_locale_sentence()
 
@@ -141,6 +143,8 @@ class SnipsOWM:
                 generated_sentence = sentence_generator.generate_error_sentence()
         except SentenceGenerationLocaleException:
             generated_sentence = sentence_generator.generate_error_locale_sentence()
+        except WeatherProviderInvalidAPIKey:
+            generated_sentence = sentence_generator.generate_api_key_error_sentence()
 
         return generated_sentence
 
@@ -227,5 +231,7 @@ class SnipsOWM:
             generated_sentence = sentence_generator.generate_error_sentence()
         except SentenceGenerationLocaleException:
             generated_sentence = sentence_generator.generate_error_locale_sentence()
+        except WeatherProviderInvalidAPIKey:
+            generated_sentence = sentence_generator.generate_api_key_error_sentence()
 
         return generated_sentence

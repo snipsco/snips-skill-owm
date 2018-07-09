@@ -16,7 +16,7 @@ class SentenceGenerator(object):
     def generate_error_sentence(self):
         error_sentences = {
             "en_US": "An error occured when trying to retrieve the weather, please try again",
-            "fr_FR": "Désolé, il y à eu une erreur lors de la récupération des données météo. Veuillez réessayer"
+            "fr_FR": "Désolé, il y a eu une erreur lors de la récupération des données météo. Veuillez réessayer"
         }
 
         return error_sentences[self.locale]
@@ -29,9 +29,16 @@ class SentenceGenerator(object):
         """
         error_sentences = {
             "en_US": "An error occured. Your system doesn't have the correct locale installed. Please refer to the documentation. ",
-            "fr_FR": "Désolé, il y à eu une erreur. Votre système n'a pas la locale correcte installée. Veuillez consulter la documentation pour plus de détails."
+            "fr_FR": "Désolé, il y a eu une erreur. Votre système n'a pas la locale correcte installée. Veuillez consulter la documentation pour plus de détails."
         }
 
+        return error_sentences[self.locale]
+
+    def generate_api_key_error_sentence(self):
+        error_sentences = {
+            "en_US": "The API key you provided is invalid, check your config.ini",
+            "fr_FR": "La clé API fournie est incorrecte, vérifiez le fichier config.ini"
+        }
         return error_sentences[self.locale]
 
 
@@ -148,8 +155,8 @@ class AnswerSentenceGenerator(SentenceGenerator):
         try:  # Careful, this operation is not thread safe ...
             locale.setlocale(locale.LC_TIME, full_locale)
         except locale.Error:
-            print "Careful ! There was an error while trying to set the locale. This means your locale is not properly installed. Please refer to the README for more information."
-            raise SentenceGenerationException()
+            print "Careful ! There was an error while trying to set the locale {}. This means your locale is not properly installed. Please refer to the README for more information.".format(full_locale)
+            print "Some information displayed might not be formated to your locale"
 
         return utils.date_to_string(date, granularity)
 

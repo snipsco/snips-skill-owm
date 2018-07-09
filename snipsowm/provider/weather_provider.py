@@ -2,6 +2,7 @@
 
 import abc
 
+
 class WeatherProvider(object):
     __metaclass__ = abc.ABCMeta
 
@@ -17,10 +18,13 @@ class WeatherProvider(object):
         pass
 
 
-
 class WeatherProviderError(Exception):
     pass
+
 
 class WeatherProviderConnectivityError(Exception):
     pass
 
+
+class WeatherProviderInvalidAPIKey(Exception):
+    pass
