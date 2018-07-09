@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from wagnerfischerpp import WagnerFischer
-import wagnerfischerpp
 from owm import OWMWeatherConditions
 from snips import SnipsWeatherConditions, mappings
 import random
