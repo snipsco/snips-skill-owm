@@ -72,6 +72,11 @@ class SentenceGenerator(object):
                 SentenceTone.POSITIVE: "Oui,",
                 SentenceTone.NEGATIVE: "Non,",
                 SentenceTone.NEUTRAL: ""
+            },
+            "es_ES": {
+                SentenceTone.POSITIVE: "Sí,",
+                SentenceTone.NEGATIVE: "No,",
+                SentenceTone.NEUTRAL: ""
             }
         }
 
@@ -135,6 +140,13 @@ class SentenceGenerator(object):
 
             return ""
 
+        if self.locale == "es_ES":
+            if POI or Locality or Region or Country:
+                locality = filter(lambda x: x is not None, [POI, Locality, Region, Country])[0]
+                return "en {}".format(locality)
+            else:
+                return ""
+
         else:
             return ""
 
@@ -156,7 +168,7 @@ class SentenceGenerator(object):
         try:  # Careful, this operation is not thread safe ...
             locale.setlocale(locale.LC_TIME, full_locale)
         except locale.Error:
-            print "Careful ! There was an error while trying to set the locale {}. This means your locale is not properly installed. Please refer to the README for more information.".format(full_locale)
+            print "Careful! There was an error while trying to set the locale {}. This means your locale is not properly installed. Please refer to the README for more information.".format(full_locale)
             print "Some information displayed might not be formated to your locale"
 
         return date_to_string(date, granularity)
@@ -223,7 +235,8 @@ class SentenceGenerator(object):
         """
         error_sentences = {
             "en_US": "I couldn't fetch the right data for the specified place and date",
-            "fr_FR": "Je n'ai pas pu récupérer les prévisions de température pour cet endroit et ces dates"
+            "fr_FR": "Je n'ai pas pu récupérer les prévisions de température pour cet endroit et ces dates",
+            "es_ES": "No he podido encontrar información meteorológica para el lugar y la fecha especificados"
         }
 
         if (temperature is None):
@@ -231,7 +244,8 @@ class SentenceGenerator(object):
 
         sentence_introductions = {
             "en_US": ["The temperature will be {} degrees"],
-            "fr_FR": ["La température sera de {} degrés", "Il fera {} degrés"]
+            "fr_FR": ["La température sera de {} degrés", "Il fera {} degrés"],
+            "es_ES": ["La temperatura será de {} grados", "Habrá {} grados"]
         }
 
         introduction = random.choice(sentence_introductions[self.locale]).format(temperature)
@@ -246,7 +260,8 @@ class SentenceGenerator(object):
     def generate_error_sentence(self):
         error_sentences = {
             "en_US": "An error occured when trying to retrieve the weather, please try again",
-            "fr_FR": "Désolé, il y a eu une erreur lors de la récupération des données météo. Veuillez réessayer"
+            "fr_FR": "Désolé, il y a eu une erreur lors de la récupération des données météo. Veuillez réessayer",
+            "es_ES": "Ha ocurrido un error obteniendo la información climática, por favor inténtalo de nuevo"
         }
 
         return error_sentences[self.locale]
@@ -254,6 +269,7 @@ class SentenceGenerator(object):
     def generate_api_key_error_sentence(self):
         error_sentences = {
             "en_US": "The API key you provided is invalid, check your config.ini",
-            "fr_FR": "La clé API fournie est incorrecte, vérifiez le fichier config.ini"
+            "fr_FR": "La clé API fournie est incorrecte, vérifiez le fichier config.ini",
+            "es_ES": "La clave de la API es incorrecta, por favor verifica tu fichero config.ini"
         }
         return error_sentences[self.locale]

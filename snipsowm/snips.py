@@ -61,210 +61,247 @@ class SnipsWeatherConditions(Enum):
 mappings = {
     SnipsWeatherConditions.HUMID: {
         'fr_FR': [u'humide'],
-        'en_US': [u'humid']
+        'en_US': [u'humid'],
+        'es_ES': [u'húmedo']
     },
     SnipsWeatherConditions.BLIZZARD: {
         'fr_FR': [u'blizzard'],
-        'en_US': [u'blizzard']
+        'en_US': [u'blizzard'],
+        'es_ES': [u'ventisca']
     },
     SnipsWeatherConditions.SNOWFALL: {
         'fr_FR': [u'snowfall'],
-        'en_US': [u'chutes de neige']
+        'en_US': [u'chutes de neige'],
+        'es_ES': [u'nieve']
     },
     SnipsWeatherConditions.WINDY: {
         'fr_FR': [u''],
-        'en_US': [u'windy']
+        'en_US': [u'windy'],
+        'es_ES': [u'viento']
     },
     SnipsWeatherConditions.CLOUD: {
         'fr_FR': [u'nuage', u'nuages'],
-        'en_US': [u'cloud', u'clouds']
+        'en_US': [u'cloud', u'clouds'],
+        'es_ES': [u'nuboso']
     },
     SnipsWeatherConditions.RAINY: {
         'fr_FR': [u'pluvieux'],
-        'en_US': [u'rainy']
+        'en_US': [u'rainy'],
+        'es_ES': [u'lluvioso']
     },
     SnipsWeatherConditions.STORMY: {
         'fr_FR': [u''],
-        'en_US': [u'stormy']
+        'en_US': [u'stormy'],
+        'es_ES': [u'tormentoso']
     },
     SnipsWeatherConditions.SUN: {
         'fr_FR': [u'soleil'],
-        'en_US': [u'sun']
+        'en_US': [u'sun'],
+        'es_ES': [u'soleado']
     },
     SnipsWeatherConditions.SNOW: {
         'fr_FR': [u'neige', u'neiger', u'neigera'],
-        'en_US': [u'snow']
+        'en_US': [u'snow'],
+        'es_ES': [u'nieve']
     },
     SnipsWeatherConditions.FOG: {
         'fr_FR': [u'brouillard'],
-        'en_US': [u'fog']
+        'en_US': [u'fog'],
+        'es_ES': [u'niebla']
     }, SnipsWeatherConditions.DEPRESSION: {
         'fr_FR': [u'dépression'],
-        'en_US': [u'depression']
+        'en_US': [u'depression'],
+        'es_ES': [u'depresión']
     },
     SnipsWeatherConditions.STORM: {
         'fr_FR': [u'tempête'],
-        'en_US': [u'storm']
+        'en_US': [u'storm'],
+        'es_ES': [u'tormenta']
     },
     SnipsWeatherConditions.RAINFALL: {
         'fr_FR': [u'précipitations'],
-        'en_US': [u'rainfall']
+        'en_US': [u'rainfall'],
+        'es_ES': [u'precipitaciones']
     },
     SnipsWeatherConditions.SNOWY: {
         'fr_FR': [u'neigeux'],
-        'en_US': [u'snowy']
+        'en_US': [u'snowy'],
+        'es_ES': [u'nevada']
     },
     SnipsWeatherConditions.SUNNY: {
         'fr_FR': [u'ensoleillé'],
-        'en_US': [u'sunny']
+        'en_US': [u'sunny'],
+        'es_ES': [u'soleado']
     },
     SnipsWeatherConditions.RAIN: {
         'fr_FR': [u'pluie'],
-        'en_US': [u'rain']
+        'en_US': [u'rain'],
+        'es_ES': [u'lluvia']
     },
     SnipsWeatherConditions.HAIL: {
         'fr_FR': [u'grêle'],
-        'en_US': [u'hail']
+        'en_US': [u'hail'],
+        'es_ES': [u'granizo']
     },
     SnipsWeatherConditions.FOGGY: {
         'fr_FR': [u''],
-        'en_US': [u'foggy']
+        'en_US': [u'foggy'],
+        'es_ES': [u'nebuloso']
     },
     SnipsWeatherConditions.OVERCAST: {
         'fr_FR': [u'couvert'],
-        'en_US': [u'overcast']
+        'en_US': [u'overcast'],
+        'es_ES': [u'cubierto']
     },
     SnipsWeatherConditions.CLOUDY: {
         'fr_FR': [u'nuageux'],
-        'en_US': [u'cloudy']
+        'en_US': [u'cloudy'],
+        'es_ES': [u'nublado']
     },
     SnipsWeatherConditions.HUMIDITY: {
         'fr_FR': [u'humidité'],
-        'en_US': [u'humidity']
+        'en_US': [u'humidity'],
+        'es_ES': [u'humedad']
     }, SnipsWeatherConditions.SNOWSTORM: {
         'fr_FR': [u'tempête de neige'],
-        'en_US': [u'snowstorm']
+        'en_US': [u'snowstorm'],
+        'es_ES': [u'tormenta de nieve']
     },
     SnipsWeatherConditions.WIND: {
         'fr_FR': [u'vent'],
-        'en_US': [u'wind']
+        'en_US': [u'wind'],
+        'es_ES': [u'viento']
     },
     SnipsWeatherConditions.TRENCH_COAT: {
         'fr_FR': [u'trench'],
-        'en_US': [u'trench coat']
+        'en_US': [u'trench coat'],
+        'es_ES': [u'gabardina']
     },
     SnipsWeatherConditions.PARKA: {
         'fr_FR': [u'parka'],
-        'en_US': [u'parka']
+        'en_US': [u'parka'],
+        'es_ES': [u'anorak']
     },
     SnipsWeatherConditions.CARDIGAN: {
         'fr_FR': [u'cardigan'],
-        'en_US': [u'cardigan']
+        'en_US': [u'cardigan'],
+        'es_ES': [u'chaqueta']
     },
     SnipsWeatherConditions.SUMMER_CLOTHING: {
         'fr_FR': [u''],
-        'en_US': [u'summer clothing']
+        'en_US': [u'summer clothing'],
+        'es_ES': [u'ropa de verano']
     },
     SnipsWeatherConditions.GAMP: {
         'fr_FR': [u'parapluie'],
-        'en_US': [u'gamp']
+        'en_US': [u'gamp'],
+        'es_ES': [u'paraguas']
     },
     SnipsWeatherConditions.BROLLY: {
         'fr_FR': [u'parapluie'],
-        'en_US': [u'brolly']
+        'en_US': [u'brolly'],
+        'es_ES': [u'paraguas']
     },
     SnipsWeatherConditions.SUNSHADE: {
         'fr_FR': [u'parasol'],
-        'en_US': [u'sunshade']
+        'en_US': [u'sunshade'],
+        'es_ES': [u'sombrilla']
     },
     SnipsWeatherConditions.PARASOL: {
         'fr_FR': [u'parasol'],
-        'en_US': [u'parasol']
+        'en_US': [u'parasol'],
+        'es_ES': [u'sombrilla']
     },
     SnipsWeatherConditions.UMBRELLA: {
         'fr_FR': [u'parapluie'],
-        'en_US': [u'umbrella']
+        'en_US': [u'umbrella'],
+        'es_ES': [u'paraguas']
     }, SnipsWeatherConditions.OPEN_TOED_SHOES: {
         'fr_FR': [u'sandales'],
-        'en_US': [u'open toed shoes']
+        'en_US': [u'open toed shoes'],
+        'es_ES': [u'sandalias']
     },
     SnipsWeatherConditions.SHORTS: {
         'fr_FR': [u'short'],
-        'en_US': [u'shorts']
+        'en_US': [u'shorts'],
+        'es_ES': [u'pantalones cortos']
     },
     SnipsWeatherConditions.SKIRT: {
         'fr_FR': [u'jupe'],
-        'en_US': [u'skirt']
+        'en_US': [u'skirt'],
+        'es_ES': [u'falda']
     },
     SnipsWeatherConditions.WARM_JUMPER: {
         'fr_FR': [u''],
-        'en_US': [u'warm jumper']
+        'en_US': [u'warm jumper'],
+        'es_ES': [u'jersey cálido']
     },
     SnipsWeatherConditions.WARM_SOCKS: {
         'fr_FR': [u'chausettes chaudes'],
-        'en_US': [u'warm socks']
+        'en_US': [u'warm socks'],
+        'es_ES': [u'calcetines cálidos']
     },
     SnipsWeatherConditions.WARM_SWEATER: {
         'fr_FR': [u''],
-        'en_US': [u'warm sweater']
+        'en_US': [u'warm sweater'],
+        'es_ES': [u'jersey cálido']
     },
     SnipsWeatherConditions.SCARF: {
         'fr_FR': [u'écharpe'],
-        'en_US': [u'scarf']
+        'en_US': [u'scarf'],
+        'es_ES': [u'bufanda']
     },
     SnipsWeatherConditions.STRAW_HAT: {
         'fr_FR': [u'chapeau de paille'],
-        'en_US': [u'straw hat']
+        'en_US': [u'straw hat'],
+        'es_ES': [u'sombero de paja']
     },
     SnipsWeatherConditions.HAT: {
         'fr_FR': [u'chapeau'],
-        'en_US': [u'hat']
+        'en_US': [u'hat'],
+        'es_ES': [u'sombrero']
     },
     SnipsWeatherConditions.SUNBLOCK: {
         'fr_FR': [u'crème solaire'],
-        'en_US': [u'sunblock']
+        'en_US': [u'sunblock'],
+        'es_ES': [u'crema solar']
     },
     SnipsWeatherConditions.SUNSCREEN: {
         'fr_FR': [u'écran solaire'],
-        'en_US': [u'sunscreen']
+        'en_US': [u'sunscreen'],
+        'es_ES': [u'protector solar']
     }, SnipsWeatherConditions.SUN_CREAM: {
         'fr_FR': [u'crème solaire'],
-        'en_US': [u'sun cream']
+        'en_US': [u'sun cream'],
+        'es_ES': [u'crema solar']
     },
     SnipsWeatherConditions.WOOLEN_SWEATER: {
         'fr_FR': [u''],
-        'en_US': [u'woolen sweater']
+        'en_US': [u'woolen sweater'],
+        'es_ES': [u'jersey de lana']
     },
     SnipsWeatherConditions.WOOLEN_JUMPER: {
         'fr_FR': [u''],
-        'en_US': [u'woolen jumper']
+        'en_US': [u'woolen jumper'],
+        'es_ES': [u'jersey de lana']
     },
     SnipsWeatherConditions.WOOLEN_TIGHTS: {
         'fr_FR': [u''],
-        'en_US': [u'woolen tights']
+        'en_US': [u'woolen tights'],
+        'es_ES': [u'medias de lana']
     },
     SnipsWeatherConditions.SLEEVELESS_SUNDRESS: {
         'fr_FR': [u''],
-        'en_US': [u'sleeveless sundress']
+        'en_US': [u'sleeveless sundress'],
+        'es_ES': [u'vestido sin mangas']
     },
     SnipsWeatherConditions.SUNDRESS: {
         'fr_FR': [u''],
-        'en_US': [u'sundress']
+        'en_US': [u'sundress'],
+        'es_ES': [u'vestido de verano']
     },
     SnipsWeatherConditions.CHUNKY_SWEATER: {
         'fr_FR': [u''],
-        'en_US': [u'chunky sweater']
+        'en_US': [u'chunky sweater'],
+        'es_ES': [u'jersey grueso']
     },
-    SnipsWeatherConditions.SUNGLASSES: {
-        'fr_FR': [u'lunettes de soleil'],
-        'en_US': [u'sunglasses']
-    },
-    SnipsWeatherConditions.RAINCOAT: {
-        'fr_FR': [u'manteau pour la pluie'],
-        'en_US': [u'raincoat']
-    },
-    SnipsWeatherConditions.WOOLEN_SOCKS: {
-        'fr_FR': [u'chaussettes en laine'],
-        'en_US': [u'woolen socks']
-    }
-}
