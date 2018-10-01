@@ -1,5 +1,5 @@
 [global]
-
+locales=
 [secret]
 api_key=
 default_location=
