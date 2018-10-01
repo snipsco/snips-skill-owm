@@ -124,7 +124,7 @@ def searchWeatherForecastTemperature(hermes, intent_message):
     locality = getAnyLocality(intent_message)
     res = hermes.skill.speak_temperature(locality, datetime, granularity)
     current_session_id = intent_message.session_id
-    hermes.publish_end_session(current_session_id, res)
+    hermes.publish_end_session(current_session_id, res.decode("latin-1"))
 
 def searchWeatherForecastCondition(hermes, intent_message):
     datetime = getDateTime(intent_message)
@@ -139,7 +139,7 @@ def searchWeatherForecastCondition(hermes, intent_message):
                                Region=region, Country=country,
                                POI=geographical_poi)
     current_session_id = intent_message.session_id
-    hermes.publish_end_session(current_session_id, res)
+    hermes.publish_end_session(current_session_id, res.decode("latin-1"))
 
 def searchWeatherForecast(hermes, intent_message):
     datetime = getDateTime(intent_message)
@@ -155,7 +155,7 @@ def searchWeatherForecast(hermes, intent_message):
                                Region=region, Country=country,
                                POI=geographical_poi)
     current_session_id = intent_message.session_id
-    hermes.publish_end_session(current_session_id, res)
+    hermes.publish_end_session(current_session_id, res.decode("latin-1"))
 
 def searchWeatherForecastItem(hermes, intent_message):
     datetime = getDateTime(intent_message)
@@ -173,8 +173,7 @@ def searchWeatherForecastItem(hermes, intent_message):
                                  Country=country,
                                  POI=geographical_poi)
     current_session_id = intent_message.session_id
-    hermes.publish_end_session(current_session_id, res)
-
+    hermes.publish_end_session(current_session_id, res.decode("latin-1"))
 
 if __name__ == "__main__":
     config = read_configuration_file("config.ini")
@@ -184,12 +183,12 @@ if __name__ == "__main__":
     elif len(config.get("secret").get("api_key")) == 0:
         print "No API key in config.ini, you must setup an OpenWeatherMap API key for this skill to work"
     
-    skill_locale = config.get("global",{"locale":"en_US"}).get("locale", "en_US")
-
+    skill_locale = config.get("global", {"locale":"en_US"}).get("locale", u"en_US")
     skill = SnipsOWM(config["secret"]["api_key"],
-                     config["secret"]["default_location"],locale=skill_locale)
+            config["secret"]["default_location"],locale=skill_locale.decode('ascii'))
+    
     lang = "EN"
-    with Hermes(MQTT_ADDR) as h:
+    with Hermes(MQTT_ADDR.encode("ascii")) as h:
         h.skill = skill
         h.subscribe_intent("searchWeatherForecastItem",
                            searchWeatherForecastItem) \
