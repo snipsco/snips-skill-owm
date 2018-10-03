@@ -68,11 +68,11 @@ mappings = {
         'en_US': [u'blizzard']
     },
     SnipsWeatherConditions.SNOWFALL: {
-        'fr_FR': [u'snowfall'],
-        'en_US': [u'chutes de neige']
+        'fr_FR': [u'chutes de neige'],
+        'en_US': [u'snowfall']
     },
     SnipsWeatherConditions.WINDY: {
-        'fr_FR': [u''],
+        'fr_FR': [u'venteux'],
         'en_US': [u'windy']
     },
     SnipsWeatherConditions.CLOUD: {
@@ -84,7 +84,7 @@ mappings = {
         'en_US': [u'rainy']
     },
     SnipsWeatherConditions.STORMY: {
-        'fr_FR': [u''],
+        'fr_FR': [u'orageux'],
         'en_US': [u'stormy']
     },
     SnipsWeatherConditions.SUN: {
@@ -127,7 +127,7 @@ mappings = {
         'en_US': [u'hail']
     },
     SnipsWeatherConditions.FOGGY: {
-        'fr_FR': [u''],
+        'fr_FR': [u'brumeux'],
         'en_US': [u'foggy']
     },
     SnipsWeatherConditions.OVERCAST: {
@@ -162,7 +162,7 @@ mappings = {
         'en_US': [u'cardigan']
     },
     SnipsWeatherConditions.SUMMER_CLOTHING: {
-        'fr_FR': [u''],
+        'fr_FR': [u'légé'],
         'en_US': [u'summer clothing']
     },
     SnipsWeatherConditions.GAMP: {
@@ -197,7 +197,7 @@ mappings = {
         'en_US': [u'skirt']
     },
     SnipsWeatherConditions.WARM_JUMPER: {
-        'fr_FR': [u''],
+        'fr_FR': [u'jupe courte'],
         'en_US': [u'warm jumper']
     },
     SnipsWeatherConditions.WARM_SOCKS: {
@@ -205,7 +205,7 @@ mappings = {
         'en_US': [u'warm socks']
     },
     SnipsWeatherConditions.WARM_SWEATER: {
-        'fr_FR': [u''],
+        'fr_FR': [u'pull'],
         'en_US': [u'warm sweater']
     },
     SnipsWeatherConditions.SCARF: {
@@ -232,27 +232,27 @@ mappings = {
         'en_US': [u'sun cream']
     },
     SnipsWeatherConditions.WOOLEN_SWEATER: {
-        'fr_FR': [u''],
+        'fr_FR': [u'pull en laine'],
         'en_US': [u'woolen sweater']
     },
     SnipsWeatherConditions.WOOLEN_JUMPER: {
-        'fr_FR': [u''],
+        'fr_FR': [u'pull en laine'],
         'en_US': [u'woolen jumper']
     },
     SnipsWeatherConditions.WOOLEN_TIGHTS: {
-        'fr_FR': [u''],
+        'fr_FR': [u'collants en laine'],
         'en_US': [u'woolen tights']
     },
     SnipsWeatherConditions.SLEEVELESS_SUNDRESS: {
-        'fr_FR': [u''],
+        'fr_FR': [u'robe d\'été'],
         'en_US': [u'sleeveless sundress']
     },
     SnipsWeatherConditions.SUNDRESS: {
-        'fr_FR': [u''],
+        'fr_FR': [u'robe d\'été'],
         'en_US': [u'sundress']
     },
     SnipsWeatherConditions.CHUNKY_SWEATER: {
-        'fr_FR': [u''],
+        'fr_FR': [u'gros pull'],
         'en_US': [u'chunky sweater']
     },
     SnipsWeatherConditions.SUNGLASSES: {
