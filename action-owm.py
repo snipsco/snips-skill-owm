@@ -184,6 +184,8 @@ if __name__ == "__main__":
         print "No API key in config.ini, you must setup an OpenWeatherMap API key for this skill to work"
     
     skill_locale = config.get("global", {"locale":"en_US"}).get("locale", u"en_US")
+    if skill_locale == u"":
+        skill_locale = u"en_US"
     skill = SnipsOWM(config["secret"]["api_key"],
             config["secret"]["default_location"],locale=skill_locale.decode('ascii'))
     
