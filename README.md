@@ -13,6 +13,7 @@ Sam will then ask you for an OpenWeatherMap API key. You can create one by signi
 The action works with the English Weather skill that you can download on [Snips' console](https://console.snips.ai)
 
 ## Locale
+> ***BEWARE: Please do not forget that you have to specify one of the following values as the locale setting during the installation. If you install it manually, please do give this setting to `config.ini` -> `locale=`. Otherwise, it will not work as expected.***
 
 To have the skills properly working, you **need** to generate locales for your languages.  So far the supported locales are:
 

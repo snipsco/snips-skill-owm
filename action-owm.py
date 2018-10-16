@@ -9,6 +9,7 @@ from hermes_python.hermes import Hermes
 import hermes_python
 import io
 import os
+import sys
 from snipsowm.snipsowm import SnipsOWM
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
@@ -183,7 +184,13 @@ if __name__ == "__main__":
     elif len(config.get("secret").get("api_key")) == 0:
         print "No API key in config.ini, you must setup an OpenWeatherMap API key for this skill to work"
     
-    skill_locale = config.get("global", {"locale":"en_US"}).get("locale", u"en_US")
+    skill_locale = config.get("secret", {"locale":"en_US"}).get("locale", u"en_US")
+    
+    if skill_locale == u"":
+        print "No locale information is found!"
+        print "Please edit 'config.ini' file, give either en_US, fr_FR or es_ES refering to the language of your assistant"
+        sys.exit(1)
+        
     skill = SnipsOWM(config["secret"]["api_key"],
             config["secret"]["default_location"],locale=skill_locale.decode('ascii'))
     
