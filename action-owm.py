@@ -184,7 +184,7 @@ if __name__ == "__main__":
     elif len(config.get("secret").get("api_key")) == 0:
         print "No API key in config.ini, you must setup an OpenWeatherMap API key for this skill to work"
     
-    skill_locale = config.get("global", {"locale":"en_US"}).get("locale", u"en_US")
+    skill_locale = config.get("secret", {"locale":"en_US"}).get("locale", u"en_US")
     
     if skill_locale == u"":
         print "No locale information is found!"
