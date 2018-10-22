@@ -20,6 +20,7 @@ To have the skills properly working, you **need** to generate locales for your l
 - 🇺🇸 `en_US`
 - 🇫🇷 `fr_FR`
 - 🇪🇸 `es_ES`
+- `de_DE`
 
 You can generate them with `sudo raspi-config`. Going in the `Localisation Options` submenu, then in the `Change Locale` submenu, and selecting the locales you want to support. For instance, select `en_US UTF-8` if you want support for English. 
 
