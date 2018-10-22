@@ -259,7 +259,7 @@ class TemperatureQuerySentenceGenerator(AnswerSentenceGenerator):
             "en_US": "I couldn't fetch the right data for the specified place and date",
             "fr_FR": "Je n'ai pas pu récupérer les prévisions de température pour cet endroit et ces dates",
             "es_ES": "No he podido encontrar información meteorológica para el lugar y la fecha especificados",
-            "de_DE": "Ich konnte nicht die richtigen Daten für den angegebenen Ort und das datum finden"
+            "de_DE": "Ich konnte nicht die richtigen Daten für den angegebenen Ort und Zeit finden"
         }
 
         if (temperature is None):
@@ -269,7 +269,7 @@ class TemperatureQuerySentenceGenerator(AnswerSentenceGenerator):
             "en_US": ["The temperature will be {} degrees"],
             "fr_FR": ["La température sera de {} degrés", "Il fera {} degrés"],
             "es_ES": ["La temperatura será de {} grados", "Habrá {} grados"],
-            "de_DE": ["Die Temperatur ist {} Grad", "Es ist {} Grad"]
+            "de_DE": ["Die Temperatur wird {} Grad", "Es wird {} Grad"]
         }
 
         introduction = random.choice(sentence_introductions[self.locale]).format(temperature)
