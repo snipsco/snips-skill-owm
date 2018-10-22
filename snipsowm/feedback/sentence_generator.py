@@ -269,7 +269,7 @@ class TemperatureQuerySentenceGenerator(AnswerSentenceGenerator):
             "en_US": ["The temperature will be {} degrees"],
             "fr_FR": ["La température sera de {} degrés", "Il fera {} degrés"],
             "es_ES": ["La temperatura será de {} grados", "Habrá {} grados"],
-            "de_DE": ["Die Temperatur wird {} Grad", "Es wird {} Grad"]
+            "de_DE": ["Es wird {} Grad"]
         }
 
         introduction = random.choice(sentence_introductions[self.locale]).format(temperature)
