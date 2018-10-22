@@ -1,62 +1,57 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
-import abc
-import collections
+import datetime
 from enum import Enum
 import locale
-import sentence_generation_utils as utils
 import random
 
 
+class SentenceTone(Enum):
+    NEUTRAL = 0
+    POSITIVE = 1
+    NEGATIVE = 2
+
+
+def date_to_string(date, granularity=0):
+    """ Convert a date to a string, with an appropriate level of
+        granularity.
+
+    :param date: A datetime object.
+    :param granularity: Granularity for the desired textual representation.
+                        0: precise (date and time are returned)
+                        1: day (only the week day is returned)
+                        2: month (only year and month are returned)
+                        3: year (only year is returned)
+    :return: A textual representation of the date.
+    """
+    if not date:
+        return ""
+
+    if granularity == 0:
+        return date.strftime("%A")
+    elif granularity == 1:
+        return date.strftime("%A, %d")
+    elif granularity == 2:
+        return date.strftime("%A, %d %B")
+
+    return date.strftime("%A, %d %B, %H:%M%p")
+
+
+def french_is_masculine_word(word):
+    return word[len(word) - 1] not in ['é', 'e']
+
+
+def starts_with_vowel(word):
+    return word[0] in ['a', 'e', 'i', 'o', 'u', 'y']
+
+
 class SentenceGenerator(object):
-    __metaclass__ = abc.ABCMeta
-
     def __init__(self, locale="en_US"):
+        """
+        :param language:
+        :type language: Language
+        """
         self.locale = locale
-
-    def generate_error_sentence(self):
-        error_sentences = {
-            "en_US": "An error occured when trying to retrieve the weather, please try again",
-            "fr_FR": "Désolé, il y a eu une erreur lors de la récupération des données météo. Veuillez réessayer",
-            "es_ES": "Ha ocurrido un error obteniendo la información meteorológica, por favor inténtalo de nuevo",
-            "de_DE": "Da ist was schiefgelaufen beim Wetterdaten einlesen, versuche es bitte nochmal"
-        }
-
-        return error_sentences[self.locale]
-
-    def generate_error_locale_sentence(self):
-        """
-        TODO : This method is too specific to be implemented by the SentenceGenerator class.
-        :return:
-        :rtype:basestring
-        """
-        error_sentences = {
-            "en_US": "An error occured. Your system doesn't have the correct locale installed. Please refer to the documentation. ",
-            "fr_FR": "Désolé, il y a eu une erreur. Votre système n'a pas la locale correcte installée. Veuillez consulter la documentation pour plus de détails.",
-            "es_ES": "Ha ocurrido un error. Parece que el sistema no tiene instalado el paquete de idioma correcto ('locale'). Consula la documentación para más detalles.",
-            "de_DE": "Da ist was schiefgelaufen. Dieser Rechner hat nicht die korrekte Lokalisierung installiert. Bitte lese die Installationsanleitung."
-        }
-
-        return error_sentences[self.locale]
-
-    def generate_api_key_error_sentence(self):
-        error_sentences = {
-            "en_US": "The API key you provided is invalid, check your config.ini",
-            "fr_FR": "La clé API fournie est incorrecte, vérifiez le fichier config.ini",
-            "es_ES": "La clave de la API proporcionada no es válida, por favor comprueba tu fichero config.ini",
-            "de_DE": "Der eingetragene API-Schlüssel ist ungültig, bitte prüfe die Konfigurationsdatei"
-        }
-        return error_sentences[self.locale]
-
-
-class SimpleSentenceGenerator(SentenceGenerator):
-    pass
-
-
-class AnswerSentenceGenerator(SentenceGenerator):
-    class SentenceTone(Enum):
-        NEUTRAL = 0
-        POSITIVE = 1
-        NEGATIVE = 2
 
     def generate_sentence_introduction(self, tone):
         """
@@ -69,24 +64,24 @@ class AnswerSentenceGenerator(SentenceGenerator):
 
         sentence_beginnings = {
             "en_US": {
-                AnswerSentenceGenerator.SentenceTone.POSITIVE: "Yes,",
-                AnswerSentenceGenerator.SentenceTone.NEGATIVE: "No,",
-                AnswerSentenceGenerator.SentenceTone.NEUTRAL: ""
+                SentenceTone.POSITIVE: "Yes,",
+                SentenceTone.NEGATIVE: "No,",
+                SentenceTone.NEUTRAL: ""
             },
             "fr_FR": {
-                AnswerSentenceGenerator.SentenceTone.POSITIVE: "Oui,",
-                AnswerSentenceGenerator.SentenceTone.NEGATIVE: "Non,",
-                AnswerSentenceGenerator.SentenceTone.NEUTRAL: ""
+                SentenceTone.POSITIVE: "Oui,",
+                SentenceTone.NEGATIVE: "Non,",
+                SentenceTone.NEUTRAL: ""
             },
             "es_ES": {
-                AnswerSentenceGenerator.SentenceTone.POSITIVE: "Sí,",
-                AnswerSentenceGenerator.SentenceTone.NEGATIVE: "No,",
-                AnswerSentenceGenerator.SentenceTone.NEUTRAL: ""
+                SentenceTone.POSITIVE: "Sí,",
+                SentenceTone.NEGATIVE: "No,",
+                SentenceTone.NEUTRAL: ""
             },
-            "de_DE": {
-                AnswerSentenceGenerator.SentenceTone.POSITIVE: "Ja,",
-                AnswerSentenceGenerator.SentenceTone.NEGATIVE: "Nein,",
-                AnswerSentenceGenerator.SentenceTone.NEUTRAL: ""
+            "es_ES": {
+                SentenceTone.POSITIVE: "Ja,",
+                SentenceTone.NEGATIVE: "Nein,",
+                SentenceTone.NEUTRAL: ""
             }
         }
 
@@ -107,13 +102,13 @@ class AnswerSentenceGenerator(SentenceGenerator):
         :rtype: basestring
         """
         if self.locale == "en_US":
-            if (POI or Locality or Region or Country):
+            if POI or Locality or Region or Country:
                 locality = filter(lambda x: x is not None, [POI, Locality, Region, Country])[0]
                 return "in {}".format(locality)
             else:
                 return ""
 
-        elif self.locale == "fr_FR":
+        if self.locale == "fr_FR":
             """
             Country granularity:
             - We use "au" for masculine nouns that begins with a consonant
@@ -138,12 +133,12 @@ class AnswerSentenceGenerator(SentenceGenerator):
                 return "à {}".format(Locality)
 
             if Region:
-                if utils.french_is_masculine_word(Region) and (not utils.starts_with_vowel(Region)):
+                if french_is_masculine_word(Region) and (not starts_with_vowel(Region)):
                     return "au {}".format(Region)
                 else:
                     return "en {}".format(Region)
             if Country:
-                if utils.french_is_masculine_word(Country) and (not utils.starts_with_vowel(Country)):
+                if french_is_masculine_word(Country) and (not starts_with_vowel(Country)):
                     return "au {}".format(Country)
                 else:
                     return "en {}".format(Country)
@@ -157,7 +152,7 @@ class AnswerSentenceGenerator(SentenceGenerator):
             else:
                 return ""
 
-        elif self.locale == "de_DE":
+        if self.locale == "de_DE":
             if POI or Locality or Region or Country:
                 locality = filter(lambda x: x is not None, [POI, Locality, Region, Country])[0]
                 return "in {}".format(locality)
@@ -188,16 +183,13 @@ class AnswerSentenceGenerator(SentenceGenerator):
             print "Careful! There was an error while trying to set the locale {}. This means your locale is not properly installed. Please refer to the README for more information.".format(full_locale)
             print "Some information displayed might not be formated to your locale"
 
-        return utils.date_to_string(date, granularity)
-
-
-class ConditionQuerySentenceGenerator(AnswerSentenceGenerator):
+        return date_to_string(date, granularity)
 
     def generate_condition_description(self, condition_description):
         return condition_description if len(condition_description) > 0 else ""
 
     def generate_condition_sentence(self,
-                                    tone=AnswerSentenceGenerator.SentenceTone.POSITIVE,
+                                    tone=SentenceTone.POSITIVE,
                                     date=None, granularity=0,
                                     condition_description=None,
                                     POI=None, Locality=None, Region=None, Country=None):
@@ -234,8 +226,6 @@ class ConditionQuerySentenceGenerator(AnswerSentenceGenerator):
         parameters = filter(lambda x: not x is None and len(x) > 0, parameters)
         return ("{} " * len(parameters)).format(*parameters)
 
-
-class TemperatureQuerySentenceGenerator(AnswerSentenceGenerator):
     def generate_temperature_sentence(self,
                                       temperature="-273.15",
                                       date=None, granularity=0,
@@ -281,10 +271,21 @@ class TemperatureQuerySentenceGenerator(AnswerSentenceGenerator):
         parameters = (introduction,) + tuple(permutable_parameters)
         return "{} {} {}".format(*parameters)
 
+    def generate_error_sentence(self):
+        error_sentences = {
+            "en_US": "An error occured when trying to retrieve the weather, please try again",
+            "fr_FR": "Désolé, il y a eu une erreur lors de la récupération des données météo. Veuillez réessayer",
+            "es_ES": "Ha ocurrido un error obteniendo la información meteorológica, por favor inténtalo de nuevo",
+            "de_DE": "Da ist was schiefgelaufen beim Wetterdaten einlesen, versuche es bitte nochmal"
+        }
 
-class SentenceGenerationException(Exception):
-    pass
+        return error_sentences[self.locale]
 
-
-class SentenceGenerationLocaleException(SentenceGenerationException):
-    pass
+    def generate_api_key_error_sentence(self):
+        error_sentences = {
+            "en_US": "The API key you provided is invalid, check your config.ini",
+            "fr_FR": "La clé API fournie est incorrecte, vérifiez le fichier config.ini",
+            "es_ES": "La clave de la API proporcionada no es válida, por favor comprueba tu fichero config.ini",
+            "de_DE": "Der eingetragene API-Schlüssel ist ungültig, bitte prüfe die Konfigurationsdatei"
+        }
+        return error_sentences[self.locale]
