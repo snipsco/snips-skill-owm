@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from wagnerfischerpp import WagnerFischer
-from owm import OWMWeatherConditions
 from snips import SnipsWeatherConditions, mappings
 import random
 from utils import _convert_to_unix_case
@@ -162,91 +161,6 @@ class SnipsToWeatherConditionMapper(object):
         """
         if self.value is None: return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
         return WeatherConditionDescriptor(self.mappings[self.value])
-
-
-class OWMToWeatherConditionMapper(object):
-    mappings = {
-        OWMWeatherConditions.THUNDERSTORM_WITH_LIGHT_RAIN: WeatherConditions.THUNDERSTORM,
-        OWMWeatherConditions.THUNDERSTORM_WITH_RAIN: WeatherConditions.THUNDERSTORM,
-        OWMWeatherConditions.THUNDERSTORM_WITH_HEAVY_RAIN: WeatherConditions.THUNDERSTORM,
-        OWMWeatherConditions.LIGHT_THUNDERSTORM: WeatherConditions.THUNDERSTORM,
-        OWMWeatherConditions.THUNDERSTORM: WeatherConditions.THUNDERSTORM,
-        OWMWeatherConditions.HEAVY_THUNDERSTORM: WeatherConditions.THUNDERSTORM,
-        OWMWeatherConditions.RAGGED_THUNDERSTORM: WeatherConditions.THUNDERSTORM,
-        OWMWeatherConditions.THUNDERSTORM_WITH_LIGHT_DRIZZLE: WeatherConditions.THUNDERSTORM,
-        OWMWeatherConditions.THUNDERSTORM_WITH_DRIZZLE: WeatherConditions.THUNDERSTORM,
-        OWMWeatherConditions.THUNDERSTORM_WITH_HEAVY_DRIZZLE: WeatherConditions.THUNDERSTORM,
-        OWMWeatherConditions.LIGHT_INTENSITY_DRIZZLE: WeatherConditions.DRIZZLE,
-        OWMWeatherConditions.DRIZZLE: WeatherConditions.DRIZZLE,
-        OWMWeatherConditions.HEAVY_INTENSITY_DRIZZLE: WeatherConditions.DRIZZLE,
-        OWMWeatherConditions.LIGHT_INTENSITY_DRIZZLE_RAIN: WeatherConditions.DRIZZLE,
-        OWMWeatherConditions.DRIZZLE_RAIN: WeatherConditions.DRIZZLE,
-        OWMWeatherConditions.HEAVY_INTENSITY_DRIZZLE_RAIN: WeatherConditions.DRIZZLE,
-        OWMWeatherConditions.SHOWER_RAIN_AND_DRIZZLE: WeatherConditions.DRIZZLE,
-        OWMWeatherConditions.HEAVY_SHOWER_RAIN_AND_DRIZZLE: WeatherConditions.DRIZZLE,
-        OWMWeatherConditions.SHOWER_DRIZZLE: WeatherConditions.DRIZZLE,
-        OWMWeatherConditions.LIGHT_RAIN: WeatherConditions.RAIN,
-        OWMWeatherConditions.MODERATE_RAIN: WeatherConditions.RAIN,
-        OWMWeatherConditions.HEAVY_INTENSITY_RAIN: WeatherConditions.RAIN,
-        OWMWeatherConditions.VERY_HEAVY_RAIN: WeatherConditions.RAIN,
-        OWMWeatherConditions.EXTREME_RAIN: WeatherConditions.RAIN,
-        OWMWeatherConditions.FREEZING_RAIN: WeatherConditions.RAIN,
-        OWMWeatherConditions.LIGHT_INTENSITY_SHOWER_RAIN: WeatherConditions.RAIN,
-        OWMWeatherConditions.SHOWER_RAIN: WeatherConditions.RAIN,
-        OWMWeatherConditions.HEAVY_INTENSITY_SHOWER_RAIN: WeatherConditions.RAIN,
-        OWMWeatherConditions.RAGGED_SHOWER_RAIN: WeatherConditions.RAIN,
-        OWMWeatherConditions.LIGHT_SNOW: WeatherConditions.SNOW,
-        OWMWeatherConditions.SNOW: WeatherConditions.SNOW,
-        OWMWeatherConditions.HEAVY_SNOW: WeatherConditions.SNOW,
-        OWMWeatherConditions.SLEET: WeatherConditions.SNOW,
-        OWMWeatherConditions.SHOWER_SLEET: WeatherConditions.RAIN,
-        OWMWeatherConditions.LIGHT_RAIN_AND_SNOW: WeatherConditions.RAIN,
-        OWMWeatherConditions.RAIN_AND_SNOW: WeatherConditions.RAIN,
-        OWMWeatherConditions.LIGHT_SHOWER_SNOW: WeatherConditions.SNOW,
-        OWMWeatherConditions.SHOWER_SNOW: WeatherConditions.SNOW,
-        OWMWeatherConditions.HEAVY_SHOWER_SNOW: WeatherConditions.SNOW,
-        OWMWeatherConditions.MIST: WeatherConditions.FOG,
-        OWMWeatherConditions.SMOKE: WeatherConditions.FOG,
-        OWMWeatherConditions.HAZE: WeatherConditions.FOG,
-        OWMWeatherConditions.SAND_DUST_WHIRLS: WeatherConditions.UNKNOWN,
-        OWMWeatherConditions.FOG: WeatherConditions.FOG,
-        OWMWeatherConditions.SAND: WeatherConditions.UNKNOWN,
-        OWMWeatherConditions.DUST: WeatherConditions.UNKNOWN,
-        OWMWeatherConditions.VOLCANIC_ASH: WeatherConditions.UNKNOWN,
-        OWMWeatherConditions.SQUALLS: WeatherConditions.UNKNOWN,
-        OWMWeatherConditions.TORNAD: WeatherConditions.UNKNOWN,
-        OWMWeatherConditions.FEW_CLOUDS: WeatherConditions.CLOUDS,
-        OWMWeatherConditions.SCATTERED_CLOUDS: WeatherConditions.CLOUDS,
-        OWMWeatherConditions.BROKEN_CLOUDS: WeatherConditions.CLOUDS,
-        OWMWeatherConditions.OVERCAST_CLOUDS: WeatherConditions.CLOUDS,
-        OWMWeatherConditions.CLEAR_SKY: WeatherConditions.SUN,
-        OWMWeatherConditions.TORNADO: WeatherConditions.STORM,
-        OWMWeatherConditions.TROPICAL_STORM: WeatherConditions.STORM,
-        OWMWeatherConditions.HURRICANE: WeatherConditions.STORM,
-        OWMWeatherConditions.COLD: WeatherConditions.UNKNOWN,
-        OWMWeatherConditions.HOT: WeatherConditions.UNKNOWN,
-        OWMWeatherConditions.WINDY: WeatherConditions.UNKNOWN,
-        OWMWeatherConditions.HAIL: WeatherConditions.UNKNOWN
-    }
-
-    def __init__(self, key):
-        self.value = None
-        if type(key) is OWMWeatherConditions:
-            self.value = key
-        elif type(key) is int:
-            try:
-                self.value = OWMWeatherConditions(key)
-            except:
-                pass
-        elif type(key) is str:
-            key = _convert_to_unix_case(key)
-            if key in OWMWeatherConditions.__members__:
-                self.value = OWMWeatherConditions[key]
-
-    def resolve(self):
-        if self.value is None: return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
-        return WeatherConditionDescriptor(self.mappings[self.value])
-
 
 class SlotValueResolver(object):
     def normalize_input(self, input_string):
