@@ -20,4 +20,7 @@ fi
 
 pip install -r requirements.txt
 
-cp config.ini.default config.ini
+if [ ! -e config.ini ]
+then
+	cp config.ini.default config.ini
+fi
