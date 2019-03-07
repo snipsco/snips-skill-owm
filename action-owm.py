@@ -39,44 +39,44 @@ def read_configuration_file(configuration_file):
 
 def getCondition(snips):
       # Determine condition
-    if snips.slots.forecast_condition_name:
+    if snips.slots is not None and snips.slots.forecast_condition_name:
         res = snips.slots.forecast_condition_name[0].slot_value.value.value
         return unicode(res)
     return None
 
 def getLocality(snips):
-    if snips.slots.forecast_locality:
+    if snips.slots is not None and snips.slots.forecast_locality:
         res = snips.slots.forecast_locality[0].slot_value.value.value
         return unicode(res)
     return None
 
 def getRegion(snips):
-    if snips.slots.forecast_region:
+    if snips.slots is not None and snips.slots.forecast_region:
         res = snips.slots.forecast_region[0].slot_value.value.value
         return unicode(res)
     return None
 
 def getCountry(snips):
-    if snips.slots.forecast_country :
+    if snips.slots is not None and snips.slots.forecast_country :
         res = snips.slots.forecast_country[0].slot_value.value.value
         return unicode(res)
     return None
 
 def getPOI(snips):
-    if snips.slots.forecast_geographical_poi:
+    if snips.slots is not None and snips.slots.forecast_geographical_poi:
         res = snips.slots.forecast_geographical_poi[0].slot_value.value.value
         return unicode(res)
     return None
 
 def getItemName(snips):
-    if snips.slots.forecast_item:
+    if snips.slots is not None and snips.slots.forecast_item:
         res = snips.slots.forecast_item[0].slot_value.value.value
         return unicode(res)
     return None
 
 def getDateTime(snips):
     # Determine datetime
-    if snips.slots.forecast_start_datetime:
+    if snips.slots is not None and snips.slots.forecast_start_datetime:
         tmp = snips.slots.forecast_start_datetime[0].slot_value.value
         if tmp is None:
             return None
