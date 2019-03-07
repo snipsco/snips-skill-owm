@@ -80,10 +80,10 @@ def getDateTime(snips):
         tmp = snips.slots.forecast_start_datetime[0].slot_value.value
         if tmp is None:
             return None
-        if isinstance(tmp, hermes_python.ontology.InstantTimeValue ):
+        if isinstance(tmp, hermes_python.ontology.dialogue.InstantTimeValue ):
             val = tmp.value[:-7]
             return datetime.strptime(val, '%Y-%m-%d %H:%M:%S')
-        elif isinstance(tmp, hermes_python.ontology.TimeIntervalValue ):
+        elif isinstance(tmp, hermes_python.ontology.dialogue.TimeIntervalValue ):
             t0 = tmp.from_date[:-7]
             t0 = datetime.strptime(t0, '%Y-%m-%d %H:%M:%S')
             t1 = tmp.to_date[:-7]
