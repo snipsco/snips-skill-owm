@@ -116,7 +116,7 @@ class SnipsOWM:
             actual_condition, temperature = self.provider.get_weather(locality, date)
 
             # We retrieve the weather from our weather provider
-            actual_condition_group = weather_condition.OWMToWeatherConditionMapper(actual_condition).resolve()
+            actual_condition_group = self.provider.map_WeatherCondition(actual_condition)
 
             if assumed_condition:
                 # We find the category (group) of the received weather description
@@ -204,7 +204,7 @@ class SnipsOWM:
             actual_condition, temperature = self.provider.get_weather(locality, date)
 
             # We retrieve the weather from our weather provider
-            actual_condition_group = weather_condition.OWMToWeatherConditionMapper(actual_condition).resolve()
+            actual_condition_group = self.provider.map_WeatherCondition(actual_condition)
 
             if item_name:
                 # We find the category (group) of the received weather description

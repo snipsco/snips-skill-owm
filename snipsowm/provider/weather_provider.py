@@ -17,6 +17,9 @@ class WeatherProvider(object):
     def get_weather(self):
         pass
 
+    @abc.abstractmethod
+    def map_WeatherCondition(self, object):
+        pass
 
 class WeatherProviderError(Exception):
     pass
