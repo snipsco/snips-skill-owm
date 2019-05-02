@@ -20,56 +20,67 @@ class WeatherConditionDescriptor(object):
             "en_US": ["Thunderstorms are expected", "expect thunderstorms"],
             "fr_FR": ["de l'orage et des éclair sont prévus"],
             "es_ES": ["Se esperan tormentas"],
+            "de_DE": ["Es werden Gewitter erwartet", "Es ist mit Gewitter zu rechnen"],
         },
         WeatherConditions.DRIZZLE: {
             "en_US": ["drizzle are expected", "expect drizzle"],
             "fr_FR": ["prévoir de la bruine"],
             "es_ES": ["Se espera granizo"],
+            "de_DE": ["Es wird Nieselregen erwartet", "Es ist mit Nieselregen zu rechnen"],
         },
         WeatherConditions.RAIN: {
             "en_US": ["rain is expected", "it's going to be rainy", "expect rain"],
             "fr_FR": ["il va pleuvoir", "il pleuvra", "le temps sera pluvieux"],
             "es_ES": ["Se esperan lluvias"],
+            "de_DE": ["Es wird Regen erwartet", "Es ist mit Regen zu rechnen"],
         },
         WeatherConditions.SNOW: {
             "en_US": ["snow is expected", "it's going to snow", "expect snow"],
             "fr_FR": ["il neigera", "il va neiger", "le temps sera neigeux"],
             "es_ES": ["Se esperan nevadas"],
+            "de_DE": ["Es wird Schnee erwartet", "Es ist mit Schnee zu rechnen"],
         },
         WeatherConditions.FOG: {
             "en_US": ["fog is expected", "it's going to be foggy", "expect fog"],
             "fr_FR": ["Il y aura du brouillard"],
             "es_ES": ["Se espera niebla"],
+            "de_DE": ["Es wird Nebel erwartet", "Es ist mit Nebel zu rechnen"],
         },
         WeatherConditions.SUN: {
             "en_US": ["sun is expected", "it's going to be sunny", "the sun will shine"],
             "fr_FR": ["le temps sera ensoleillé"],
             "es_ES": ["Se espera sol", "El sol brillará"],
+            "de_DE": ["Es wird sonnig sein", "Es ist mit Sonne zu rechnen"],
         },
         WeatherConditions.CLOUDS: {
             "en_US": ["it's going to be cloudy", "expect clouds"],
             "fr_FR": ["le temps sera nuageux"],
             "es_ES": ["Se esperan nubes", "El cielo estará nublado"],
+            "de_DE": ["Es wird wolkig sein", "Es ist mit bewölkung zu rechnen"],
         },
         WeatherConditions.STORM: {
             "en_US": ["storms are expected", "it's going to be stormy", "expect storms"],
             "fr_FR": ["il y aura de l'orage"],
             "es_ES": ["Se esperan tormentas"],
+            "de_DE": ["Es wird Sturm erwartet", "Es ist mit Sturm zu rechnen"],
         },
         WeatherConditions.HUMID: {
             "en_US": ["humidity is expected", "it's going to be humid"],
             "fr_FR": ["le temps sera humide"],
             "es_ES": ["La humedad será elevada"],
+            "de_DE": ["Es kann mit Nässe gerechnet werden"],
         },
         WeatherConditions.WIND: {
             "en_US": ["wind is expected", "it's going to be windy", "expect wind"],
             "fr_FR": ["s'attendre à du vent"],
             "es_ES": ["Se espera un tiempo ventoso"],
+            "de_DE": ["Es wird windig", "Es kann mit Wind gerechnet werden"],
         },
         WeatherConditions.UNKNOWN: {
             "en_US": ["I don't know how to describe the weather"],
             "fr_FR": ["Je ne peux pas décrire la météo"],
             "es_ES": ["No puedo decirte el tiempo que hará"],
+            "de_DE": ["Ich weis nicht wie ich das Wetter beschreiben soll"],
         },
     }
 

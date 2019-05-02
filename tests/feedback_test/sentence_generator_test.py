@@ -33,3 +33,10 @@ class TestFrenchAnswerSentenceGenerator(TestCase):
 
     def test_sentence_generation_locality_empty(self):
         self.assertEquals(len(self.generator.generate_sentence_locality()), 0)
+
+class TestGermanAnswerSentenceGenerator(TestCase):
+    def setUp(self):
+        self.generator = sentence_generator.AnswerSentenceGenerator(locale="de_DE")
+
+    def test_sentence_generation_locality_empty(self):
+        self.assertEquals(len(self.generator.generate_sentence_locality()), 0)

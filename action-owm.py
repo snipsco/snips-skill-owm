@@ -188,7 +188,7 @@ if __name__ == "__main__":
     
     if skill_locale == u"":
         print "No locale information is found!"
-        print "Please edit 'config.ini' file, give either en_US, fr_FR or es_ES refering to the language of your assistant"
+        print "Please edit 'config.ini' file, give either en_US, fr_FR, de_DE or es_ES refering to the language of your assistant"
         sys.exit(1)
         
     skill = SnipsOWM(config["secret"]["api_key"],
