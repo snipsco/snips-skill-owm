@@ -184,13 +184,13 @@ if __name__ == "__main__":
         print("No API key in config.ini, you must setup an OpenWeatherMap API key for this skill to work")
         sys.exit(1)
     
-    skill_locale = config.get("secret", {}).get("locale")
+    skill_locale = config["secret"].get("locale")
     if not skill_locale:
         print("No locale information is found!")
         print("Please edit 'config.ini' file, give either en_US, fr_FR or es_ES refering to the language of your assistant")
         sys.exit(1)
 
-    # config["secret"]["default_location"] can be empty is this intended?
+    # TODO config["secret"]["default_location"] can be empty is this intended?
     skill = SnipsOWM(api_key, config["secret"]["default_location"], locale=skill_locale.decode('ascii'))
 
     lang = "EN"
