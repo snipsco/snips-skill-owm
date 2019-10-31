@@ -160,7 +160,8 @@ class SnipsToWeatherConditionMapper(object):
         :return: a WeatherCondition
         :rtype: WeatherCondition
         """
-        if self.value is None: return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
+        if self.value is None:
+            return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
         return WeatherConditionDescriptor(self.mappings[self.value])
 
 
@@ -244,7 +245,8 @@ class OWMToWeatherConditionMapper(object):
                 self.value = OWMWeatherConditions[key]
 
     def resolve(self):
-        if self.value is None: return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
+        if self.value is None:
+            return WeatherConditionDescriptor(WeatherConditions.UNKNOWN)
         return WeatherConditionDescriptor(self.mappings[self.value])
 
 
@@ -266,4 +268,4 @@ class SlotValueResolver(object):
 
 
 if __name__ == "__main__":
-    print SlotValueResolver().fuzzy_match("fr_FR", u'HUMID')
+    print(SlotValueResolver().fuzzy_match("fr_FR", u'HUMID'))

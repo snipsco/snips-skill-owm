@@ -99,11 +99,8 @@ class AnswerSentenceGenerator(SentenceGenerator):
         :rtype: basestring
         """
         if self.locale == "en_US":
-            if (POI or Locality or Region or Country):
-                locality = filter(lambda x: x is not None, [POI, Locality, Region, Country])[0]
-                return "in {}".format(locality)
-            else:
-                return ""
+            locality = POI or Locality or Region or Country
+            return "in {}".format(locality) if locality else ""
 
         elif self.locale == "fr_FR":
             """
@@ -143,11 +140,8 @@ class AnswerSentenceGenerator(SentenceGenerator):
             return ""
 
         if self.locale == "es_ES":
-            if POI or Locality or Region or Country:
-                locality = filter(lambda x: x is not None, [POI, Locality, Region, Country])[0]
-                return "en {}".format(locality)
-            else:
-                return ""
+            locality = POI or Locality or Region or Country
+            return "en {}".format(locality) if locality else ""
 
         else:
             return ""
@@ -170,8 +164,8 @@ class AnswerSentenceGenerator(SentenceGenerator):
         try:  # Careful, this operation is not thread safe ...
             locale.setlocale(locale.LC_TIME, full_locale)
         except locale.Error:
-            print "Careful! There was an error while trying to set the locale {}. This means your locale is not properly installed. Please refer to the README for more information.".format(full_locale)
-            print "Some information displayed might not be formated to your locale"
+            print("Careful! There was an error while trying to set the locale {}. This means your locale is not properly installed. Please refer to the README for more information.".format(full_locale))
+            print("Some information displayed might not be formated to your locale")
 
         return utils.date_to_string(date, granularity)
 

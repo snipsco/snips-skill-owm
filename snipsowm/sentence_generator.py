@@ -97,11 +97,8 @@ class SentenceGenerator(object):
         :rtype: basestring
         """
         if self.locale == "en_US":
-            if POI or Locality or Region or Country:
-                locality = filter(lambda x: x is not None, [POI, Locality, Region, Country])[0]
-                return "in {}".format(locality)
-            else:
-                return ""
+            locality = POI or Locality or Region or Country
+            return "in {}".format(locality) if locality else ""
 
         if self.locale == "fr_FR":
             """
@@ -141,11 +138,8 @@ class SentenceGenerator(object):
             return ""
 
         if self.locale == "es_ES":
-            if POI or Locality or Region or Country:
-                locality = filter(lambda x: x is not None, [POI, Locality, Region, Country])[0]
-                return "en {}".format(locality)
-            else:
-                return ""
+            locality = POI or Locality or Region or Country
+            return "en {}".format(locality) if locality else ""
 
         else:
             return ""
@@ -168,13 +162,13 @@ class SentenceGenerator(object):
         try:  # Careful, this operation is not thread safe ...
             locale.setlocale(locale.LC_TIME, full_locale)
         except locale.Error:
-            print "Careful! There was an error while trying to set the locale {}. This means your locale is not properly installed. Please refer to the README for more information.".format(full_locale)
-            print "Some information displayed might not be formated to your locale"
+            print("Careful! There was an error while trying to set the locale {}. This means your locale is not properly installed. Please refer to the README for more information.".format(full_locale))
+            print("Some information displayed might not be formated to your locale")
 
         return date_to_string(date, granularity)
 
     def generate_condition_description(self, condition_description):
-        return condition_description if len(condition_description) > 0 else ""
+        return condition_description or ""
 
     def generate_condition_sentence(self,
                                     tone=SentenceTone.POSITIVE,
@@ -201,18 +195,18 @@ class SentenceGenerator(object):
 
             """
         introduction = self.generate_sentence_introduction(tone)
-
         locality = self.generate_sentence_locality(POI, Locality, Region, Country)
-
         date = self.generate_sentence_date(date, granularity=granularity)
 
-        permutable_parameters = list((locality, date))
+        permutable_parameters = [locality, date]
         random.shuffle(permutable_parameters)
-        parameters = (introduction, condition_description) + tuple(permutable_parameters)
+        parameters = [introduction, condition_description] + permutable_parameters
 
         # Formatting
-        parameters = filter(lambda x: not x is None and len(x) > 0, parameters)
-        return ("{} " * len(parameters)).format(*parameters)
+        parameters = [x for x in parameters if x]
+        # TODO was this space in the end intended?
+        return ' '.join(parameters) + ' '
+
 
     def generate_temperature_sentence(self,
                                       temperature="-273.15",
@@ -239,7 +233,7 @@ class SentenceGenerator(object):
             "es_ES": "No he podido encontrar información meteorológica para el lugar y la fecha especificados"
         }
 
-        if (temperature is None):
+        if temperature is None:
             return error_sentences[self.locale]
 
         sentence_introductions = {
@@ -252,10 +246,9 @@ class SentenceGenerator(object):
         locality = self.generate_sentence_locality(POI, Locality, Region, Country)
         date = self.generate_sentence_date(date)
 
-        permutable_parameters = list((locality, date))
+        permutable_parameters = [locality, date]
         random.shuffle(permutable_parameters)
-        parameters = (introduction,) + tuple(permutable_parameters)
-        return "{} {} {}".format(*parameters)
+        return "{} {} {}".format(introduction, *permutable_parameters)
 
     def generate_error_sentence(self):
         error_sentences = {

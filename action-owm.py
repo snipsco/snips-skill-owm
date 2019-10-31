@@ -26,7 +26,7 @@ lang = "EN"
 
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
-        return {section: {option_name : option for option_name, option in self.items(section)} for section in self.sections()}
+        return {section: dict(self.items(section)) for section in self.sections()}
 
 def read_configuration_file(configuration_file):
     try:
@@ -34,7 +34,7 @@ def read_configuration_file(configuration_file):
             conf_parser = SnipsConfigParser()
             conf_parser.readfp(f)
             return conf_parser.to_dict()
-    except (IOError, ConfigParser.Error) as e:
+    except (IOError, ConfigParser.Error):
         return dict()
 
 def getCondition(snips):
@@ -93,8 +93,8 @@ def getDateTime(snips):
     return None
 
 def getAnyLocality(snips):
-      locality = None
-      try:
+    locality = None
+    try:
         locality = snips.slots.forecast_locality \
           or snips.slots.forecast_country \
           or snips.slots.forecast_region \
@@ -102,21 +102,21 @@ def getAnyLocality(snips):
 
         if locality:
           return unicode(locality[0].slot_value.value.value)
-      except Exception:
+    except Exception:
         pass
 
 def getGranurality(datetime):
-      # Determine granularity
-      if datetime:  # We have an information about the date.
+    # Determine granularity
+    if datetime:  # We have an information about the date.
         now = dt.datetime.now().replace(tzinfo=None)
         delta_days = abs((datetime - now).days)
         if delta_days > 10: # There a week difference between today and the date we want the forecast.
             return 2 # Give the day of the forecast date, plus the number of the day in the month.
         elif delta_days > 5: # There a 10-day difference between today and the date we want the forecast.
-          return 1 # Give the full date
+            return 1 # Give the full date
         else:
-          return 0 # Just give the day of the week
-      else:
+            return 0 # Just give the day of the week
+    else:
         return 0
 
 def searchWeatherForecastTemperature(hermes, intent_message):
@@ -166,39 +166,38 @@ def searchWeatherForecastItem(hermes, intent_message):
     region = getRegion(intent_message)
     country = getCountry(intent_message)
     geographical_poi = getPOI(intent_message)
-    res = hermes.skill.speak_item(item_name,
+    res = hermes.skill.speak_condition(item_name,
                                   datetime,
                                   granularity=granularity,
-                                 Locality=locality,
-                                 Region=region,
-                                 Country=country,
-                                 POI=geographical_poi)
+                                  Locality=locality,
+                                  Region=region,
+                                  Country=country,
+                                  POI=geographical_poi)
     current_session_id = intent_message.session_id
     hermes.publish_end_session(current_session_id, res.decode("latin-1"))
 
 if __name__ == "__main__":
     config = read_configuration_file("config.ini")
 
-    if config.get("secret").get("api_key") is None:
-        print "No API key in config.ini, you must setup an OpenWeatherMap API key for this skill to work"
-    elif len(config.get("secret").get("api_key")) == 0:
-        print "No API key in config.ini, you must setup an OpenWeatherMap API key for this skill to work"
-    
-    skill_locale = config.get("secret", {"locale":"en_US"}).get("locale", u"en_US")
-    
-    if skill_locale == u"":
-        print "No locale information is found!"
-        print "Please edit 'config.ini' file, give either en_US, fr_FR or es_ES refering to the language of your assistant"
+    api_key = config.get("secret", {}).get("api_key")
+    if not api_key:
+        print("No API key in config.ini, you must setup an OpenWeatherMap API key for this skill to work")
         sys.exit(1)
-        
-    skill = SnipsOWM(config["secret"]["api_key"],
-            config["secret"]["default_location"],locale=skill_locale.decode('ascii'))
     
+    skill_locale = config.get("secret", {}).get("locale")
+    if not skill_locale:
+        print("No locale information is found!")
+        print("Please edit 'config.ini' file, give either en_US, fr_FR or es_ES refering to the language of your assistant")
+        sys.exit(1)
+
+    # config["secret"]["default_location"] can be empty is this intended?
+    skill = SnipsOWM(api_key, config["secret"]["default_location"], locale=skill_locale.decode('ascii'))
+
     lang = "EN"
     with Hermes(MQTT_ADDR.encode("ascii")) as h:
         h.skill = skill
         h.subscribe_intent("searchWeatherForecastItem",
-                           searchWeatherForecastItem) \
+                          searchWeatherForecastItem) \
         .subscribe_intent("searchWeatherForecastTemperature",
                           searchWeatherForecastTemperature) \
         .subscribe_intent("searchWeatherForecastCondition",

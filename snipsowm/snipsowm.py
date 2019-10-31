@@ -95,12 +95,9 @@ class SnipsOWM:
         """
 
         # Checking the parameters values
-        if (POI or Locality or Region or Country):
-            localities = filter(lambda x: x is not None, [POI, Locality, Region, Country])
-            locality = localities[0]
-        else:
-            locality = self.default_location
-            Locality = self.default_location
+        locality = POI or Locality or Region or Country
+        if not locality:
+            Locality = locality = self.default_location
 
         # Initializing variables
         assumed_condition_group = weather_condition.WeatherConditionDescriptor(
@@ -113,7 +110,7 @@ class SnipsOWM:
 
         sentence_generator = ConditionQuerySentenceGenerator(locale=self.locale)
         try:
-            actual_condition, temperature = self.provider.get_weather(locality, date)
+            actual_condition, _ = self.provider.get_weather(locality, date)
 
             # We retrieve the weather from our weather provider
             actual_condition_group = weather_condition.OWMToWeatherConditionMapper(actual_condition).resolve()
@@ -134,101 +131,14 @@ class SnipsOWM:
                                                                                 date=date, granularity=granularity,
                                                                                 condition_description=actual_condition_group.describe(
                                                                                     self.locale),
-                                                                                POI=POI, Locality=Locality,
+                                                                                POI=POI,
+                                                                                Locality=Locality,
                                                                                 Region=Region,
                                                                                 Country=Country)
 
             # And finally send it to the TTS if provided
         except (WeatherProviderError, WeatherProviderConnectivityError):
                 generated_sentence = sentence_generator.generate_error_sentence()
-        except SentenceGenerationLocaleException:
-            generated_sentence = sentence_generator.generate_error_locale_sentence()
-        except WeatherProviderInvalidAPIKey:
-            generated_sentence = sentence_generator.generate_api_key_error_sentence()
-
-        return generated_sentence
-
-    def speak_item(self, item_name, date, POI=None, Locality=None, Region=None, Country=None,
-                   granularity=0):
-        """ Speak a response for a given a item
-            at a specified locality and datetime.
-            If the locality is not specified, use the default location.
-
-        :param item_name: A SnipsWeatherCondition value string
-                          corresponding to a weather condition extracted from the slots.
-                          e.g 'HUMID', 'SUNNY', etc ...
-                          Can be none, if there is no assumption.
-        :type item_name: basestring
-
-        :param date: datetime of the forecast
-        :type date: datetime.datetime
-
-        :param POI: Slot value from Snips
-        :type POI: basestring
-
-        :param Locality: Slot value from Snips
-        :type Locality: basestring
-
-        :param Region: Slot value from Snips
-        :type Region: basestring
-
-        :param Country: Slot value from Snips
-        :type Country: basestring
-
-        :param granularity: Precision with which the date should be described.
-        :type granularity: int
-
-        :return: A random response for a given weather condition
-                 at a specified locality and datetime.
-        """
-
-        # Checking the parameters values
-        if (POI or Locality or Region or Country):
-            localities = filter(lambda x: x is not None, [POI, Locality, Region, Country])
-            locality = localities[0]
-        else:
-            locality = self.default_location
-            Locality = self.default_location
-
-        # Initializing variables
-        assumed_condition_group = weather_condition.WeatherConditionDescriptor(
-            weather_condition.WeatherConditions.UNKNOWN)
-        tone = AnswerSentenceGenerator.SentenceTone.NEUTRAL
-
-        # We retrieve the condition and the temperature from our weather provider
-        actual_condition_group = weather_condition.WeatherConditionDescriptor(
-            weather_condition.WeatherConditions.UNKNOWN)
-
-        sentence_generator = ConditionQuerySentenceGenerator(locale=self.locale)
-        try:
-            actual_condition, temperature = self.provider.get_weather(locality, date)
-
-            # We retrieve the weather from our weather provider
-            actual_condition_group = weather_condition.OWMToWeatherConditionMapper(actual_condition).resolve()
-
-            if item_name:
-                # We find the category (group) of the received weather description
-                assumed_condition_group = weather_condition.SnipsToWeatherConditionMapper().fuzzy_matching(self.locale,
-                                                                                                           item_name).resolve()
-
-                # We check if their is a positive/negative tone to add to the answer
-                if assumed_condition_group.value != weather_condition.WeatherConditions.UNKNOWN:
-                    tone = AnswerSentenceGenerator.SentenceTone.NEGATIVE if assumed_condition_group.value != actual_condition_group.value else AnswerSentenceGenerator.SentenceTone.POSITIVE
-            else:
-                tone = AnswerSentenceGenerator.SentenceTone.NEUTRAL
-
-            # We compose the sentence
-            generated_sentence = sentence_generator.generate_condition_sentence(tone=tone,
-                                                                                date=date, granularity=granularity,
-                                                                                condition_description=actual_condition_group.describe(
-                                                                                    self.locale),
-                                                                                POI=POI, Locality=Locality,
-                                                                                Region=Region,
-                                                                                Country=Country)
-
-            # And finally send it to the TTS if provided
-        except (WeatherProviderError, WeatherProviderConnectivityError):
-            generated_sentence = sentence_generator.generate_error_sentence()
         except SentenceGenerationLocaleException:
             generated_sentence = sentence_generator.generate_error_locale_sentence()
         except WeatherProviderInvalidAPIKey:
